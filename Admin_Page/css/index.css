@@ -1,0 +1,51 @@
+body {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("../../img/PITA.jpg");
+    min-height: 100%;
+}
+
+.sidebar-brand{
+    background: linear-gradient(to bottom,#FFFF00, rgba(249, 174, 70, 0.764));
+}
+.navbar{
+    background: linear-gradient(to bottom,#FFFF00, rgba(249, 174, 70, 0.764));
+    
+}
+.sidebar-brand img{
+    width:  90px;
+    height: 90px;
+    
+}
+.navbar-nav{
+    /* background: rgba(255, 255, 255, 0.179); */
+    background: rgba(255, 255, 255, 0.179);
+
+}
+#content-wrapper{
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("../../img/PITA.jpg");
+    min-height: 100%;
+
+}
+.admin-container{
+    align-items: center;
+    display:flex;
+    width: 100%;
+}
+.admin-card{
+    padding: 10px;
+    width: 100%;
+    height: auto;
+    color: #fff;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.126);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    margin:1%
+}
