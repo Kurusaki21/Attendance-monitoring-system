@@ -345,8 +345,9 @@ if(isset($user)){
                             <label for="inputAddress2">Address</label>
                             <input type="text" class="form-control" name="address" id="prof_address">
                         </div>
+                        <input type="hidden" name="prof_id" id="prof_uid">
                        
-                        <button type="submit" name="submit" id="btn_submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" name="edit_submit" id="btn_submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
                
@@ -411,6 +412,7 @@ if(isset($user)){
                 });
             }
         })
+        $('#prof_uid').val(prof_id);
         $('#editProfessor').modal(); 
     }
 

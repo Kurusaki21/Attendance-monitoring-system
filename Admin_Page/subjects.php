@@ -105,7 +105,7 @@ if(isset($user)){
                 </div>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="subjects.php">
                     <i class="fas fa-fw fa-clipboard"></i>
                     <span>Subjects</span></a>
@@ -210,7 +210,7 @@ if(isset($user)){
                                                 <td> <?= $subjects['subject_description']; ?></td>
                                                 
                                                 <td><?= $subjects['subj_id'];?></td>
-                                                <td><button type="button" data-toggle="tooltip" data-placement="top" title="edit" onclick="editSubjectModal(<?= $subjects['id'];?>)" class="btn btn-sm btn-success"><i class="far fa-edit"></i></button> <a href="show-assigned-professor.php?id=<?= $subjects['id'];?>" class="btn btn-sm btn-warning" data-toggle="tooltip" data-placement="top" title="show assigned professors"><i class="fas fa-eye"></i></i></a> <button class="btn btn-sm btn-warning" data-toggle="tooltip" onclick="assignProfessorModal(<?= $subjects['id'];?>)" data-placement="top" title="assign professor"><i class="fas fa-network-wired"></i></button> <button type="button" onclick="deleteSubject(<?= $subjects['id'];?>)" class="btn-sm btn-danger dlt_record" data-toggle="tooltip" data-placement="top" title="delete subject"><i class="fa fa-trash"></button></td>
+                                                <td><button type="button" data-toggle="tooltip" data-placement="top" title="edit" onclick="editSubjectModal(<?= $subjects['id'];?>)" class="btn btn-sm btn-success"><i class="far fa-edit"></i></button> <a href="show-assigned-professor.php?subject_id=<?= $subjects['id'];?>" class="btn btn-sm btn-warning" data-toggle="tooltip" data-placement="top" title="show assigned professors"><i class="fas fa-eye"></i></i></a> <button class="btn btn-sm btn-warning" data-toggle="tooltip" onclick="assignProfessorModal(<?= $subjects['id'];?>)" data-placement="top" title="assign professor"><i class="fas fa-network-wired"></i></button> <button type="button" onclick="deleteSubject(<?= $subjects['id'];?>)" class="btn-sm btn-danger dlt_record" data-toggle="tooltip" data-placement="top" title="delete subject"><i class="fa fa-trash"></button></td>
                                             <?php  
                                             }
                                             }

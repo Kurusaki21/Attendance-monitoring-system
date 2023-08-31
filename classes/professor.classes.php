@@ -7,13 +7,24 @@ class Professor extends DB{
         $connection = $this->dbOpen();
         $stmt = $connection->prepare('INSERT INTO professors (first_name, last_name, address, email, password,created_at) VALUES (?,?,?,?,?,?)');
 
-        if(!$stmt->execute([$fname, $lname, $email,  $address, $password, $datetimetoday])){
+        if(!$stmt->execute([$fname, $lname, $address,  $email, $password, $datetimetoday])){
             $stmt = null;
             header("location: index.php?errors=stmtfailed");
             exit();
         }
             header("location: ../admin_page/professors.php");
         
+    }
+
+    protected function editProfessor($id, $fname, $lname, $email,  $address){
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("UPDATE professors SET first_name = ?, last_name = ?, email = ?, address = ? WHERE id = ?");
+        if(!$stmt->execute([$fname, $lname, $email,  $address, $id])){
+            $stmt = null;
+            header("location: index.php?errors=stmtfailed");
+            exit();
+        }
+            header("location: ../admin_page/professors.php?success=1");
     }
 
     protected function getProfessor(){

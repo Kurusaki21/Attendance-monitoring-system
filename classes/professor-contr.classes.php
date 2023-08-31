@@ -14,6 +14,18 @@ class ProfessorCntr extends Professor{
         }
     }
 
+    public function setEdit(){
+        if(isset($_POST['edit_submit'])){
+            $id = $_POST['prof_id'];
+            $fname = $_POST['first_name'];
+            $lname = $_POST['last_name'];
+            $email = $_POST['email'];
+            $address = $_POST['address'];
+
+           $this->editProfessor($id, $fname, $lname, $email,  $address);
+        }
+    }
+
     public function Professor(){
         return $this->getProfessor();
     }

@@ -1,8 +1,10 @@
 <?php
   include "../classes/userContr.classes.php";
+  include "../includes/subject_details.inc.php";
+
+
   $userdata = new UserCntr();
   $user = $userdata->get_userdata();
-
 if(isset($user)){
       
   $name = $user['name'];
@@ -80,7 +82,7 @@ if(isset($user)){
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Dashboard</span></a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-users"></i>
@@ -97,7 +99,7 @@ if(isset($user)){
                 </div>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="subjects.php">
                     <i class="fas fa-fw fa-clipboard"></i>
                     <span>Subjects</span></a>
@@ -168,15 +170,14 @@ if(isset($user)){
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
                     <!-- Content Row -->
                     <div class="row">
                         
                         <div class="admin-container">
                             <div class="admin-card">
-                              <center><h4><b>Subject name</b></h4>  </center><br>
-                              <center><b>Subject description</b></center>
-                              <center><p>Count <i class="fas fa-network-wired"></i></p></center>
+                              <center><h4><b><?= $subject['subject_name']; ?></b></h4>  </center><br>
+                              <center><b><?= $subject['subject_description']; ?></b></center>
+                              <center><p><?= $subject['subj_id']; ?> <i class="fas fa-network-wired"></i></p></center>
                               <hr>
                               <div class="container"> 
                               <div class="table-responsive">
@@ -185,24 +186,41 @@ if(isset($user)){
                                         <tr>
                                             <th>Professor Name</th>
                                             <th>Email</th>
-                                            <th>Phone</th>
+                                            <th>Address</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                         
+
+                                        <?php
+                                            if($s == false){
+
+                                            }
+                                            else{
+                                            foreach($s as $rm){ ?>
+                                               <tr id="records_<?= $rm['id'];?>">
+                                               <a href="#"><td><?= $rm['first_name'].' '.$rm['last_name']; ?></td><a>
+                                                    <td> <?= $rm['email']; ?></td>
+                                                    <td> <?= $rm['address']; ?></td>
+                                                    <td>
+                                                        <button type="button" onclick="addSchedule(<?= $rm['id'];?>, <?= $rm['subject_id']; ?>)" class="btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="assign schedule"><i class="fa fa-plus"></i></button>
+                                                        <button type="button" onclick="deleteProf(<?= $rm['id'];?>, <?= $rm['subject_id']; ?>)" class="btn-sm btn-danger dlt_record" data-toggle="tooltip" data-placement="top" title="delete"><i class="fa fa-trash"></i></button>
+                                                    </td>
+                                                </tr>
+                                            <?php  
+                                            }
+                                            }
+                                        ?>
 
                                     </tbody>
                                 </table>
+                             </div>
                             </div>
-
-                              </div>
                         </div>
-                    </div>
-                                  
-</div>
-                            </div>
-                          </div> 
+                    </div>              
+            </div>
+        </div>
+    </div> 
 
 
                     <!-- Content Row -->
@@ -248,89 +266,107 @@ if(isset($user)){
         </div>
     </div>
 
-    <!-- Add Professor Modal -->
-    <div class="modal fade addProfessor" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+     <!-- Assign Schedule to the subject -->
+     <div class="modal fade" id="assignProfessor" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Professor</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Scheduler</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="../includes/professor.inc.php">
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="Name">First Name</label>
-                                <input type="text" class="form-control" name="first_name" id="first_name">
+                    <div class="alert alert-danger error_alert" role="alert">
+                         Schedule Already Exist!
+                    </div>
+                    <div class="alert alert-success success_alert" role="alert">
+                         Schedule Added!
+                    </div>
+                    <div class="row  justify-content-center">
+                        <form method="post" id="myForm">
+                            <div class="form-rowr">
+                                <div class="form-group">
+                                    <label for="student_first_name">Time In</label>
+                                    <input type="time" class="form-control" name="time_in">
+                                </div>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="user_email">Last Name</label>
-                                <input type="text" class="form-control" name="last_name" id="last_name">
+                            <div class="form-row justify-content-center">
+                                <div class="form-group">
+                                    <label for="student_first_name">Time Out</label>
+                                    <input type="time" class="form-control" name="time_out">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="user_email">Password</label>
-                            <input type="password" class="form-control" name="password" id="user_password">
-                        </div>
-                        <div class="form-group">
-                            <label for="user_email">Confirm Password</label>
-                            <input type="password" class="form-control" name="confirm_password" id="prof_confirm_password">
-                        </div>
-                        <p id="conpasscheck" style="color: red;"></p>
-                        <div class="form-group">
-                            <label for="user_email">Email</label>
-                            <input type="email" class="form-control" name="email" id="user_email">
-                        </div>
-                        <div class="form-group">
-                            <label for="inputAddress2">Address</label>
-                            <input type="text" class="form-control" name="address" id="user_address">
-                        </div>
-                       
-                        <button type="submit" name="submit" id="btn_submit" class="btn btn-primary">Submit</button>
-                    </form>
-                </div>
-               
-            </div>
-        </div>
-    </div>
+                            <div class="form-row justify-content-center">
+                            <div class="form-group col-md-4">
+                                    <input type="checkbox" class="custom-control-input" id="mon" value="mon" name="chkl[]">
+                                    <label class="custom-control-label" for="mon">Monday</label>
+                                </div>
+                            </div>
+                            <div class="form-row justify-content-center">
+                                <div class="form-group col-md-4">
+                                    <input type="checkbox" class="custom-control-input" id="tues" value="tues" name="chkl[]">
+                                    <label class="custom-control-label" for="tues">Tuesday</label>
+                                </div>
+                            </div>
+                            <div class="form-row justify-content-center">
+                                <div class="form-group col-md-4">
+                                    <input type="checkbox" class="custom-control-input" id="wed" value="wed" name="chkl[]">
+                                    <label class="custom-control-label" for="wed">Wednesday</label>
+                                </div>
+                            </div>
+                            <div class="form-row justify-content-center">
+                                <div class="form-group col-md-4">
+                                    <input type="checkbox" class="custom-control-input" id="thurs" value="thurs" name="chkl[]">
+                                    <label class="custom-control-label" for="thurs">Thursday</label>
+                                </div>
+                            </div>
+                            <div class="form-row justify-content-center =">
+                                <div class="form-group col-md-4">
+                                    <input type="checkbox" class="custom-control-input" id="fri" value="fri" name="chkl[]">
+                                    <label class="custom-control-label" for="fri">Friday</label>
+                                </div>
+                            </div>
+                            <div class="form-row justify-content-center">
+                                <div class="form-group col-md-4">
+                                    <input type="checkbox" class="custom-control-input" id="sat" value="sat" name="chkl[]">
+                                    <label class="custom-control-label" for="sat">Saturday</label>
+                                </div>
+                            </div>
 
-     <!-- Edit Professor Modal -->
-     <div class="modal fade" id="editProfessor" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Professor</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="post" action="../includes/professor.inc.php">
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="Name">First Name</label>
-                                <input type="text" class="form-control" name="first_name" id="prof_first_name">
+                            <input type="hidden" name="prof_subj_id" id="prof_subj_id">
+                            <input type="hidden" name="subj_uid" id="subj_uid">
+                            <hr>
+                            <div class="form-row justify-content-center">
+                                <div class="form-group">
+                                    <button type="button" name="btn_schedule_submit" id="btn_schedule_submit" class="btn btn-primary">Submit</button>
+                                </div>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="user_email">Last Name</label>
-                                <input type="text" class="form-control" name="last_name" id="prof_last_name">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="user_email">Email</label>
-                            <input type="email" class="form-control" name="email" id="prof_email">
-                        </div>
-                        <div class="form-group">
-                            <label for="inputAddress2">Address</label>
-                            <input type="text" class="form-control" name="address" id="prof_address">
-                        </div>
-                       
-                        <button type="submit" name="submit" id="btn_submit" class="btn btn-primary">Submit</button>
-                    </form>
+                        </form>                   
+                    
+                    </div>
+                    <hr>
+                    <div class="row justify-content-center">
+                       <div class="table-responsive">
+                        <center>Schedules</center>
+                        <table class="table table-dark" id="tbl1" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Subject Name</th>
+                                    <th>Day</th>
+                                    <th>Time In</th>
+                                    <th>Time Out</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="tbl1"> 
+                                
+                            </tbody>
+                        </table>
+                       </div>
+                    </div>
+                    
                 </div>
-               
             </div>
         </div>
     </div>
@@ -352,63 +388,94 @@ if(isset($user)){
     <script src="../js/demo/datatables-demo.js"></script>
     <script>
     $(document).ready(function () {
-        $("#conpasscheck").hide();
-        $("#btn_submit").hide();
-        let confirmPasswordError = true;
-        $("#prof_confirm_password").keyup(function () {
-            validateConfirmPassword();
-        });
+    });
+    function addSchedule(id, subj_id){
+        $('.error_alert').hide();
+        $('.success_alert').hide();
+        
+        schedules(id,subj_id);
 
-        function validateConfirmPassword() {
-        let confirmPasswordValue = $("#prof_confirm_password").val();
-        let passwordValue = $("#user_password").val();
-        if (passwordValue != confirmPasswordValue) {
-            $("#conpasscheck").show();
-            $("#conpasscheck").html("Password didn't Match");
-            $("#conpasscheck").css("color", "red");
-            confirmPasswordError = false;
-            return false;
-        } else {
-            $("#conpasscheck").hide();
-            $("#btn_submit").show();
-        }
+        $('#prof_subj_id').val(id);
+        $('#subj_uid').val(subj_id);
+        $('#assignProfessor').modal();
     }
 
-    
-        
-    });
-
-    function editProfessorModal(prof_id){
+    $('#btn_schedule_submit').click(function (){
         $.ajax({
-            method: "get",
-            dataType: "json",
-            url: "../includes/professor.inc.php?id=" + prof_id,
-            success: function (response){
-            $.each(response, function(index, data) {
-                    $('#prof_first_name').val(data.first_name)
-                    $('#prof_last_name').val(data.last_name)
-                    $('#prof_address').val(data.address)
-                    $('#prof_email').val(data.email)
+            url: '../includes/subject_details.inc.php',
+            type: 'post',
+            dataType: 'json',
+            data: $('form#myForm').serialize(),
+            success: function(data) {
+                schedules(data.prof_id,data.subj_id);
+                if(data.error){
+                    $( ".error_alert" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
+                }
+                else{
+                    $( ".success_alert" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
+                }
+            }
+         });
+    })
+
+    function schedules(id,subj_id){
+        var html = '';
+        var str = '';
+        $.ajax({
+                method: "get",
+                dataType: "json",
+                url: "../includes/subject_details.inc.php?prof_id="+ id +'&subj_id='+subj_id, 
+                success: function (response){
+                $.each(response, function(index, data) {
+                    time = data.time;
+                    html += '<tr class="schedule_record_'+data.id+'">';
+                    html += '<td>'+data.subject_name+'</td>';
+                    html += '<td>'+data.day+'</td>';
+                    html += '<td>'+data.time_in+'</td>';
+                    html += '<td>'+data.time_out+'</td>';
+                    html += '<td><button class="btn btn-sm btn-danger" onclick="deleteSched('+data.id+','+id+','+subj_id+','+timeToDecimal(data.time_in)+')" id="delete_schedule"><i class="fa fa-trash"></i></button></td>';
+                    html += '</tr>';
                 });
+                // for (var i = 0; i < response.length; ++i) {
+                //     console.log(response[i].time_in);
+                // }
+                $('.tbl1').html(html);
+            },
+            error: function( error ){
+                console.log('may error')
             }
         })
-        $('#editProfessor').modal(); 
     }
 
-    function deleteUser(id){
-            var confirmation = confirm("are you sure you want to remove the item?");
+    function timeToDecimal(t) {
+        var arr = t.split(':');
+        var dec = parseInt((arr[1]/6)*10, 10);
+        
+        return parseFloat(parseInt(arr[0], 10) + '.' + (dec<10?'0':'') + dec);
+    }   
 
-            if(confirmation){
-                $.ajax({
-                    method: "get",
-                    url: "../includes/professor.inc.php?delete_user=" + id,
-                    success: function (response){
-                    $("#records_"+id).remove();
-                    }
-                })
-            }
+    function deleteProf(id,subj_id){
+        var confirmation = confirm("are you sure you want to remove professor in this subject?");
+
+        if(confirmation){
+            $.ajax({
+                method: "get",
+                url: "../includes/subject_details.inc.php?delete_prof="+ id +'&subj_id='+subj_id,
+                success: function (response){
+                $("#records_"+id).remove();
+                }
+            })
+        }
     }
-
+    function deleteSched(record_id,id,subj_id,time_in){
+        $.ajax({
+                method: "get",
+                url: "../includes/subject_details.inc.php?delete_sched="+ id +'&subj_id='+subj_id +'&time_in='+time_in,
+                success: function (response){
+                  $(".schedule_record_"+record_id).remove();
+                }
+        })
+    }
     </script>
 </body>
 

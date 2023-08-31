@@ -32,3 +32,7 @@
     if(isset($_GET['subject_id'])){
        return $subject->selectProfessors();
     }
+
+    if(isset($_POST['btn_schedule_submit'])){
+        return $subject->insertSchedule();
+    }

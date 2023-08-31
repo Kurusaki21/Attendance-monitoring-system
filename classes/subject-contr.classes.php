@@ -61,6 +61,69 @@ class SubjectCntr extends AddSubject{
         }
         return $result;
     }
+
+    public function showSubjectdata($id){
+        return $this->getSubjectData($id);
+    }
+    public function getSubject($id){
+        return $this->getSubjectId($id);
+    }
+
+    public function insertSchedule(){
+         
+            $prof_id = $_POST['prof_subj_id'];
+            $subj_id = $_POST['subj_uid'];
+            $time_in = $_POST['time_in'];
+            $time_out = $_POST['time_out'];
+            $chkl = $_POST['chkl'];
+            if($this->matchDay($prof_id, $subj_id, $chkl) == true){
+                echo json_encode(array('error'=>'schedules already exist', 'prof_id' => $prof_id, 'subj_id' => $subj_id));
+            }
+            else{
+                echo json_encode($this->setSchedule($prof_id, $subj_id,$time_in, $time_out, $chkl));
+            }
+        
+    }
+
+    public function getProfessorSchedule($prof_id, $subj_id){
+
+        echo json_encode($this->profSchedDetails($prof_id, $subj_id));
+    }
+
+    public function matchDay($prof_id, $subj_id, $chkl){
+        $result;
+
+        if($this->validateSchedule($prof_id, $subj_id, $chkl)){
+            $result = true;
+        }
+        else{
+            $result = false;
+        }
+        return $result;
+    }
+
+    public function removeProfonSchedule($prof_id, $subj_id){
+        return $this->removeAssignedProfessor($prof_id, $subj_id);
+        return json_encode(array("statusCode"=>200));
+    }
+
+    public function removeSchedule($prof_id, $subj_id, $time_in){
+
+       return $this->removeSubjectProfessor($prof_id, $subj_id, $this->clockalize($time_in));
+    }
+
+     function clockalize($in){
+
+        $h = intval($in);
+        $m = round((((($in - $h) / 100.0) * 60.0) * 100), 0);
+        if ($m == 60)
+        {
+            $h++;
+            $m = 0;
+        }
+        $retval = sprintf("%02d:%02d", $h, $m);
+        return $retval;
+    }
     
 }
 

@@ -9,6 +9,7 @@ include_once '../classes/professor-contr.classes.php';
 $prof = new ProfessorCntr();
 
 $prof->setProfessor();
+$prof->setEdit();
 
 if(isset($_GET['id'])){
     $prof->getProfessorData($_GET['id']);
