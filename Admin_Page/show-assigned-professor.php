@@ -322,10 +322,14 @@ if(isset($user)){
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-danger error_alert" role="alert">
-                         Schedule Already Exist!
+                         <div class="error_div">
+
+                         </div>
                     </div>
                     <div class="alert alert-success success_alert" role="alert">
-                         Schedule Added!
+                        <div class="success_div">
+                                            
+                         </div>
                     </div>
                     <div class="row  justify-content-center">
                         <div class="col">
@@ -468,10 +472,12 @@ if(isset($user)){
             success: function(data) {
                 schedules(data.prof_id,data.subj_id);
                 if(data.error){
+                    $('.error_div').html(data.error)
                     $( ".error_alert" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
                 }
                 else{
                     showAccordion(data.prof_id,data.subj_id)
+                    $('.success_div').html(data.success)
                     $( ".success_alert" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
                 }
             }
@@ -544,7 +550,6 @@ if(isset($user)){
             },
             url: "../includes/list_of_schedules.php",
             success: function(result) {
-                //alert(result);
                 console.log(result);
                 $(".accordion_schedules").html(result);
             }

@@ -133,7 +133,7 @@ class AddSubject extends DB{
             $stmt->execute([$prof_id, $subj_id, $checklist, $time_in , $time_out, $datetimetoday]);
         
         }
-        return array('prof_id'=>$prof_id, 'subj_id'=>$subj_id);
+        return array('success'=>'Schedule Added','prof_id'=>$prof_id, 'subj_id'=>$subj_id);
         
        
     }
@@ -204,6 +204,51 @@ class AddSubject extends DB{
         $data = $stmt->fetchall();
         $total = $stmt->rowCount();
         return $data;
+    }
+
+    protected function insertStudents($student_id,$pro_id,$subj_id,$sched_subject){
+        $datetimetoday = date("Y-m-d H:i:s");
+        $connection = $this->dbOpen();
+       
+        $stmt = $connection->prepare("INSERT INTO professor_student (subject_id,schedule_id, professor_id, student_id, created_at) VALUES (?,?,?,?,?)");
+        $stmt->execute([$subj_id,$sched_subject,$pro_id,$student_id,$datetimetoday]);
+        
+   
+        return array('success' => 'Student Added','prof_id'=>$pro_id, 'subj_id'=>$subj_id);
+    }
+
+    protected function validateStudent($student_id, $sched_subject){
+        $resultCheck;
+        $connection = $this->dbOpen();
+        $arr = explode(',',$sched_subject);
+        foreach($arr as $scheds){
+            $stmt = $connection->prepare("SELECT * FROM professor_student WHERE student_id = ? and schedule_id = ?");
+            $stmt->execute([$student_id, $scheds]);
+
+            if($stmt->rowCount() > 0 ){
+                $resultCheck = true;
+            }
+            else{
+                $resultCheck = false;
+            }
+            return $resultCheck;
+            
+        }
+    }
+
+    protected function studentsData($getprofessorid,$getsubjectid,$getscheduleid){
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("SELECT students.school_id, students.first_name, students.last_name FROM students LEFT JOIN professor_student ON students.id = professor_student.student_id WHERE professor_student.schedule_id = ?;");
+        $stmt->execute([$getscheduleid]);
+        $data = $stmt->fetchall();
+        $total = $stmt->rowCount();
+
+        if($total > 0){
+            return $data;
+        }
+        else{
+            return false;
+        }
     }
 }
 

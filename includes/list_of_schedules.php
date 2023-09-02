@@ -29,16 +29,16 @@ if(isset($_POST['prof_id']) && isset($_POST['subject_id'])){
                         <button class="add_button btn-danger" onclick='hide_button_function(<?= $data['id']; ?>)' id="hidden_button_<?= $data['id']; ?>"><span>Close</span></button>
                     </div>
                     <div class="col" id="hide_me_<?= $data['id']; ?>"> 
-                            <input type="text" value="<?= $_POST['prof_id'] ?>" id="sub_prof_id">
-                            <input type="text" value="<?= $_POST['subject_id'] ?>" id="sub_id">
-                            <input type="text" value="<?= $data['ids'] ?>" id="sched_subject">
+                            <input type="hidden" value="<?= $_POST['prof_id'] ?>" id="sub_prof_id">
+                            <input type="hidden" value="<?= $_POST['subject_id'] ?>" id="sub_id">
+                            <input type="hidden" value="<?= $data['ids']; ?>"class="sched_subject" id="sched_subject_<?= $data['id']?>">
                             <select class="selectpicker form-control my-select-student" id="my-select-student_<?= $data['id']; ?>" data-live-search="true" name="select_professor">
                          
                             </select>
                     </div>
                 <div class="container">
                 <div class="table-responsive">
-                                <table class="table table-stripped" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-stripped schedules_table_<?= $data['id']; ?>" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>School ID</th>
@@ -47,11 +47,7 @@ if(isset($_POST['prof_id']) && isset($_POST['subject_id'])){
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                        </tr>
+                                        
                                         
                                     </tbody>
                                 </table>
@@ -68,28 +64,77 @@ if(isset($_POST['prof_id']) && isset($_POST['subject_id'])){
 <script>
 
         $(".my-select-student").change(function(e){
+           var student_id = this.value;
            var pro_id = $('#sub_prof_id').val();
            var subj_id = $('#sub_id').val();
-           var sched_subject = $('#sched_subject').val();
-           console.log(pro_id)
-           console.log(subj_id)
-           console.log(sched_subject)
+           var id = $(this).children(":selected").attr("id");
+           console.log(id);
+        
+           $.ajax({
+                type: "post",
+                dataType: "json",
+                url: "../includes/subject_details.inc.php", 
+                data:{
+                    student_id: student_id,
+                    pro_id: pro_id,
+                    subj_id: subj_id,
+                    sched_subject: id,
+                    action_submit: 'assign_student'
+                },
+                success: function (response){
+                    if(response.error){
+                     
+                        $('.error_div').html(response.error)
+                        $( ".error_alert" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
+                    }
+                    else{
+                        $('.success_div').html(response.success)
+                        $( ".success_alert" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
+                    }
+                    listofStudents(pro_id, subj_id, id);
+                    console.log(response);
+                },
+                error: function( error ){
+                    console.log(error)
+                }
+            })
+
+        
+
         })
 
 
 $('.my-select-student').selectpicker();
-// $('#add_button').click(function(){
-//     $('#add_button').hide();
-// })
-// $('#hidden_button').click(function(){
-//     $('#hide_me').hide();
 
-//     $('#hidden_button').hide();
-// })
 function showData(prof_id, subj_id,id){
     $('#hide_me_'+id+'').hide();
     $('#hidden_button_'+id+'').hide();
     $('#add_button_'+id+'').show();
+
+    
+    listofStudents(prof_id, subj_id, id);
+}
+
+function listofStudents(prof_id, subj_id, id){
+    var html='';
+    $.ajax({
+        type: "post",
+        dataType: "json",
+        url: "../includes/subject_details.inc.php?getprofessorid="+ prof_id+'&&getsubjectid='+ subj_id+'&&getscheduleid='+id, 
+        success: function (response){
+            $.each(response,function(index,value){
+                html +='<tr>';
+                html +='<td>'+ value.school_id + '</td>';
+                html +='<td>'+ value.first_name +' '+ value.last_name+ '</td>';
+                html +='<td><button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button></td>';
+                html +='</tr>';
+            });
+            $('.schedules_table_'+id+' tbody').html(html);
+        },
+        error: function( error ){
+            console.log(error)
+        }
+    })
 }
 function add_button_function(id){
     html='';
@@ -105,7 +150,7 @@ function add_button_function(id){
             $(this).append('   <option></option>');
             html += '<option>Select Student</option>';
             for (var i = 0; i < response.length; i++) {
-                $(this).append('<option value='+response[i]['id']+'>'+response[i]['first_name']+' '+response[i]['last_name']+'</option>');
+                $(this).append('<option id="'+id+'" value='+response[i]['id']+'>'+response[i]['first_name']+' '+response[i]['last_name']+'</option>');
             }
         $('.my-select-student').selectpicker('refresh');
             })
@@ -117,6 +162,7 @@ function add_button_function(id){
     $('#hide_me_'+id+'').show();
     $('#hidden_button_'+id+'').show();
     $('#add_button_'+id+'').hide();
+    // $('#sched_subject_'+id+'').val(id)
     
 }
 function hide_button_function(id){
@@ -124,4 +170,6 @@ function hide_button_function(id){
     $('#hide_me_'+id+'').hide();
     $('#hidden_button_'+id+'').hide();
 }
+
+
 </script>
