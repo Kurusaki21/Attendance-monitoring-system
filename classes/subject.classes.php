@@ -125,7 +125,6 @@ class AddSubject extends DB{
     }
 
     protected function setSchedule($prof_id, $subj_id,  $time_in , $time_out, $chkl){
-     
         $datetimetoday = date("Y-m-d H:i:s");
         $connection = $this->dbOpen();
 
@@ -141,7 +140,7 @@ class AddSubject extends DB{
 
     protected function profSchedDetails($prof_id, $subj_id){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT subject_schedule.id, subject.subject_name, GROUP_CONCAT(subject_schedule.day) as day, subject_schedule.time_in, subject_schedule.time_out FROM subject_schedule LEFT JOIN subject ON subject_schedule.subject_id = subject.id WHERE subject_schedule.prof_id = ? and subject_schedule.subject_id = ? GROUP BY subject_schedule.time_in;");
+        $stmt = $connection->prepare("SELECT subject_schedule.id, subject.subject_name, GROUP_CONCAT(subject_schedule.id) as ids,GROUP_CONCAT(subject_schedule.day) as day, subject_schedule.time_in, subject_schedule.time_out FROM subject_schedule LEFT JOIN subject ON subject_schedule.subject_id = subject.id WHERE subject_schedule.prof_id = ? and subject_schedule.subject_id = ? GROUP BY subject_schedule.time_in;");
         $stmt->execute([$prof_id, $subj_id]);
 
         $data = $stmt->fetchall();
@@ -149,13 +148,13 @@ class AddSubject extends DB{
         return $data;
     }
 
-    protected function validateSchedule($prof_id, $subj_id, $chkl){
+    protected function validateSchedule($prof_id, $subj_id, $chkl, $time_in){
         $resultCheck;
         $connection = $this->dbOpen();
 
         foreach($chkl as $checklist){
-            $stmt = $connection->prepare("SELECT day FROM subject_schedule WHERE prof_id = ? and subject_id = ? and day = ?");
-            $stmt->execute([$prof_id, $subj_id, $checklist]);
+            $stmt = $connection->prepare("SELECT day FROM subject_schedule WHERE prof_id = ? and subject_id = ? and day = ? and time_in = ?");
+            $stmt->execute([$prof_id, $subj_id, $checklist, $time_in]);
 
             if($stmt->rowCount() > 0 ){
                 $resultCheck = true;
@@ -166,6 +165,7 @@ class AddSubject extends DB{
             return $resultCheck;
             
         }
+        
 
     }
 
@@ -194,6 +194,16 @@ class AddSubject extends DB{
             header("location: index.php?errors=stmtfailed");
             exit();
         }
+    }
+
+    protected function studentsList(){
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("SELECT * FROM students");
+        $stmt->execute();
+
+        $data = $stmt->fetchall();
+        $total = $stmt->rowCount();
+        return $data;
     }
 }
 

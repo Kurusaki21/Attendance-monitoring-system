@@ -31,7 +31,51 @@ if(isset($user)){
     .table-bordered{
         color:white;
     }
-  
+    .add_button {
+    border-radius: 4px;
+    background-color: #5ca1e1;
+    border: none;
+    color: #fff;
+    text-align: center;
+    font-size: 6px;
+    width:70px;
+    transition: all 0.5s;
+    cursor: pointer;
+    }
+ 
+    .add_button{
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+    }
+    select{
+		font-family: fontAwesome
+	}
+    .add_button:after {
+    content: '+';
+    position: absolute;
+    opacity: 0;  
+    right: -20px;
+    transition: 0.5s;
+    }
+    .add_button:after {
+    content: '+';
+    position: absolute;
+    opacity: 0;  
+    right: -20px;
+    transition: 0.5s;
+    }
+
+    .add_button:hover{
+    padding-right: 20px;
+    padding-left:-5px;
+    }
+
+    .add_button:hover:after {
+    opacity: 1;
+    right: 10px;
+    }
 </style>
 <body id="page-top">
     <!-- Page Wrapper -->
@@ -284,71 +328,85 @@ if(isset($user)){
                          Schedule Added!
                     </div>
                     <div class="row  justify-content-center">
-                        <form method="post" id="myForm">
-                            <div class="form-rowr">
-                                <div class="form-group">
-                                    <label for="student_first_name">Time In</label>
-                                    <input type="time" class="form-control" name="time_in">
-                                </div>
-                            </div>
-                            <div class="form-row justify-content-center">
-                                <div class="form-group">
-                                    <label for="student_first_name">Time Out</label>
-                                    <input type="time" class="form-control" name="time_out">
-                                </div>
-                            </div>
-                            <div class="form-row justify-content-center">
-                            <div class="form-group col-md-4">
-                                    <input type="checkbox" class="custom-control-input" id="mon" value="mon" name="chkl[]">
-                                    <label class="custom-control-label" for="mon">Monday</label>
-                                </div>
-                            </div>
-                            <div class="form-row justify-content-center">
-                                <div class="form-group col-md-4">
-                                    <input type="checkbox" class="custom-control-input" id="tues" value="tues" name="chkl[]">
-                                    <label class="custom-control-label" for="tues">Tuesday</label>
-                                </div>
-                            </div>
-                            <div class="form-row justify-content-center">
-                                <div class="form-group col-md-4">
-                                    <input type="checkbox" class="custom-control-input" id="wed" value="wed" name="chkl[]">
-                                    <label class="custom-control-label" for="wed">Wednesday</label>
-                                </div>
-                            </div>
-                            <div class="form-row justify-content-center">
-                                <div class="form-group col-md-4">
-                                    <input type="checkbox" class="custom-control-input" id="thurs" value="thurs" name="chkl[]">
-                                    <label class="custom-control-label" for="thurs">Thursday</label>
-                                </div>
-                            </div>
-                            <div class="form-row justify-content-center =">
-                                <div class="form-group col-md-4">
-                                    <input type="checkbox" class="custom-control-input" id="fri" value="fri" name="chkl[]">
-                                    <label class="custom-control-label" for="fri">Friday</label>
-                                </div>
-                            </div>
-                            <div class="form-row justify-content-center">
-                                <div class="form-group col-md-4">
-                                    <input type="checkbox" class="custom-control-input" id="sat" value="sat" name="chkl[]">
-                                    <label class="custom-control-label" for="sat">Saturday</label>
-                                </div>
-                            </div>
+                        <div class="col">
 
-                            <input type="hidden" name="prof_subj_id" id="prof_subj_id">
-                            <input type="hidden" name="subj_uid" id="subj_uid">
-                            <hr>
+                            <div class="accordion_schedules"></div>
+                                            
+                           
+                        </div>
+                        <div class="col">
+                          
                             <div class="form-row justify-content-center">
-                                <div class="form-group">
-                                    <button type="button" name="btn_schedule_submit" id="btn_schedule_submit" class="btn btn-primary">Submit</button>
+                                    
+                                          Add Schedule
                                 </div>
-                            </div>
-                        </form>                   
-                    
+                                <br>
+                            <form method="post" id="myForm">
+                                <div class="form-row justify-content-center">
+                                    <div class="form-group">
+                                        <label for="student_first_name">Time In</label>
+                                        <input type="time" class="form-control" name="time_in">
+                                    </div>
+                                </div>
+                                <div class="form-row justify-content-center">
+                                    <div class="form-group">
+                                        <label for="student_first_name">Time Out</label>
+                                        <input type="time" class="form-control" name="time_out">
+                                    </div>
+                                </div>
+                                <div class="form-row justify-content-center">
+                                <div class="form-group col-md-4">
+                                        <input type="checkbox" class="custom-control-input" id="mon" value="mon" name="chkl[]">
+                                        <label class="custom-control-label" for="mon">Monday</label>
+                                    </div>
+                                </div>
+                                <div class="form-row justify-content-center">
+                                    <div class="form-group col-md-4">
+                                        <input type="checkbox" class="custom-control-input" id="tues" value="tues" name="chkl[]">
+                                        <label class="custom-control-label" for="tues">Tuesday</label>
+                                    </div>
+                                </div>
+                                <div class="form-row justify-content-center">
+                                    <div class="form-group col-md-4">
+                                        <input type="checkbox" class="custom-control-input" id="wed" value="wed" name="chkl[]">
+                                        <label class="custom-control-label" for="wed">Wednesday</label>
+                                    </div>
+                                </div>
+                                <div class="form-row justify-content-center">
+                                    <div class="form-group col-md-4">
+                                        <input type="checkbox" class="custom-control-input" id="thurs" value="thurs" name="chkl[]">
+                                        <label class="custom-control-label" for="thurs">Thursday</label>
+                                    </div>
+                                </div>
+                                <div class="form-row justify-content-center =">
+                                    <div class="form-group col-md-4">
+                                        <input type="checkbox" class="custom-control-input" id="fri" value="fri" name="chkl[]">
+                                        <label class="custom-control-label" for="fri">Friday</label>
+                                    </div>
+                                </div>
+                                <div class="form-row justify-content-center">
+                                    <div class="form-group col-md-4">
+                                        <input type="checkbox" class="custom-control-input" id="sat" value="sat" name="chkl[]">
+                                        <label class="custom-control-label" for="sat">Saturday</label>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" name="prof_subj_id" id="prof_subj_id">
+                                <input type="hidden" name="subj_uid" id="subj_uid">
+                                <hr>
+                                <div class="form-row justify-content-center">
+                                    <div class="form-group">
+                                        <button type="button" name="btn_schedule_submit" id="btn_schedule_submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </div>
+                            </form>      
+                        </div>
+                       
                     </div>
-                    <hr>
+                    <!-- <hr>
                     <div class="row justify-content-center">
                        <div class="table-responsive">
-                        <center>Schedules</center>
+                        <center><h2>Schedules</h2></center>
                         <table class="table table-dark" id="tbl1" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
@@ -364,7 +422,7 @@ if(isset($user)){
                             </tbody>
                         </table>
                        </div>
-                    </div>
+                    </div> -->
                     
                 </div>
             </div>
@@ -383,16 +441,16 @@ if(isset($user)){
 
     <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
     <!-- Page level custom scripts -->
     <script src="../js/demo/datatables-demo.js"></script>
     <script>
-    $(document).ready(function () {
-    });
+    
+    $('#hide_me').hide();
     function addSchedule(id, subj_id){
         $('.error_alert').hide();
         $('.success_alert').hide();
-        
+        showAccordion(id, subj_id);
         schedules(id,subj_id);
 
         $('#prof_subj_id').val(id);
@@ -401,6 +459,7 @@ if(isset($user)){
     }
 
     $('#btn_schedule_submit').click(function (){
+      
         $.ajax({
             url: '../includes/subject_details.inc.php',
             type: 'post',
@@ -412,6 +471,7 @@ if(isset($user)){
                     $( ".error_alert" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
                 }
                 else{
+                    showAccordion(data.prof_id,data.subj_id)
                     $( ".success_alert" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
                 }
             }
@@ -440,9 +500,6 @@ if(isset($user)){
                 //     console.log(response[i].time_in);
                 // }
                 $('.tbl1').html(html);
-            },
-            error: function( error ){
-                console.log('may error')
             }
         })
     }
@@ -467,6 +524,7 @@ if(isset($user)){
             })
         }
     }
+
     function deleteSched(record_id,id,subj_id,time_in){
         $.ajax({
                 method: "get",
@@ -476,6 +534,25 @@ if(isset($user)){
                 }
         })
     }
+
+    function showAccordion(id,subj_id){
+        $.ajax({
+            type: "POST",
+            data: {
+                prof_id: id,
+                subject_id: subj_id
+            },
+            url: "../includes/list_of_schedules.php",
+            success: function(result) {
+                //alert(result);
+                console.log(result);
+                $(".accordion_schedules").html(result);
+            }
+        });
+    }
+    
+
+
     </script>
 </body>
 

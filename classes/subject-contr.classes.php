@@ -76,7 +76,7 @@ class SubjectCntr extends AddSubject{
             $time_in = $_POST['time_in'];
             $time_out = $_POST['time_out'];
             $chkl = $_POST['chkl'];
-            if($this->matchDay($prof_id, $subj_id, $chkl) == true){
+            if($this->matchDay($prof_id, $subj_id, $chkl, $time_in) == true){
                 echo json_encode(array('error'=>'schedules already exist', 'prof_id' => $prof_id, 'subj_id' => $subj_id));
             }
             else{
@@ -87,13 +87,13 @@ class SubjectCntr extends AddSubject{
 
     public function getProfessorSchedule($prof_id, $subj_id){
 
-        echo json_encode($this->profSchedDetails($prof_id, $subj_id));
+       return $this->profSchedDetails($prof_id, $subj_id);
     }
 
-    public function matchDay($prof_id, $subj_id, $chkl){
+    public function matchDay($prof_id, $subj_id, $chkl, $time_in){
         $result;
 
-        if($this->validateSchedule($prof_id, $subj_id, $chkl)){
+        if($this->validateSchedule($prof_id, $subj_id, $chkl,$time_in)){
             $result = true;
         }
         else{
@@ -110,6 +110,10 @@ class SubjectCntr extends AddSubject{
     public function removeSchedule($prof_id, $subj_id, $time_in){
 
        return $this->removeSubjectProfessor($prof_id, $subj_id, $this->clockalize($time_in));
+    }
+
+    public function getStudents(){
+        echo json_encode($this->studentsList());
     }
 
      function clockalize($in){
