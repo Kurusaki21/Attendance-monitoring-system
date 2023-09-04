@@ -124,6 +124,40 @@ class SubjectCntr extends AddSubject{
         $retval = sprintf("%02d:%02d", $h, $m);
         return $retval;
     }
+<<<<<<< Updated upstream
+=======
+
+    public function insertStudentSchedule($student_id,$pro_id,$subj_id,$sched_subject){
+
+        if($this->matchStudent($student_id, $sched_subject) == true){
+            echo json_encode(array('error'=>'Student Already Added', 'student_id' => $student_id, 'sched_subject' => $sched_subject));
+        }
+        else{
+            echo json_encode($this->insertStudents($student_id,$pro_id,$subj_id,$sched_subject));
+        }
+       
+    }
+
+    public function matchStudent($student_id, $sched_subject){
+        $result;
+
+        if($this->validateStudent($student_id, $sched_subject)){
+            $result = true;
+        }
+        else{
+            $result = false;
+        }
+        return $result;
+    }
+
+    public function students($getscheduleid){
+        echo json_encode($this->studentsData($getscheduleid));
+    }
+
+    public function deleteAssignedStudents($id){
+        echo json_encode($this->deleteStudent($id));
+    }
+>>>>>>> Stashed changes
     
 }
 

@@ -28,3 +28,21 @@
       
         return $subject_details->removeSchedule($_GET['delete_sched'], $_GET['subj_id'],$_GET['time_in']);
     }
+<<<<<<< Updated upstream
+=======
+
+    if(isset($_POST['action']) && !empty($_POST['action'])){
+        return $subject_details->getStudents();
+    }
+
+    if(isset($_POST['action_submit']) && !empty($_POST['action_submit']) ){
+        return $subject_details->insertStudentSchedule($_POST['student_id'],$_POST['pro_id'],$_POST['subj_id'],$_POST['sched_subject']);
+    }
+    if(isset($_GET['getscheduleid'])){
+        return $subject_details->students($_GET['getscheduleid']);
+    }
+
+    if(isset($_POST['deleteassignedstudent'])){
+        return $subject_details->deleteAssignedStudents($_GET['getscheduleid']);
+    }
+>>>>>>> Stashed changes
