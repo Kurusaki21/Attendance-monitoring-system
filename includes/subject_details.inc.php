@@ -28,3 +28,14 @@
       
         return $subject_details->removeSchedule($_GET['delete_sched'], $_GET['subj_id'],$_GET['time_in']);
     }
+
+    if(isset($_POST['action']) && !empty($_POST['action'])){
+        return $subject_details->getStudents();
+    }
+
+    if(isset($_POST['action_submit']) && !empty($_POST['action_submit']) ){
+        return $subject_details->insertStudentSchedule($_POST['student_id'],$_POST['pro_id'],$_POST['subj_id'],$_POST['sched_subject']);
+    }
+    if(isset($_GET['getprofessorid']) && isset($_GET['getsubjectid']) && isset($_GET['getscheduleid'])){
+        return $subject_details->students($_GET['getprofessorid'],$_GET['getsubjectid'],$_GET['getscheduleid']);
+    }

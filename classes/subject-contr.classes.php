@@ -76,8 +76,8 @@ class SubjectCntr extends AddSubject{
             $time_in = $_POST['time_in'];
             $time_out = $_POST['time_out'];
             $chkl = $_POST['chkl'];
-            if($this->matchDay($prof_id, $subj_id, $chkl) == true){
-                echo json_encode(array('error'=>'schedules already exist', 'prof_id' => $prof_id, 'subj_id' => $subj_id));
+            if($this->matchDay($prof_id, $subj_id, $chkl, $time_in) == true){
+                echo json_encode(array('error'=>'Schedule Already Exist', 'prof_id' => $prof_id, 'subj_id' => $subj_id));
             }
             else{
                 echo json_encode($this->setSchedule($prof_id, $subj_id,$time_in, $time_out, $chkl));
@@ -87,13 +87,13 @@ class SubjectCntr extends AddSubject{
 
     public function getProfessorSchedule($prof_id, $subj_id){
 
-        echo json_encode($this->profSchedDetails($prof_id, $subj_id));
+       return $this->profSchedDetails($prof_id, $subj_id);
     }
 
-    public function matchDay($prof_id, $subj_id, $chkl){
+    public function matchDay($prof_id, $subj_id, $chkl, $time_in){
         $result;
 
-        if($this->validateSchedule($prof_id, $subj_id, $chkl)){
+        if($this->validateSchedule($prof_id, $subj_id, $chkl,$time_in)){
             $result = true;
         }
         else{
@@ -112,6 +112,10 @@ class SubjectCntr extends AddSubject{
        return $this->removeSubjectProfessor($prof_id, $subj_id, $this->clockalize($time_in));
     }
 
+    public function getStudents(){
+        echo json_encode($this->studentsList());
+    }
+
      function clockalize($in){
 
         $h = intval($in);
@@ -123,6 +127,33 @@ class SubjectCntr extends AddSubject{
         }
         $retval = sprintf("%02d:%02d", $h, $m);
         return $retval;
+    }
+
+    public function insertStudentSchedule($student_id,$pro_id,$subj_id,$sched_subject){
+
+        if($this->matchStudent($student_id, $sched_subject) == true){
+            echo json_encode(array('error'=>'Student Already Added', 'student_id' => $student_id, 'sched_subject' => $sched_subject));
+        }
+        else{
+            echo json_encode($this->insertStudents($student_id,$pro_id,$subj_id,$sched_subject));
+        }
+       
+    }
+
+    public function matchStudent($student_id, $sched_subject){
+        $result;
+
+        if($this->validateStudent($student_id, $sched_subject)){
+            $result = true;
+        }
+        else{
+            $result = false;
+        }
+        return $result;
+    }
+
+    public function students($getprofessorid,$getsubjectid,$getscheduleid){
+        echo json_encode($this->studentsData($getprofessorid,$getsubjectid,$getscheduleid));
     }
     
 }
