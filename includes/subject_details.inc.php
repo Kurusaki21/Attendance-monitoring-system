@@ -28,6 +28,7 @@
       
         return $subject_details->removeSchedule($_GET['delete_sched'], $_GET['subj_id'],$_GET['time_in']);
     }
+<<<<<<< Updated upstream
 
     if(isset($_POST['action']) && !empty($_POST['action'])){
         return $subject_details->getStudents();
@@ -39,3 +40,5 @@
     if(isset($_GET['getprofessorid']) && isset($_GET['getsubjectid']) && isset($_GET['getscheduleid'])){
         return $subject_details->students($_GET['getprofessorid'],$_GET['getsubjectid'],$_GET['getscheduleid']);
     }
+=======
+>>>>>>> Stashed changes

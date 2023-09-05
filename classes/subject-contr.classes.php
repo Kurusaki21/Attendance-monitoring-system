@@ -128,6 +128,7 @@ class SubjectCntr extends AddSubject{
         $retval = sprintf("%02d:%02d", $h, $m);
         return $retval;
     }
+<<<<<<< Updated upstream
 
     public function insertStudentSchedule($student_id,$pro_id,$subj_id,$sched_subject){
 
@@ -155,6 +156,8 @@ class SubjectCntr extends AddSubject{
     public function students($getprofessorid,$getsubjectid,$getscheduleid){
         echo json_encode($this->studentsData($getprofessorid,$getsubjectid,$getscheduleid));
     }
+=======
+>>>>>>> Stashed changes
     
 }
 

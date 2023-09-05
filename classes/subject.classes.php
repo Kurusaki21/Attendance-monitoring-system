@@ -195,6 +195,7 @@ class AddSubject extends DB{
             exit();
         }
     }
+<<<<<<< Updated upstream
 
     protected function studentsList(){
         $connection = $this->dbOpen();
@@ -250,6 +251,8 @@ class AddSubject extends DB{
             return false;
         }
     }
+=======
+>>>>>>> Stashed changes
 }
 
 ?>
