@@ -112,21 +112,21 @@ function showData(prof_id, subj_id,id){
     $('#add_button_'+id+'').show();
 
     
-    listofStudents(prof_id, subj_id, id);
+    listofStudents(id);
 }
 
-function listofStudents(prof_id, subj_id, id){
+function listofStudents(id){
     var html='';
     $.ajax({
         type: "post",
         dataType: "json",
-        url: "../includes/subject_details.inc.php?getprofessorid="+ prof_id+'&&getsubjectid='+ subj_id+'&&getscheduleid='+id, 
+        url: "../includes/subject_details.inc.php?getscheduleid="+id, 
         success: function (response){
             $.each(response,function(index,value){
                 html +='<tr>';
                 html +='<td>'+ value.school_id + '</td>';
                 html +='<td>'+ value.first_name +' '+ value.last_name+ '</td>';
-                html +='<td><button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button></td>';
+                html +='<td><button class="btn btn-sm btn-danger" onclick="deleteAssignedStudent('+value.student_id+', '+id+')"><i class="fa fa-trash"></i></button></td>';
                 html +='</tr>';
             });
             $('.schedules_table_'+id+' tbody').html(html);
@@ -169,6 +169,20 @@ function hide_button_function(id){
     $('#add_button_'+id+'').show();
     $('#hide_me_'+id+'').hide();
     $('#hidden_button_'+id+'').hide();
+}
+
+function deleteAssignedStudent(id,schedule_id){
+    var confirmation = confirm("are you sure you want to remove professor in this subject?");
+
+if(confirmation){
+    $.ajax({
+        method: "get",
+        url: "../includes/subject_details.inc.php?delete_student="+id,
+        success: function (response){
+            listofStudents(schedule_id)
+        }
+    })
+}
 }
 
 

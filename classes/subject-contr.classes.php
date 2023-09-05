@@ -104,7 +104,7 @@ class SubjectCntr extends AddSubject{
 
     public function removeProfonSchedule($prof_id, $subj_id){
         return $this->removeAssignedProfessor($prof_id, $subj_id);
-        return json_encode(array("statusCode"=>200));
+     
     }
 
     public function removeSchedule($prof_id, $subj_id, $time_in){
@@ -128,7 +128,6 @@ class SubjectCntr extends AddSubject{
         $retval = sprintf("%02d:%02d", $h, $m);
         return $retval;
     }
-<<<<<<< Updated upstream
 
     public function insertStudentSchedule($student_id,$pro_id,$subj_id,$sched_subject){
 
@@ -153,12 +152,12 @@ class SubjectCntr extends AddSubject{
         return $result;
     }
 
-    public function students($getprofessorid,$getsubjectid,$getscheduleid){
-        echo json_encode($this->studentsData($getprofessorid,$getsubjectid,$getscheduleid));
+    public function students($getscheduleid){
+        echo json_encode($this->studentsData($getscheduleid));
     }
-=======
->>>>>>> Stashed changes
-    
+    public function delStudent($id){
+        return $this->deleteAssignedStudent($id);
+    }
 }
 
 ?>

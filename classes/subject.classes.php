@@ -195,7 +195,6 @@ class AddSubject extends DB{
             exit();
         }
     }
-<<<<<<< Updated upstream
 
     protected function studentsList(){
         $connection = $this->dbOpen();
@@ -237,9 +236,9 @@ class AddSubject extends DB{
         }
     }
 
-    protected function studentsData($getprofessorid,$getsubjectid,$getscheduleid){
+    protected function studentsData($getscheduleid){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT students.school_id, students.first_name, students.last_name FROM students LEFT JOIN professor_student ON students.id = professor_student.student_id WHERE professor_student.schedule_id = ?;");
+        $stmt = $connection->prepare("SELECT professor_student.id as student_id, students.school_id, students.first_name, students.last_name FROM students LEFT JOIN professor_student ON students.id = professor_student.student_id WHERE professor_student.schedule_id = ?;");
         $stmt->execute([$getscheduleid]);
         $data = $stmt->fetchall();
         $total = $stmt->rowCount();
@@ -251,8 +250,17 @@ class AddSubject extends DB{
             return false;
         }
     }
-=======
->>>>>>> Stashed changes
+
+    protected function deleteAssignedStudent($id){
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("DELETE FROM professor_student WHERE id = ?");
+        if(!$stmt->execute([$id])){
+            $stmt = null;
+            header("location: index.php?errors=stmtfailed");
+            exit();
+        }
+        return json_encode(array("statusCode"=>200));
+    }
 }
 
 ?>
