@@ -10,6 +10,7 @@ if(isset($_POST['prof_id']) && isset($_POST['subject_id'])){
 
 ?>
 <?php foreach($s as $data){
+    
 ?>
 
    <div id="accordion">
@@ -17,7 +18,7 @@ if(isset($_POST['prof_id']) && isset($_POST['subject_id'])){
             <div class="card-header" id="headingOne">
             <h5 class="mb-0">
                 <button class="btn btn-link" data-toggle="collapse" onclick="showData(<?= $_POST['prof_id'].','.$_POST['subject_id'].','.$data['id']; ?>)" data-target="#collapse_<?= $data['id']; ?>" aria-expanded="true" aria-controls="collapseOne">
-                <?= $data['day'].' | '.$data['time_in'].'-'.$data['time_out']; ?>
+                <?= $data['day'].' | '.$data['time_in'].'-'.$data['time_out']; ?><button class="btn btn-sm btn-danger" onclick="deleteSched(<?= $data['id'].','.$_POST['prof_id'].','. $_POST['subject_id'].','. $subject_details->decimalHours($data['time_in'])?>)" id="delete_schedule"><i class="fa fa-trash"></i></button>
                 </button>
             </h5>
             </div>
@@ -56,6 +57,7 @@ if(isset($_POST['prof_id']) && isset($_POST['subject_id'])){
             </div>
             </div>
         </div>
+        
     </div>  
 <?php
 }
@@ -91,7 +93,7 @@ if(isset($_POST['prof_id']) && isset($_POST['subject_id'])){
                         $('.success_div').html(response.success)
                         $( ".success_alert" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
                     }
-                    listofStudents(pro_id, subj_id, id);
+                    listofStudents(id);
                     console.log(response);
                 },
                 error: function( error ){
@@ -174,15 +176,29 @@ function hide_button_function(id){
 function deleteAssignedStudent(id,schedule_id){
     var confirmation = confirm("are you sure you want to remove professor in this subject?");
 
-if(confirmation){
-    $.ajax({
-        method: "get",
-        url: "../includes/subject_details.inc.php?delete_student="+id,
-        success: function (response){
-            listofStudents(schedule_id)
-        }
-    })
+    if(confirmation){
+        $.ajax({
+            method: "get",
+            url: "../includes/subject_details.inc.php?delete_student="+id,
+            success: function (response){
+                listofStudents(schedule_id)
+            }
+        })
+    }
 }
+
+function deleteSched(record_id,id,subj_id,time_in){
+    var confirmation = confirm("Confirm delete subject");
+
+    if(confirmation){
+        $.ajax({
+                method: "get",
+                url: "../includes/subject_details.inc.php?delete_sched="+ id +'&subj_id='+subj_id +'&time_in='+time_in,
+                success: function (response){
+                    showAccordion(id,subj_id);
+                }
+        })
+    }
 }
 
 

@@ -118,6 +118,11 @@ if(isset($user)){
                     <i class="fas fa-fw fa-sms"></i>
                     <span>SMS</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="barcode.php">
+                    <i class="fas fa-fw fa-sms"></i>
+                    <span>Barcode Scanner</span></a>
+            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -149,7 +154,7 @@ if(isset($user)){
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $name; ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>

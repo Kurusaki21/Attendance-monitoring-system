@@ -33,7 +33,7 @@
     }
 
     if(isset($_POST['action_submit']) && !empty($_POST['action_submit']) ){
-        return $subject_details->insertStudentSchedule($_POST['student_id'],$_POST['pro_id'],$_POST['subj_id'],$_POST['sched_subject']);
+       return $subject_details->insertStudentSchedule($_POST['student_id'],$_POST['pro_id'],$_POST['subj_id'],$_POST['sched_subject']);
     }
     if(isset($_GET['getscheduleid'])){
         return $subject_details->students($_GET['getscheduleid']);

@@ -158,6 +158,14 @@ class SubjectCntr extends AddSubject{
     public function delStudent($id){
         return $this->deleteAssignedStudent($id);
     }
+
+    
+    public function decimalHours($time)
+    {
+        $hms = explode(":", $time);
+        return ($hms[0] + ($hms[1]/60) + ($hms[2]/3600));
+    }
 }
+
 
 ?>

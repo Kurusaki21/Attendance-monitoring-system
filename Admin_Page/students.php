@@ -1,6 +1,8 @@
 <?php
   include "../classes/userContr.classes.php";
   include "../includes/student.inc.php";
+  require '../vendor/autoload.php';
+  $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
   $userdata = new UserCntr();
   $user = $userdata->get_userdata();
 
@@ -32,8 +34,17 @@ if(isset($user)){
     .table-bordered{
         color:white;
     }
+    #preview{
+        height: 100px;
+        width: 100px;
+    }
+    #edit_preview{
+        height: 100px;
+        width: 100px;
+    }
   
 </style>
+
 <body id="page-top">
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -118,6 +129,11 @@ if(isset($user)){
                     <i class="fas fa-fw fa-sms"></i>
                     <span>SMS</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="barcode.php">
+                    <i class="fas fa-fw fa-sms"></i>
+                    <span>Barcode Scanner</span></a>
+            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -149,7 +165,7 @@ if(isset($user)){
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $name; ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -188,6 +204,8 @@ if(isset($user)){
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
+                                            <th>Shoold ID</th>
+                                            <th>Student Photo</th>
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Address</th>
@@ -205,6 +223,10 @@ if(isset($user)){
                                             else{
                                             foreach($list_of_students as $students){ ?>
                                                <tr id="records_<?= $students['id'];?>">
+                                                    <td> 
+                                                          <p class="small"><?= $students['school_id']?></p>
+                                                    </td>
+                                                    <td align="center"><img src="<?=$students['imageFile'] ?>" width="50px" height="50px"> </td>
                                                     <td> <?= $students['first_name'].' '.$students['last_name']; ?></td>
                                                     <td> <?= $students['email']; ?></td>
                                                     <td> <?= $students['address']; ?></td>
@@ -283,8 +305,10 @@ if(isset($user)){
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="../includes/student.inc.php">
+                    <form method="POST" action="../includes/student.inc.php" enctype="multipart/form-data">
                         <div class="form-group">
+                            <?= 
+                                 $generator->getBarcode($students['school_id'], $generator::TYPE_CODE_128); ?>
                             <label for="student_email">Student ID</label>
                             <input type="text" class="form-control" name="stud_id" id='school_id' readonly>
                         </div>
@@ -348,6 +372,14 @@ if(isset($user)){
                                 </select>
                             </div>
 
+                            <div class="form-row col-md-12">
+                                    <input type="file" name="item_photo" value=""  onchange="loadFile(event)">
+                                 
+                            </div>
+                            <div class="form-row col-md-12 ">
+                                <img id="preview" src="#" />
+                            </div>
+
                         </div>
                         <hr>
                         <button type="submit" name="submit" class="btn btn-primary">Submit</button>
@@ -368,7 +400,7 @@ if(isset($user)){
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="../includes/student.inc.php">
+                    <form method="POST" action="../includes/student.inc.php" enctype="multipart/form-data">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                             <label for="student_first_name">First Name</label>
@@ -428,6 +460,15 @@ if(isset($user)){
                                     <option value="D">D</option>
                                 </select>
                             </div>
+
+                            <div class="form-row col-md-12">
+                                    <input type="file" name="item_photo" value=""  onchange="loadFile2(event)">
+                                 
+                            </div>
+                            <div class="form-row col-md-12 ">
+                                <img id="edit_preview" src="#" />
+                            </div>
+
                                 <input type="hidden" id = "student_id" name="student_id">
                         </div>
                         <hr>
@@ -453,7 +494,25 @@ if(isset($user)){
 
     <!-- Page level custom scripts -->
     <script src="../js/demo/datatables-demo.js"></script>
+    <script tpye="application/javascript">
+
+    var loadFile = function(event) {
+    var output = document.getElementById('preview');
+    output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function() {
+        URL.revokeObjectURL(output.src) // free memory
+        }
+    };
+    var loadFile2 = function(event) {
+    var output = document.getElementById('edit_preview');
+    output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function() {
+        URL.revokeObjectURL(output.src) // free memory
+        }
+    };
+    </script>
     <script>
+       
       $(document).on('click', '#getstudentid', function () {
         const d = new Date();
         let year = d.getFullYear();

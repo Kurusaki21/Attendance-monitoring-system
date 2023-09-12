@@ -531,16 +531,6 @@ if(isset($user)){
         }
     }
 
-    function deleteSched(record_id,id,subj_id,time_in){
-        $.ajax({
-                method: "get",
-                url: "../includes/subject_details.inc.php?delete_sched="+ id +'&subj_id='+subj_id +'&time_in='+time_in,
-                success: function (response){
-                  $(".schedule_record_"+record_id).remove();
-                }
-        })
-    }
-
     function showAccordion(id,subj_id){
         $.ajax({
             type: "POST",

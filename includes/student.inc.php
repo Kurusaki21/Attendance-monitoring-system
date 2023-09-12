@@ -21,5 +21,8 @@
     if(isset($_GET['get_school_id'])){
         return $student->selectLastInsertScoolId($_GET['get_school_id']);
     }
+    if(isset($_GET['school_id'])){
+        return $student->studentSChoolId($_GET['school_id']);
+    }
 
 ?>

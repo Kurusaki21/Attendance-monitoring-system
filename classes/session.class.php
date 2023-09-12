@@ -15,7 +15,8 @@
             }
             $_SESSION['userdata'] = array(
                 'id' => $array['id'],
-                'name' => $array['name'],
+                'first_name' => $array['first_name'],
+                'last_name' => $array['last_name'],
                 'role' => $array['role']  
             );
             return $_SESSION['userdata'];
