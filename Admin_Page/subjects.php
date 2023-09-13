@@ -13,7 +13,7 @@
 
 if(isset($user)){
       
-  $name = $user['name'];
+  $name = $user['first_name']. ' ' .$user['last_name'];
   $role = $user['role'];
   if(isset($role) == '1'){
 

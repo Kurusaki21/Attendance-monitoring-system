@@ -68,7 +68,7 @@ class Professor extends DB{
 
     protected function profSchedDetails($prof_id){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT subject_schedule.id, subject.subject_name, GROUP_CONCAT(subject_schedule.id) as ids,GROUP_CONCAT(CASE WHEN subject_schedule.day = 'mon' THEN 'M' WHEN subject_schedule.day = 'tues' THEN 'T' WHEN subject_schedule.day = 'wed' THEN 'W' WHEN subject_schedule.day = 'thurs' THEN 'TH' ELSE 'F' END SEPARATOR '|') as day, subject_schedule.time_in, subject_schedule.time_out FROM subject_schedule LEFT JOIN subject ON subject_schedule.subject_id = subject.id WHERE subject_schedule.prof_id = ? GROUP BY subject_schedule.time_in");
+        $stmt = $connection->prepare("SELECT subject_schedule.id, subject.subject_name, GROUP_CONCAT(subject_schedule.id) as ids,GROUP_CONCAT(CASE WHEN subject_schedule.day = 'mon' THEN 'M' WHEN subject_schedule.day = 'tues' THEN 'T' WHEN subject_schedule.day = 'wed' THEN 'W' WHEN subject_schedule.day = 'thurs' THEN 'TH' ELSE 'F' END SEPARATOR '|') as day, subject_schedule.time_in, subject_schedule.time_out FROM subject_schedule LEFT JOIN subject ON subject_schedule.subject_id = subject.id WHERE subject_schedule.prof_id = ? GROUP BY subject_schedule.time_in, subject_id ORDER BY subject_name");
         $stmt->execute([$prof_id]);
 
         $data = $stmt->fetchall();
@@ -200,17 +200,78 @@ class Professor extends DB{
       
 
         if($stmt->rowCount() == 0 ){
-            $resultCheck = false;
+            $resultCheck = 0;
         }
         else{
             $new_date_format = date('Y-m-d', strtotime($data['created_at']));
             if($datetimetoday != $new_date_format){
-                $resultCheck = true;
+                $resultCheck = 1;
             }
             else{
-                $resultCheck = false;
+                $resultCheck = 0;
             }
         }
         return $resultCheck;
+    }
+
+    protected function professorSubject($id){
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("SELECT subject.subject_name, subject.id FROM subject LEFT JOIN subject_professor ON subject_professor.subject_id = subject.id WHERE professor_id = ? ");
+        $stmt->execute([$id]);
+
+        $data = $stmt->fetchall();
+        return $data;
+    }
+
+    protected function checkStudent($student_id, $prof_id, $subject_id){
+        $resultCheck;
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("SELECT * FROM professor_student WHERE student_id = ? AND professor_id = ? AND schedule_id = ?");
+
+        if(!$stmt->execute([$student_id, $prof_id, $subject_id])){
+            $stmt = null;
+
+            header("location: index.php?errors=stmtfailed");
+            exit();
+        }
+        $data = $stmt->fetchall();
+      
+
+        if($stmt->rowCount() == 0 ){
+            $resultCheck = false;
+        }
+        else{
+            $resultCheck = true;
+        }
+        return $resultCheck;
+    }
+
+    protected function records($id){
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("SELECT students.first_name, students.last_name, subject.subject_name, CASE WHEN subject_schedule.day = 'mon' THEN 'Monday' WHEN subject_schedule.day = 'tues' THEN 'Tuesday' WHEN subject_schedule.day = 'wed' THEN 'Wednesday' WHEN subject_schedule.day = 'thurs' THEN 'Thursday' WHEN subject_schedule.day = 'fri' THEN 'Friday' ELSE 'Saturday' END as day, subject_schedule.time_in, subject_schedule.time_out, student_attendance.is_present, student_attendance.on_time, student_attendance.created_at FROM student_attendance LEFT JOIN students ON students.id = student_attendance.student_id LEFT JOIN subject_schedule ON subject_schedule.id = student_attendance.sched_id LEFT JOIN subject ON subject_schedule.subject_id = subject.id WHERE student_attendance.prof_id = ? ORDER BY created_at DESC;");
+        $stmt->execute([$id]);
+
+        $data = $stmt->fetchall();
+        return $data;
+    }
+
+    protected function countRecords($id){
+        $datetimetoday = date("Y-m-d");
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("SELECT * FROM `student_attendance` WHERE prof_id = ? AND is_present = '1' AND DATE(created_at) = ?;");
+        $stmt->execute([$id, $datetimetoday]);
+
+        $data = $stmt->rowCount();
+        return $data;
+    }
+
+    protected function countStudents($id){
+        $datetimetoday = date("Y-m-d");
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("SELECT * FROM `professor_student` WHERE professor_id = ? GROUP BY student_id");
+        $stmt->execute([$id]);
+
+        $data = $stmt->rowCount();
+        return $data;
     }
 }

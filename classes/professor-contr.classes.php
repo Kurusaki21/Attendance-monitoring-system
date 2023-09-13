@@ -52,18 +52,25 @@ class ProfessorCntr extends Professor{
         $time_in = $this->getTimeSchedule($subject_id)['time_in'];
         $time_out = $this->getTimeSchedule($subject_id)['time_out'];
         $newTime = date('H:i:s', strtotime($time_in. ' +15 minutes'));
-        if($this->attendanceExist($this->getStudentData($school_id)['id'],$this->getSchedulData($subject_id)['prof_id'], $subject_id ) == false){
-            if ($time >= $newTime) {
-                return $this->setStudentAttendance($this->getStudentData($school_id)['id'], $this->getSchedulData($subject_id)['prof_id'], $subject_id, 0);
-            
-            }
-            else{
-                return $this->setStudentAttendance($this->getStudentData($school_id)['id'], $this->getSchedulData($subject_id)['prof_id'], $subject_id, 1);
-            }
+       
+        if($this->checkStudent($this->getStudentData($school_id)['id'],$this->getSchedulData($subject_id)['prof_id'], $subject_id ) == false){
+            echo json_encode(array("error" => "400"));   
         }
         else{
-            echo json_encode(array("error" => "404"));
+            if($this->attendanceExist($this->getStudentData($school_id)['id'],$this->getSchedulData($subject_id)['prof_id'], $subject_id ) == false){
+                if ($time >= $newTime) {
+                    return $this->setStudentAttendance($this->getStudentData($school_id)['id'], $this->getSchedulData($subject_id)['prof_id'], $subject_id, 0);
+                
+                }
+                else{
+                    return $this->setStudentAttendance($this->getStudentData($school_id)['id'], $this->getSchedulData($subject_id)['prof_id'], $subject_id, 1);
+                }
+            }
+            else{
+                echo json_encode(array("error" => "404"));
+            }
         }
+       
        // return $this->attendanceExist($this->getStudentData($school_id)['id'],$this->getSchedulData($subject_id)['prof_id'], $subject_id );
     }
     //get the student id
@@ -82,7 +89,7 @@ class ProfessorCntr extends Professor{
     public function attendanceExist($student_id, $prof_id, $subject_id){
         $result;
 
-        if($this->checkAttendance($student_id, $prof_id, $subject_id)){
+        if($this->checkAttendance($student_id, $prof_id, $subject_id) == 0){
             $result = false;
         }
         else{
@@ -93,7 +100,30 @@ class ProfessorCntr extends Professor{
      //  echo $this->checkAttendance($student_id, $prof_id, $subject_id);
     }
 
-   
+    public function getProfessorSubject($id){
+        return $this->professorSubject($id);
+    }
 
+    public function checkEnrolledStudent($student_id, $prof_id, $subject_id){
+        $result;
+
+        if($this->checkStudent($student_id, $prof_id, $subject_id) == 0){
+            $result = false;
+        }
+        else{
+            $result = true;
+        }
+        return $result;
+    }
+
+    public function getAllStudentRecords($id){
+        return $this->records($id);
+    }
+   public function countStudentsAttndance($id){
+    return $this->countRecords($id);
+   }
+   public function countAllStudents($id){
+    return $this->countStudents($id);
+   }
 
 }

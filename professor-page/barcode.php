@@ -83,15 +83,9 @@ if(isset($user)){
             </li>
             
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="records.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Records</span></a>
-            </li>
-
-            <li class="nav-item active">
-                <a class="nav-link" href="barcode.php">
-                    <i class="fas fa-fw fa-sms"></i>
-                    <span>Barcode Scanner</span></a>
             </li>
 
             <!-- Divider -->
@@ -254,6 +248,24 @@ if(isset($user)){
             </div>
     </div>
 
+    <div class="modal fade" id="undefined_student" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                <h5><i class="icon fas fa-info"></i> Undefined!</h5>
+                    <button type="button" class="sched_close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning alert-dismissible">
+                        <center><b>Student not enrolled in this schedule</b></center>
+                    </div>    
+                </div>
+                </div>
+            </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -297,6 +309,13 @@ if(isset($user)){
 
                             setTimeout(function(){
                                 $('#is_present_professor').modal('hide')
+                            }, 2000);
+                        }
+                        else if(data == 400){
+                            $('#undefined_student').modal('show')
+
+                            setTimeout(function(){
+                                $('#undefined_student').modal('hide')
                             }, 2000);
                         }
                         else{
