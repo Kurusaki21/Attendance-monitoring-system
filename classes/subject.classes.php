@@ -209,10 +209,10 @@ class AddSubject extends DB{
     protected function insertStudents($student_id,$pro_id,$subj_id,$sched_subject){
         $datetimetoday = date("Y-m-d H:i:s");
         $connection = $this->dbOpen();
-       
-        $stmt = $connection->prepare("INSERT INTO professor_student (subject_id,schedule_id, professor_id, student_id, created_at) VALUES (?,?,?,?,?)");
-        $stmt->execute([$subj_id,$sched_subject,$pro_id,$student_id,$datetimetoday]);
-        
+        foreach($sched_subject as $schedules){
+            $stmt = $connection->prepare("INSERT INTO professor_student (subject_id,schedule_id, professor_id, student_id, created_at) VALUES (?,?,?,?,?)");
+            $stmt->execute([$subj_id,$schedules,$pro_id,$student_id,$datetimetoday]);
+        }
    
         return array('success' => 'Student Added','prof_id'=>$pro_id, 'subj_id'=>$subj_id);
     }
@@ -220,8 +220,8 @@ class AddSubject extends DB{
     protected function validateStudent($student_id, $sched_subject){
         $resultCheck;
         $connection = $this->dbOpen();
-        $arr = explode(',',$sched_subject);
-        foreach($arr as $scheds){
+    
+        foreach($sched_subject as $scheds){
             $stmt = $connection->prepare("SELECT * FROM professor_student WHERE student_id = ? and schedule_id = ?");
             $stmt->execute([$student_id, $scheds]);
 
@@ -232,7 +232,6 @@ class AddSubject extends DB{
                 $resultCheck = false;
             }
             return $resultCheck;
-            
         }
     }
 

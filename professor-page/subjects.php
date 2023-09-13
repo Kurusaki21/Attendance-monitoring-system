@@ -7,9 +7,9 @@
 if(isset($user)){
       
   $name = $user['first_name'].' ' .$user['last_name'];
-  $id =$user['id'];
   $role = $user['role'];
-  if(isset($role) == 3){
+  $id =$user['id'];
+  if(isset($role) == '1'){
 
 
 ?>
@@ -17,14 +17,54 @@ if(isset($user)){
 <html lang="en">
 <?php include 'includes/header.php'; ?>
 <style>
-    .dashboard-image1{
-      position: absolute;
-      margin-top: -70px;
-      z-index: 999999;
-      margin-left:1em;
+    .add_button {
+    border-radius: 4px;
+    background-color: #5ca1e1;
+    border: none;
+    color: #fff;
+    text-align: center;
+    font-size: 7px;
+    width:70px;
+    transition: all 0.5s;
+    cursor: pointer;
     }
-  
+ 
+    .add_button{
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+    }
+    select{
+		font-family: fontAwesome
+	}
+    .add_button:after {
+    content: '+';
+    position: absolute;
+    opacity: 0;  
+    right: -20px;
+    transition: 0.5s;
+    }
+    .add_button:after {
+    content: '+';
+    position: absolute;
+    opacity: 0;  
+    right: -20px;
+    transition: 0.5s;
+    }
+
+    .add_button:hover{
+    padding-right: 20px;
+    padding-left:-5px;
+    }
+
+    .add_button:hover:after {
+    opacity: 1;
+    right: 10px;
+    }
 </style>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
 <body id="page-top">
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -56,7 +96,7 @@ if(isset($user)){
                     <div class="row">
                         <div class="col d-flex justify-content-center">
                             <div class="admin-name">
-                                <?php echo $name; ?>
+                            <?php echo $name; ?>
                                 <br>
                                 <small><?= $name == '1' ? 'Administrator' : ($name == '2' ? 'Sub Adminitstrator': 'Professor');  ?></small>
                             </div>
@@ -69,7 +109,7 @@ if(isset($user)){
             <!-- Divider -->
             <hr class="sidebar-divider">
 
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="index.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Dashboard</span></a>
@@ -86,7 +126,6 @@ if(isset($user)){
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Records</span></a>
             </li>
-
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
@@ -117,7 +156,7 @@ if(isset($user)){
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $name; ?></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?=   $name ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -145,61 +184,67 @@ if(isset($user)){
                        
                         <div class="admin-container">
                             <div class="admin-card">
-                                <h4><b>Dashboard</b></h4>   <br> 
-                  
-                                <div class="row d-flex justify-content-center">
-                                  <div class="col-sm-6 p-5">
-                                    <div class="card">
-                                        <div class="card-body">
-                                          <p class="text-right mb-0 font-weight-bold text-gray-800">Students Enrolled</p>
-                                          <p class="text-right text-gray-800"><?= $prof->countAllStudents($id); ?></p>
-                                        </div>
-                                    </div>
-                                  </div>
-
-                                  <div class="col-sm-6 p-5">
-                                    <div class="card">
-                                      <div class="card-body">
-                                          <p class="text-right mb-0 font-weight-bold text-gray-800">Present</p>
-                                          <p class="text-right text-gray-800"><?= $prof->countStudentsAttndance($id) ?></p>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                  <div class="row d-flex">
+                                <h4><b>Subjects and Schedules</b></h4>   <br> 
+                               
+                                <div class="row d-flex">
                                     <div class="col-sm-12 mb-4">
                                       <div class="card">
                                         <div class="card-body">
-                                          <h5 class="card-title mb-0 font-weight-bold text-gray-800">Take Attendance</h5>
-                                          <hr>
-                                            <form method="POST" action="../includes/professor.inc.php">
-                                                <div class="row md-12">
-                                                     <h6 class="card-title mb-5 small text-gray-800">Attendance Information</h6>
-                                               
-                                                        <div class="form-group col-md-12">
-                                                            <h6 class="card-title mb-2  font-weight-bold text-gray-500">Select Schedule</h6>
-                                                           
-                                                            <select class="custom-select"  name="professor_schedule">
-                                                            <?php foreach($prof->getProfessorSchedules($id) as $prof_sched){?>
-                                                                <option value="<?= $prof_sched['ids']; ?>"><?= ucfirst($prof_sched['subject_name']).' '.$prof_sched['day'].' ('.$prof_sched['time_in'].'-'.$prof_sched['time_out'].')'?></option>
+
+                                            <div class="row d-flex justify-content-center">
+                                                <div class="col-sm-3">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <table class="table" id="dataTable" width="100%" cellspacing="0">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Subject Name</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <?php
+                                                                       foreach( $prof->getProfessorSubject($id) as $subjects){
+                                                                        ?>
+                                                                        <tr>
+                                                                            <td><a href="#" onclick="showSchedules(<?= $subjects['id']?>,<?= $id?>)" class="subjectid_<?= $subjects['id'] ?>"> <?= $subjects['subject_name']?></a></td>
+                                                                        </tr>
+
+                                                                    <?php
+                                                                       }
+                                                                    ?>
+                                                                </tbody>
+                                                            </table>
                                                             
-                                                                <?php } ?>
-                                                            </select>
                                                         </div>
-                                               
-                                                    <div class="form-group col-md-12">
-                                                      <h6 class="card-title mb-2  font-weight-bold text-gray-500">Date</h6>
-                                                          <input type="date" name="today_date" class="form-control" value="<?php echo date('2023-09-14'); ?>" readonly/>
                                                     </div>
-                                                    <button type="submit" name ="btn_start_attendance" class="btn btn-primary btn-lg btn-block">Start Attendance</button>
-                                                </div>
-                                            </form>
+                                                 </div>
+
+                                                 <div class="col-sm-9">
+                                                    <div class="card">
+                                                        <div class="card-body hide_me_card">
+                                                            <div class="alert alert-danger error_alert" role="alert">
+                                                                <div class="error_div">
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="alert alert-success success_alert" role="alert">
+                                                                <div class="success_div">
+                                                                                    
+                                                                </div>
+                                                            </div>
+                                                               <div class="accordion_schedules_professor">
+                                                                
+                                                               </div>
+                                                        </div>
+                                                    </div>
+                                                 </div>
+
+                                            </div>
+                                        
                                         </div>
                                       </div>
                                     </div>
                                   </div>
-                                
                             </div>
                           </div> 
 
@@ -252,54 +297,111 @@ if(isset($user)){
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../includes/logout.php">Logout</a>
+                    <a class="btn btn-primary" href="../login.php">Logout</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="no_sched" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="is_present_professor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                <h5><i class="icon fas fa-info"></i> Invalid!</h5>
+                <h5><i class="icon fas fa-info"></i> Attendance Already Added!</h5>
                     <button type="button" class="sched_close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-danger alert-dismissible">
-                        <center><b>No Schedule for this day</b></center>
+                        <center><b>Your Attendance has been recorded</b></center>
                     </div>    
                 </div>
                 </div>
             </div>
-        </div>
+    </div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>   
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 
     <!-- Custom scripts for all pages-->
     <script src="../js/sb-admin-2.min.js"></script>
-       <!-- Page level plugins -->
-    <script src="../vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="../js/demo/chart-pie-demo.js"></script>
-    <?php
-              if(!empty($_GET['error'])){
-                echo "<script type='text/javascript'> $('#no_sched').modal('show'); </script>";
-              }
-    ?>
     <script>
-      
-        $('.sched_close').on('click', function(){
-            window.location.replace("index.php");
-        })
+        $('.hide_me_card').hide();
+        $('.my-select1').selectpicker();
+        $('.error_alert').hide();
+        $('.success_alert').hide();
+        function showSchedules(id, prof_id){
+            showAccordion(prof_id,id)
+        }
+
+        function showAccordion(id,subj_id){
+        $.ajax({
+            type: "POST",
+            data: {
+                prof_id: id,
+                subject_id: subj_id
+            },
+            url: "../includes/list_of_schedules.php",
+            success: function(result) {
+                 $('.hide_me_card').show();
+                $(".accordion_schedules_professor").html(result);
+            }
+        });
+    }
+
+        
+        function onScanSuccess(decodedText, decodedResult) {
+        var sound = new Audio("../includes/barcode.wav");
+        setInterval(getStudentRecord(decodedText), 5000);
+        sound.play();
+        }
+
+        var config = {
+        fps: 10,
+        qrbox: {width: 300, height: 300},
+        rememberLastUsedCamera: true,
+        // Only support camera scan type.
+        supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
+        };
+
+        let html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader", config, /* verbose= */ false);
+
+        html5QrcodeScanner.render(onScanSuccess);
+
+        function getStudentRecord(id){
+            var subject_id = $('#prof_id').val();
+            $.ajax({
+                method: "get",
+                dataType: "json",
+                url: "../includes/professor.inc.php?school_id=" + id+'&subj_id='+subject_id,
+                success: function (response){
+                    $.each(response, function(index, data) {
+                        if(data == 404){
+                            $('#is_present_professor').modal('show')
+
+                            setTimeout(function(){
+                                $('#is_present_professor').modal('hide')
+                            }, 2000);
+                        }
+                        else{
+                            $('.stud_name_professor').html(data.first_name+' '+data.last_name);
+                            $('.stud_year_professor').html(data.student_year);
+                            $('.stud_course_professor').html(data.student_course);
+                            document.getElementById('student_preview_professor').innerHTML = '<img class="rounded-circle" width="200" height="200" src="'+data.imageFile+'">';
+                        }
+                          
+                    });
+                }
+            })
+        }
+
     </script>
 </body>
 

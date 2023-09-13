@@ -91,7 +91,7 @@ class Student extends DB{
             else{
                 return false;
              }
-}
+    }
 
 
 }
