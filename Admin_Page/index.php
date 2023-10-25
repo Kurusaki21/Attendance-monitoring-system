@@ -97,14 +97,14 @@ if(isset($user)){
             </li>
             
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="records.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Records</span></a>
             </li>
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="sms.php">
                     <i class="fas fa-fw fa-sms"></i>
                     <span>SMS</span></a>
             </li>

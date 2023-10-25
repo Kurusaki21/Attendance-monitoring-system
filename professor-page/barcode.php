@@ -285,7 +285,7 @@ if(isset($user)){
 
         var config = {
         fps: 10,
-        qrbox: {width: 300, height: 300},
+        qrbox: {width: 550, height: 550},
         rememberLastUsedCamera: true,
         // Only support camera scan type.
         supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]

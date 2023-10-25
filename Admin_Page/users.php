@@ -5,7 +5,7 @@
 
 if(isset($user)){
       
-  $name = $user['name'];
+  $name = $user['first_name'].''.$user['last_name'];
   $role = $user['role'];
   if(isset($role) == '1'){
 
@@ -146,7 +146,7 @@ if(isset($user)){
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $name; ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -725,7 +725,7 @@ if(isset($user)){
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="../includes/professor.inc.php">
+                    <form method="post" action="../includes/users.inc.php">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="Name">First Name</label>
