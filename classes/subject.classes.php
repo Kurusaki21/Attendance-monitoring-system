@@ -1,12 +1,12 @@
 <?php 
 
 class AddSubject extends DB{
-    protected function addSubject($subject_name, $subject_description){
+    protected function addSubject($subject_name, $subject_description, $school_year, $school_sem){
         $datetimetoday = date("Y-m-d H:i:s");
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare('INSERT INTO subject (subject_name, subject_description, created_at) VALUES (?,?,?)');
+        $stmt = $connection->prepare('INSERT INTO subject (subject_name, subject_description,school_year, semester, created_at) VALUES (?,?,?,?,?)');
 
-        if(!$stmt->execute([$subject_name, $subject_description, $datetimetoday])){
+        if(!$stmt->execute([$subject_name, $subject_description, $school_year, $school_sem, $datetimetoday])){
             $stmt = null;
             header("location: index.php?errors=stmtfailed");
             exit();
@@ -16,7 +16,7 @@ class AddSubject extends DB{
     }
     protected function getSubjects(){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT subject.id,count(subject_professor.subject_id) as subj_id, subject.subject_name, subject.subject_description FROM subject LEFT JOIN subject_professor ON subject.id = subject_professor.subject_id GROUP BY subject.id");
+        $stmt = $connection->prepare("SELECT subject.id,count(subject_professor.subject_id) as subj_id, subject.subject_name, subject.subject_description FROM subject LEFT JOIN subject_professor ON subject.id = subject_professor.subject_id WHERE school_year = '".$this->getCurrentSchoolYear()['school_year']."'GROUP BY subject.id");
         $stmt->execute();
         $subjects = $stmt->fetchall();
         $total = $stmt->rowCount();
@@ -124,13 +124,13 @@ class AddSubject extends DB{
         }
     }
 
-    protected function setSchedule($prof_id, $subj_id,  $time_in , $time_out, $chkl){
+    protected function setSchedule($prof_id, $subj_id,  $time_in , $time_out, $chkl, $room_id){
         $datetimetoday = date("Y-m-d H:i:s");
         $connection = $this->dbOpen();
 
         foreach($chkl as $checklist){
-            $stmt = $connection->prepare("INSERT INTO subject_schedule (prof_id, subject_id, day, time_in, time_out, created_at) VALUES (?,?,?,?,?,?) ");
-            $stmt->execute([$prof_id, $subj_id, $checklist, $time_in , $time_out, $datetimetoday]);
+            $stmt = $connection->prepare("INSERT INTO subject_schedule (prof_id, subject_id, room_id, day, time_in, time_out, created_at) VALUES (?,?,?,?,?,?,?) ");
+            $stmt->execute([$prof_id, $subj_id, $room_id, $checklist, $time_in , $time_out, $datetimetoday]);
         
         }
         return array('success'=>'Schedule Added','prof_id'=>$prof_id, 'subj_id'=>$subj_id);
@@ -140,7 +140,7 @@ class AddSubject extends DB{
 
     protected function profSchedDetails($prof_id, $subj_id){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT subject_schedule.id, subject.subject_name, GROUP_CONCAT(subject_schedule.id) as ids,GROUP_CONCAT(subject_schedule.day) as day, subject_schedule.time_in, subject_schedule.time_out FROM subject_schedule LEFT JOIN subject ON subject_schedule.subject_id = subject.id WHERE subject_schedule.prof_id = ? and subject_schedule.subject_id = ? GROUP BY subject_schedule.time_in;");
+        $stmt = $connection->prepare("SELECT subject_schedule.id, subject.subject_name, GROUP_CONCAT(subject_schedule.id) as ids,GROUP_CONCAT(DISTINCT(subject_schedule.day) SEPARATOR ',') as day, subject_schedule.time_in, subject_schedule.time_out,rooms.room_number FROM subject_schedule LEFT JOIN subject ON subject_schedule.subject_id = subject.id LEFT JOIN rooms ON subject_schedule.room_id = rooms.id WHERE subject_schedule.prof_id = ? and subject_schedule.subject_id = ? GROUP BY subject_schedule.room_id, subject_schedule.time_in;");
         $stmt->execute([$prof_id, $subj_id]);
 
         $data = $stmt->fetchall();
@@ -155,6 +155,27 @@ class AddSubject extends DB{
         foreach($chkl as $checklist){
             $stmt = $connection->prepare("SELECT day FROM subject_schedule WHERE prof_id = ? and subject_id = ? and day = ? and time_in = ?");
             $stmt->execute([$prof_id, $subj_id, $checklist, $time_in]);
+
+            if($stmt->rowCount() > 0 ){
+                $resultCheck = true;
+            }
+            else{
+                $resultCheck = false;
+            }
+            return $resultCheck;
+            
+        }
+        
+
+    }
+
+    protected function validateRoomAndTime($prof_id, $subj_id, $chkl, $time_in, $room_id){
+        $resultCheck;
+        $connection = $this->dbOpen();
+
+        foreach($chkl as $checklist){
+            $stmt = $connection->prepare("SELECT day FROM subject_schedule WHERE prof_id = ? and subject_id = ? and day = ? and time_in = ? AND room_id = ?");
+            $stmt->execute([$prof_id, $subj_id, $checklist, $time_in, $room_id]);
 
             if($stmt->rowCount() > 0 ){
                 $resultCheck = true;
@@ -259,6 +280,90 @@ class AddSubject extends DB{
             exit();
         }
         return json_encode(array("statusCode"=>200));
+    }
+
+    protected function insertRoom($room_no){
+        $datetimetoday = date("Y-m-d H:i:s");
+        $connection = $this->dbOpen();
+
+        $stmt = $connection->prepare("INSERT INTO rooms (room_number, created_at) VALUES (?,?) ");
+       
+        if(!$stmt->execute([$room_no, $datetimetoday])){
+            $stmt = null;
+            header("location: index.php?errors=stmtfailed");
+            exit();
+        }
+    
+        return json_encode(array('success'=>'New Room added','room_number'=>$room_no, 'room_id'=>$connection->lastInsertId()));
+    }
+
+    protected function returnRooms(){
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("SELECT * FROM rooms");
+        $stmt->execute();
+
+        $data = $stmt->fetchall();
+        $total = $stmt->rowCount();
+        return $data;
+    }
+
+    protected function deleteThisRoom($id){
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("DELETE FROM rooms WHERE id = ?");
+        if(!$stmt->execute([$id])){
+            $stmt = null;
+            header("location: index.php?errors=stmtfailed");
+            exit();
+        }
+        return json_encode(array("statusCode"=>200, "room_id" => $id));
+    }
+
+    protected function allRooms(){
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("SELECT * FROM rooms");
+        $stmt->execute();
+
+        $data = $stmt->fetchall();
+        $total = $stmt->rowCount();
+
+        if($total > 0){
+            return $data;
+        }
+        else{
+            return false;
+        }
+    }
+
+    protected function setSchoolyear($school_year){
+        $datetimetoday = date("Y-m-d H:i:s");
+
+        $connection = $this->dbOpen();
+
+        $stmt = $connection->prepare("INSERT INTO school_year (school_year, created_at) VALUES (?,?) ");
+       
+        if(!$stmt->execute([$school_year, $datetimetoday])){
+            $stmt = null;
+            header("location: index.php?errors=stmtfailed");
+            exit();
+        }
+    
+        header("location: ../admin_page/subjects.php");
+    }
+
+    protected function getCurrentSchoolYear(){
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("SELECT school_year FROM school_year ORDER BY id DESC LIMIT 1");
+        $stmt->execute();
+
+        $data = $stmt->fetch();
+        $total = $stmt->rowCount();
+
+        if($total > 0){
+            return $data;
+        }
+        else{
+            return false;
+        }
     }
 }
 

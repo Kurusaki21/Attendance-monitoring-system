@@ -18,9 +18,9 @@ if(isset($user)){
 <style>
     .dashboard-image1{
       position: absolute;
-      margin-top: -70px;
       z-index: 999999;
-      margin-left:1em;
+      margin-top: 5px;
+      margin-left: 5px;
     }
   
 </style>
@@ -85,7 +85,7 @@ if(isset($user)){
                         <h6 class="collapse-header">Registered Users</h6>
                         <a class="collapse-item" href="students.php">Students</a>
                         <a class="collapse-item" href="professors.php">Professors</a>
-                        <a class="collapse-item" href="users.php">Users</a>
+                        <a class="collapse-item" href="users.php">Sub-Admin</a>
                     </div>
                 </div>
             </li>
@@ -97,14 +97,14 @@ if(isset($user)){
             </li>
             
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="records.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Records</span></a>
             </li>
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="sms.php">
                     <i class="fas fa-fw fa-sms"></i>
                     <span>SMS</span></a>
             </li>
@@ -177,10 +177,11 @@ if(isset($user)){
                   
                                 <div class="row d-flex justify-content-center">
                                   <div class="col-sm-6 p-5">
-                                      <div class="dashboard-image1">
+                           
+                                    <div class="card">
+                                    <div class="dashboard-image1">
                                       <img  src="../img/students.png" width="150" height="150">
                                       </div>
-                                    <div class="card">
                                         <div class="card-body">
                                           <p class="text-right mb-0 font-weight-bold text-gray-800">Students</p>
                                           <p class="text-right text-gray-800">Count</p>

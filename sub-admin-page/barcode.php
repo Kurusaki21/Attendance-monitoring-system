@@ -5,9 +5,8 @@
 
 if(isset($user)){
       
-  $name = $user['first_name'].' ' .$user['last_name'];
+  $name = $user['first_name'].' '.$user['last_name'];
   $role = $user['role'];
-  $id =$user['id'];
   if(isset($role) == '1'){
 
 
@@ -57,9 +56,9 @@ if(isset($user)){
                     <div class="row">
                         <div class="col d-flex justify-content-center">
                             <div class="admin-name">
-                            <?php echo $name; ?>
+                                <?php echo $name; ?>
                                 <br>
-                                <small><?= $name == '1' ? 'Administrator' : ($name == '2' ? 'Sub Adminitstrator': 'Professor');  ?></small>
+                                <small>Administrator</small>
                             </div>
                         </div>
                     </div>
@@ -70,10 +69,26 @@ if(isset($user)){
             <!-- Divider -->
             <hr class="sidebar-divider">
 
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="index.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Dashboard</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>List of Accounts</span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Registered Users</h6>
+                        <a class="collapse-item" href="students.php">Students</a>
+                        <a class="collapse-item" href="professors.php">Professors</a>
+                        <a class="collapse-item" href="users.php">Users</a>
+                    </div>
+                </div>
             </li>
 
             <li class="nav-item">
@@ -86,6 +101,19 @@ if(isset($user)){
                 <a class="nav-link" href="records.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Records</span></a>
+            </li>
+
+            <!-- Nav Item - Tables -->
+            <li class="nav-item">
+                <a class="nav-link" href="sms.php">
+                    <i class="fas fa-fw fa-sms"></i>
+                    <span>SMS</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="barcode.php">
+                    <i class="fas fa-fw fa-sms"></i>
+                    <span>Barcode Scanner</span></a>
             </li>
 
             <!-- Divider -->
@@ -150,18 +178,17 @@ if(isset($user)){
                                 <div class="row">
                                     <div class="col-md-6">
                                           <div class="container">
-                                            <input type="hidden" id="prof_id" value="<?= $_GET['id']; ?>">
                                                 <div class="row justify-content-center">
-                                                       <div id="student_preview_professor"></div>
+                                                       <div id="student_preview"></div>
                                                 </div>
                                                 <div class="row justify-content-center">
-                                                        <h1 class="display-1 stud_name_professor"></h1>
+                                                        <h1 class="display-1 stud_name"></h1>
                                                 </div>
                                                 <div class="row justify-content-center">
-                                                       <h4 class="display-4 stud_course_professor"></h3>
+                                                       <h4 class="display-4 stud_course"></h3>
                                                 </div>
                                                 <div class="row justify-content-center">
-                                                      <h4 class="display-4 stud_year_professor"></h3>
+                                                      <h4 class="display-4 stud_year"></h3>
                                                 </div>
                                           </div>
                                     </div>
@@ -230,42 +257,6 @@ if(isset($user)){
         </div>
     </div>
 
-    <div class="modal fade" id="is_present_professor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                <h5><i class="icon fas fa-info"></i> Attendance Already Added!</h5>
-                    <button type="button" class="sched_close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-danger alert-dismissible">
-                        <center><b>Your Attendance has been recorded</b></center>
-                    </div>    
-                </div>
-                </div>
-            </div>
-    </div>
-
-    <div class="modal fade" id="undefined_student" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                <h5><i class="icon fas fa-info"></i> Undefined!</h5>
-                    <button type="button" class="sched_close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-warning alert-dismissible">
-                        <center><b>Student not enrolled in this schedule</b></center>
-                    </div>    
-                </div>
-                </div>
-            </div>
-    </div>
-
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -276,17 +267,12 @@ if(isset($user)){
     <!-- Custom scripts for all pages-->
     <script src="../js/sb-admin-2.min.js"></script>
     <script>
-        
         function onScanSuccess(decodedText, decodedResult) {
         var sound = new Audio("../includes/barcode.wav");
-        setInterval(getStudentRecord(decodedText), 5000);
+        // handle the scanned code as you like, for example:
+        console.log(`Code matched = ${decodedText}`, decodedResult);
+        getStudentRecord(decodedText);
         sound.play();
-        html5QrcodeScanner.pause().then(_ => {
-            // the UI should be cleared here    
-        }).catch(error => {
-            // Could not stop scanning for reasons specified in `error`.
-            // This conditions should ideally not happen.
-        });
         }
 
         var config = {
@@ -303,44 +289,21 @@ if(isset($user)){
         html5QrcodeScanner.render(onScanSuccess);
 
         function getStudentRecord(id){
-            var subject_id = $('#prof_id').val();
             $.ajax({
                 method: "get",
                 dataType: "json",
-                url: "../includes/professor.inc.php?school_id=" + id+'&subj_id='+subject_id,
+                url: "../includes/student.inc.php?school_id=" + id,
                 success: function (response){
-                    $.each(response, function(index, data) {
-                        if(data == 404){
-                            $('#is_present_professor').modal('show')
-
-                            setTimeout(function(){
-                                $('#is_present_professor').modal('hide')
-                            }, 2000);
-                            const myTimeout = setTimeout(timeInterval, 2000);
-                        }
-                        else if(data == 400){
-                            $('#undefined_student').modal('show')
-
-                            setTimeout(function(){
-                                $('#undefined_student').modal('hide')
-                            }, 2000);
-                            const myTimeout = setTimeout(timeInterval, 2000);
-                        }
-                        else{
-                            $('.stud_name_professor').html(data.first_name+' '+data.last_name);
-                            $('.stud_year_professor').html(data.student_year);
-                            $('.stud_course_professor').html(data.student_course);
-                            document.getElementById('student_preview_professor').innerHTML = '<img class="rounded-circle" width="200" height="200" src="'+data.imageFile+'">';
-                            const myTimeout = setTimeout(timeInterval, 2000);
-                        }
-                          
+                $.each(response, function(index, data) {
+                    console.log(data);
+                        $('.stud_name').html(data.first_name+' '+data.last_name);
+                        $('.stud_year').html(data.student_year);
+                        $('.stud_course').html(data.student_course);
+                        document.getElementById('student_preview').innerHTML = '<img class="rounded-circle" width="200" height="200" src="'+data.imageFile+'">';
                     });
                 }
+               
             })
-        }
-
-        function timeInterval() {
-            html5QrcodeScanner.resume();
         }
 
     </script>

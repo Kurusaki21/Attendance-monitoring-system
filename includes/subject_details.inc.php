@@ -41,3 +41,5 @@
     if(isset($_GET['delete_student'])){
         return $subject_details->delStudent($_GET['delete_student']);
     }
+
+    $ssd = $subject_details->showAllRooms();

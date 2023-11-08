@@ -1,12 +1,12 @@
 <?php 
 
 class Student extends DB{
-    protected function addStudent($id, $fname, $lname, $email,  $address, $phone, $course, $year,$imageFile){
+    protected function addStudent($id, $fname, $lname, $email,  $address, $phone, $course, $year,$imageFile, $school_year){
             $datetimetoday = date("Y-m-d H:i:s");
             $connection = $this->dbOpen();
-            $stmt = $connection->prepare('INSERT INTO students (school_id, first_name, last_name, email, address, parents_contact, student_year, imageFile, student_course,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)');
+            $stmt = $connection->prepare('INSERT INTO students (school_id, first_name, last_name, email, address, parents_contact, student_year, imageFile, student_course, school_year,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
     
-            if(!$stmt->execute([$id, $fname, $lname, $email,  $address, $phone, $year, $imageFile, $course, $datetimetoday])){
+            if(!$stmt->execute([$id, $fname, $lname, $email,  $address, $phone, $year, $imageFile, $course,$school_year, $datetimetoday])){
                 $stmt = null;
                 header("location: index.php?errors=stmtfailed");
                 exit();
@@ -17,13 +17,29 @@ class Student extends DB{
 
     protected function getStudents(){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT * FROM students");
+        $stmt = $connection->prepare("SELECT * FROM students WHERE school_year = '".$this->getCurrentSchoolYear()['school_year']."'");
         $stmt->execute();
         $students = $stmt->fetchall();
         $total = $stmt->rowCount();
 
         if($total > 0){
             return $students;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    protected function getCurrentSchoolYear(){
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("SELECT school_year FROM school_year ORDER BY id DESC LIMIT 1");
+        $stmt->execute();
+
+        $data = $stmt->fetch();
+        $total = $stmt->rowCount();
+
+        if($total > 0){
+            return $data;
         }
         else{
             return false;
@@ -80,9 +96,9 @@ class Student extends DB{
 
     protected function getSchoolId($id){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT school_id, first_name, last_name, student_course,student_year, imageFile  FROM students WHERE school_id = ? ORDER BY school_id DESC LIMIT 1");
+        $stmt = $connection->prepare("SELECT id, school_id, first_name, last_name, student_course,student_year, imageFile,parents_contact, student_course  FROM students WHERE school_id = ? ORDER BY school_id DESC LIMIT 1");
         $stmt->execute([$id]);
-        $data = $stmt->fetchall();
+        $data = $stmt->fetch();
         $total = $stmt->rowCount();
 
             if($total > 0){
@@ -91,6 +107,28 @@ class Student extends DB{
             else{
                 return false;
              }
+    }
+
+    protected function lastTimeIn($id){
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("SELECT status,created_at FROM school_entry WHERE stud_id = ? ORDER BY created_at DESC LIMIT 1");
+        $stmt->execute([$id]);
+        $data = $stmt->fetch();
+        $total = $stmt->rowCount();
+
+            if($total > 0){
+                return $data;
+            }
+            else{
+                return false;
+             }
+    }
+
+    protected function inserStudentEntry($id, $status = 0, $has_sent = null, $datetime){
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare('INSERT INTO school_entry (stud_id, status, has_sent, created_at) VALUES (?,?,?,?)');
+        $stmt->execute([$id, $status, $has_sent, $datetime]);
+
     }
 
 

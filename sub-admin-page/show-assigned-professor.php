@@ -118,15 +118,16 @@ if(isset($user)){
                 
             </li>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
+           <!-- Divider -->
+           <hr class="sidebar-divider">
 
-            <li class="nav-item">
+            <li class="nav-item ">
                 <a class="nav-link" href="index.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Dashboard</span></a>
             </li>
-            <li class="nav-item">
+            <?php if($user['account_setting'] == 1){ ?>
+            <li class="nav-item ">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-users"></i>
@@ -138,36 +139,67 @@ if(isset($user)){
                         <h6 class="collapse-header">Registered Users</h6>
                         <a class="collapse-item" href="students.php">Students</a>
                         <a class="collapse-item" href="professors.php">Professors</a>
-                        <a class="collapse-item" href="users.php">Sub-Admin</a>
+                        <a class="collapse-item" href="users.php">Users</a>
                     </div>
                 </div>
             </li>
+            <?php }
+            else{
+                echo '';
+            }
+            ?>
 
-            <li class="nav-item active">
-                <a class="nav-link" href="subjects.php">
-                    <i class="fas fa-fw fa-clipboard"></i>
-                    <span>Subjects</span></a>
-            </li>
-            
-            <li class="nav-item ">
-                <a class="nav-link" href="records.php">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Records</span></a>
-            </li>
+            <?php if($user['subject_setting'] == 1){ ?> 
+                <li class="nav-item active">
+                    <a class="nav-link" href="subjects.php">
+                        <i class="fas fa-fw fa-clipboard"></i>
+                        <span>Subjects</span></a>
+                </li>
+            <?php }
+            else{
+                echo '';
+            }
+            ?>
+
+            <?php if($user['records_setting'] == 1){ ?> 
+                <li class="nav-item">
+                    <a class="nav-link" href="records.php">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Records</span></a>
+                </li>
+            <?php }
+            else{
+                echo '';
+            }
+            ?>
 
             <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-sms"></i>
-                    <span>SMS</span></a>
-            </li>
+            <?php if($user['sms_setting'] == 1){ ?> 
+                <li class="nav-item">
+                    <a class="nav-link" href="sms.php">
+                        <i class="fas fa-fw fa-sms"></i>
+                        <span>SMS</span></a>
+                </li>
+            <?php }
+            else{
+                echo '';
+            }
+            ?>
+
+            <?php if($user['barcode_setting'] == 1){ ?>     
             <li class="nav-item">
                 <a class="nav-link" href="barcode.php">
                     <i class="fas fa-fw fa-sms"></i>
                     <span>Barcode Scanner</span></a>
             </li>
+            <?php }
+            else{
+                echo '';
+            }
+            ?>
 
             <!-- Divider -->
+
             <hr class="sidebar-divider d-none d-md-block">
 
             <!-- Sidebar Toggler (Sidebar) -->

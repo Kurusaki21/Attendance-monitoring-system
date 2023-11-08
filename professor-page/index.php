@@ -160,7 +160,7 @@ if(isset($user)){
                                   <div class="col-sm-6 p-5">
                                     <div class="card">
                                       <div class="card-body">
-                                          <p class="text-right mb-0 font-weight-bold text-gray-800">Present</p>
+                                          <p class="text-right mb-0 font-weight-bold text-gray-800">Subject handle</p>
                                           <p class="text-right text-gray-800"><?= $prof->countStudentsAttndance($id) ?></p>
                                       </div>
                                     </div>
@@ -182,7 +182,7 @@ if(isset($user)){
                                                            
                                                             <select class="custom-select"  name="professor_schedule">
                                                             <?php foreach($prof->getProfessorSchedules($id) as $prof_sched){?>
-                                                                <option value="<?= $prof_sched['ids']; ?>"><?= ucfirst($prof_sched['subject_name']).' '.$prof_sched['day'].' ('.$prof_sched['time_in'].'-'.$prof_sched['time_out'].')'?></option>
+                                                                <option value="<?= $prof_sched['ids']; ?>">  <?=  'Room # ' .$prof_sched['room_number'].' | '. ucfirst($prof_sched['subject_name']).' '.$prof_sched['day'].' ('.$prof_sched['time_in'].'-'.$prof_sched['time_out'].')'?></option>
                                                             
                                                                 <?php } ?>
                                                             </select>

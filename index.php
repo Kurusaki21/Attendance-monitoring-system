@@ -9,7 +9,13 @@
     $role = $user['role'];
     if(isset($role) == '1'){
         header("location: admin_page/index.php");
-    } 
+    }
+    elseif(isset($role) == '2'){
+      header("location: sub-admin-page/index.php");
+    }
+    else{
+      header("location: professor-page/index.php");
+    }
   }
   else{
     header('location: login.php');

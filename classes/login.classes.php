@@ -12,9 +12,9 @@ class Login extends DB {
             exit();
         }
 
-        if($stmt->rowCount() == 0){
+        if($stmt->rowCount() == 0){ 
             $stmt = null;
-            header("LocationL ../index.php?error=user_not_found");
+            header("Location: ../index.php?error=user_not_found");
             exit();
         }
        // var_dump($stmt->fetch());
@@ -28,7 +28,7 @@ class Login extends DB {
         } 
 
         elseif($pass1 == $pass){
-            $stmt = $con->prepare("SELECT *  FROM (SELECT id, first_name, last_name ,email, role, password FROM users UNION SELECT id, first_name, last_name ,email,role, password from professors ) as users WHERE users.email = ? and password = ?");
+            $stmt = $con->prepare("SELECT * FROM (SELECT id, first_name, last_name ,email, role, password,accounts_settings, subject_setting, records_setting, sms_setting, barcode_setting FROM users UNION SELECT id, first_name, last_name ,email,role, password ,accounts_settings, subject_setting, records_setting, sms_setting, barcode_setting from professors ) as users WHERE users.email = ? and password = ?");
             if(!$stmt->execute(array($email, $pass1))){
                 $stmt = null;
                 header("Location: ../index.php?error=stmt_failed");
@@ -65,6 +65,10 @@ class Login extends DB {
             }
             
    
+        }
+        else{
+            header("Location: ../index.php?asdasdas");
+            exit();
         }
 
         $stmt = null;

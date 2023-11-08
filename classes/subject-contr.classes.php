@@ -5,8 +5,10 @@ class SubjectCntr extends AddSubject{
         if(isset($_POST['btn_submit'])){
             $subject = $_POST['subject_name'];
             $subject_description = $_POST['subject_description'];
+            $school_year = $_POST['school_year'];
+            $school_sem = $_POST['school_sem'];
 
-            $this->addSubject($subject, $subject_description);
+            $this->addSubject($subject, $subject_description, $school_year, $school_sem);
         }
     }
 
@@ -71,16 +73,20 @@ class SubjectCntr extends AddSubject{
 
     public function insertSchedule(){
          
+            $room_id = $_POST['select_room'];
             $prof_id = $_POST['prof_subj_id'];
             $subj_id = $_POST['subj_uid'];
             $time_in = $_POST['time_in'];
             $time_out = $_POST['time_out'];
             $chkl = $_POST['chkl'];
-            if($this->matchDay($prof_id, $subj_id, $chkl, $time_in) == true){
-                echo json_encode(array('error'=>'Schedule Already Exist', 'prof_id' => $prof_id, 'subj_id' => $subj_id));
+            // if($this->matchDay($prof_id, $subj_id, $chkl, $time_in) == true){
+            //     echo json_encode(array('error'=>'Schedule Already Exist', 'prof_id' => $prof_id, 'subj_id' => $subj_id));
+            // }
+            if($this->matchRoom($prof_id, $subj_id, $chkl, $time_in, $room_id) == true){
+                echo json_encode(array('error'=>'Conflict of Schedule', 'prof_id' => $prof_id, 'subj_id' => $subj_id));
             }
             else{
-                echo json_encode($this->setSchedule($prof_id, $subj_id,$time_in, $time_out, $chkl));
+                echo json_encode($this->setSchedule($prof_id, $subj_id,$time_in, $time_out, $chkl, $room_id));
             }
         
     }
@@ -94,6 +100,18 @@ class SubjectCntr extends AddSubject{
         $result;
 
         if($this->validateSchedule($prof_id, $subj_id, $chkl,$time_in)){
+            $result = true;
+        }
+        else{
+            $result = false;
+        }
+        return $result;
+    }
+
+    public function matchRoom($prof_id, $subj_id, $chkl, $time_in, $room_id){
+        $result;
+
+        if($this->validateRoomAndTime($prof_id, $subj_id, $chkl,$time_in,$room_id)){
             $result = true;
         }
         else{
@@ -155,6 +173,7 @@ class SubjectCntr extends AddSubject{
     public function students($getscheduleid){
         echo json_encode($this->studentsData($getscheduleid));
     }
+
     public function delStudent($id){
         return $this->deleteAssignedStudent($id);
     }
@@ -164,6 +183,30 @@ class SubjectCntr extends AddSubject{
     {
         $hms = explode(":", $time);
         return ($hms[0] + ($hms[1]/60) + ($hms[2]/3600));
+    }
+
+    public function insertRoomNumber($room_no){
+        echo $this->insertRoom($room_no);
+    }
+
+    public function getAllRooms(){
+        return $this->returnRooms();
+    }
+
+    public function deleteRoom($id){
+        echo $this->deleteThisRoom($id);
+    }
+
+    public function showAllRooms(){
+        return $this->allRooms();
+    }
+
+    public function addSchoolyear($school_year){
+        return $this->setSchoolyear($school_year);
+    }
+
+    public function getSchoolYear(){
+        return $this->getCurrentSchoolYear();
     }
 }
 

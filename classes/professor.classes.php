@@ -1,13 +1,13 @@
 <?php 
 
 class Professor extends DB{
-    protected function addProf($fname, $lname, $email,  $address, $password){
+    protected function addProf($fname, $lname, $email,  $address, $password, $school_year){
         $datetimetoday = date("Y-m-d H:i:s");
         $password = md5($password);
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare('INSERT INTO professors (first_name, last_name, address, email, password,created_at) VALUES (?,?,?,?,?,?)');
+        $stmt = $connection->prepare('INSERT INTO professors (first_name, last_name, address, email,school_year, password,created_at) VALUES (?,?,?,?,?,?,?)');
 
-        if(!$stmt->execute([$fname, $lname, $address,  $email, $password, $datetimetoday])){
+        if(!$stmt->execute([$fname, $lname, $address,  $email, $school_year, $password, $datetimetoday])){
             $stmt = null;
             header("location: index.php?errors=stmtfailed");
             exit();
@@ -29,13 +29,30 @@ class Professor extends DB{
 
     protected function getProfessor(){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT * FROM professors");
+        $stmt = $connection->prepare("SELECT * FROM professors WHERE school_year = '".$this->getCurrentSchoolYear()['school_year']."'");
         $stmt->execute();
         $professors = $stmt->fetchall();
         $total = $stmt->rowCount();
 
         if($total > 0){
             return $professors;
+        }
+        else{
+            return false;
+        }
+    }
+
+    
+    protected function getCurrentSchoolYear(){
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("SELECT school_year FROM school_year ORDER BY id DESC LIMIT 1");
+        $stmt->execute();
+
+        $data = $stmt->fetch();
+        $total = $stmt->rowCount();
+
+        if($total > 0){
+            return $data;
         }
         else{
             return false;
@@ -68,7 +85,7 @@ class Professor extends DB{
 
     protected function profSchedDetails($prof_id){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT subject_schedule.id, subject.subject_name, GROUP_CONCAT(subject_schedule.id) as ids,GROUP_CONCAT(CASE WHEN subject_schedule.day = 'mon' THEN 'M' WHEN subject_schedule.day = 'tues' THEN 'T' WHEN subject_schedule.day = 'wed' THEN 'W' WHEN subject_schedule.day = 'thurs' THEN 'TH' ELSE 'F' END SEPARATOR '|') as day, subject_schedule.time_in, subject_schedule.time_out FROM subject_schedule LEFT JOIN subject ON subject_schedule.subject_id = subject.id WHERE subject_schedule.prof_id = ? GROUP BY subject_schedule.time_in, subject_id ORDER BY subject_name");
+        $stmt = $connection->prepare("SELECT subject_schedule.id, subject.subject_name, GROUP_CONCAT(subject_schedule.id) as ids,GROUP_CONCAT(CASE WHEN subject_schedule.day = 'mon' THEN 'M' WHEN subject_schedule.day = 'tues' THEN 'T' WHEN subject_schedule.day = 'wed' THEN 'W' WHEN subject_schedule.day = 'thurs' THEN 'TH' ELSE 'F' END SEPARATOR '|') as day, rooms.room_number, subject_schedule.time_in, subject_schedule.time_out FROM subject_schedule LEFT JOIN subject ON subject_schedule.subject_id = subject.id LEFT JOIN rooms ON subject_schedule.room_id = rooms.id WHERE subject_schedule.prof_id = ? GROUP BY subject_schedule.time_in, subject_id , subject_schedule.room_id ORDER BY subject_name;");
         $stmt->execute([$prof_id]);
 
         $data = $stmt->fetchall();
@@ -250,16 +267,16 @@ class Professor extends DB{
         $connection = $this->dbOpen();
         $stmt = $connection->prepare("SELECT students.first_name, students.last_name, subject.subject_name, CASE WHEN subject_schedule.day = 'mon' THEN 'Monday' WHEN subject_schedule.day = 'tues' THEN 'Tuesday' WHEN subject_schedule.day = 'wed' THEN 'Wednesday' WHEN subject_schedule.day = 'thurs' THEN 'Thursday' WHEN subject_schedule.day = 'fri' THEN 'Friday' ELSE 'Saturday' END as day, subject_schedule.time_in, subject_schedule.time_out, student_attendance.is_present, student_attendance.on_time, student_attendance.created_at FROM student_attendance LEFT JOIN students ON students.id = student_attendance.student_id LEFT JOIN subject_schedule ON subject_schedule.id = student_attendance.sched_id LEFT JOIN subject ON subject_schedule.subject_id = subject.id WHERE student_attendance.prof_id = ? ORDER BY created_at DESC;");
         $stmt->execute([$id]);
-
         $data = $stmt->fetchall();
         return $data;
     }
 
     protected function countRecords($id){
         $datetimetoday = date("Y-m-d");
+        $date1 = $this->getWeekday($datetimetoday);
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT * FROM `student_attendance` WHERE prof_id = ? AND is_present = '1' AND DATE(created_at) = ?;");
-        $stmt->execute([$id, $datetimetoday]);
+        $stmt = $connection->prepare("SELECT *  FROM `subject_schedule` WHERE prof_id = ? AND day = '$date1'");
+        $stmt->execute([$id]);
 
         $data = $stmt->rowCount();
         return $data;

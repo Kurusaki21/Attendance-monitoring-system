@@ -14,17 +14,18 @@ class StudentCntr extends Student{
             $course = $_POST['course'];
             $year = $_POST['year'];
             $block = $_POST['block'];
+            $school_year = $_POST['school_year'];
             $imageName = $_FILES["item_photo"];
 
          
             // var_dump($imageName);
            if($_FILES['item_photo']['size'] == 0){
-                return $this->addStudent($id, $fname, $lname, $email,  $address, $phone, $course, $year, null);
+                return $this->addStudent($id, $fname, $lname, $email,  $address, $phone, $course, $year, null, $school_year);
             }
             else{
                 $imageFile = $this->uploadImage($imageName);
                
-                return $this->addStudent($id, $fname, $lname, $email,  $address, $phone, $course, $year, $imageFile);
+                return $this->addStudent($id, $fname, $lname, $email,  $address, $phone, $course, $year, $imageFile, $school_year);
             }
         }
     }
@@ -122,8 +123,122 @@ class StudentCntr extends Student{
     public function getStudentData($id){
         echo json_encode($this->studentData($id));
     }
+
     public function studentSChoolId($id){
-        echo json_encode($this->getSchoolId($id));
+        $datetimetoday = date("Y-m-d H:i:s");
+        $get_last_time_status = $this->getLastTimeIn($id);
+        $array= $this->getSchoolId($id);
+        $year = '';
+
+        switch ($array['student_year']){
+           case  '4':
+                $year = '4th year';
+                break;
+            case '3':
+                $year = '3rd year';
+                break;
+            case '2';
+                $year = '2nd year';
+                break;
+            case '1';
+                $year = '1st year';
+                break;
+
+        }
+           
+
+       
+        if($get_last_time_status == false){
+       
+
+            try {
+                echo json_encode(array("first_name"=>$array['first_name'], "last_name"=>$array['last_name'], "status"=>"Time In", "student_year" => $year, "student_course"=> $array['student_course'], "imageFile"=>$array['imageFile'], "message_sent"=>"Success!"));
+                // Send a message using the primary device.
+               // $msg = sendSingleMessage("09197941914", "Dear Guardian/Parents of ".$array['first_name'] ." ".$array['last_name'].". We would like to inform you that this student has just entered the school premises at $datetimetoday", 0, null, false, null, true);
+                $url = "https://app.sms-gateway.app/services/send.php?key=e59cd9ef18630e0e4cf5a0fa569612bc3424f492&number=%2B".$array['parents_contact']."&message=Dear Guardian/Parents of ".$array['first_name'] ." ".$array['last_name'].". We would like to inform you that this student has just entered the school premises at $datetimetoday&option=2&type=sms&prioritize=1";
+
+
+                 
+                 $this->get_url($url);
+
+                $this->inserStudentEntry($array['id'], 1, 1, $datetimetoday);
+
+                
+             
+            } catch (Exception $e) {
+                echo $e->getMessage();
+            }
+
+          
+        }
+        else if($get_last_time_status['status'] == '1'){
+            $this->inserStudentEntry($array['id'], 0, 1, $datetimetoday);
+
+            try {
+                // Send a message using the primary device.
+                $msg = sendSingleMessage("+11234567890", "This is a test of single message.");
+            
+                // Send a message using the Device ID 1.
+                // $msg = sendSingleMessage("+11234567890", "This is a test of single message.", 1);
+
+                echo json_encode(array("first_name"=>$array['first_name'], "last_name"=>$array['last_name'], "status"=>"Time In", "student_year" => $year, "student_course"=> $array['student_course'], "imageFile"=>$array['imageFile'], "message_sent"=>"Success!"));
+                
+            } catch (Exception $e) {
+                echo $e->getMessage();
+            }
+        }
+        else{
+            $this->inserStudentEntry($array['id'], 1, 1, $datetimetoday);
+
+            try {
+                // Send a message using the primary device.
+                $msg = sendSingleMessage($array['parents_contact'], "Dear Guardian/Parents of ".$array['first_name'] ." ".$array['last_name'].". We would like to inform you that this student has just entered the school premises at $datetimetoday");
+            
+                // Send a message using the Device ID 1.
+                // $msg = sendSingleMessage("+11234567890", "This is a test of single message.", 1);
+
+                echo json_encode(array("first_name"=>$array['first_name'], "last_name"=>$array['last_name'], "status"=>"Time Out", "student_year" => $year, "student_course"=> $array['student_course'], "imageFile"=>$array['imageFile'], "message_sent"=>"Success!"));
+
+            } catch (Exception $e) {
+                echo $e->getMessage();
+            }
+
+
+        }
+      
+        
+ 
+        // if($this->checkStudent($this->getStudentData($school_id)['id'],$this->getSchedulData($subject_id)['prof_id'], $subject_id ) == false){
+        //     echo json_encode(array("error" => "400"));   
+        // }
+        // else{
+        //     if($this->attendanceExist($this->getStudentData($school_id)['id'],$this->getSchedulData($subject_id)['prof_id'], $subject_id ) == false){
+        //         if ($time >= $newTime) {
+        //             return $this->setStudentAttendance($this->getStudentData($school_id)['id'], $this->getSchedulData($subject_id)['prof_id'], $subject_id, 0);
+                
+        //         }
+        //         else{
+        //             return $this->setStudentAttendance($this->getStudentData($school_id)['id'], $this->getSchedulData($subject_id)['prof_id'], $subject_id, 1);
+        //         }
+        //     }
+        //     else{
+        //         echo json_encode(array("error" => "404"));
+        //     }
+        // }
+    
+    }
+
+    public function get_url($url)
+{
+    $cmd  = "curl --max-time 60 ";
+    $cmd .= "'" . $url . "'";
+    $cmd .= " > /dev/null 2>&1 &";
+    exec($cmd, $output, $exit);
+    return $exit == 0;
+}
+
+    public function getLastTimeIn($id){
+        return $this->lastTimeIn($id);
     }
 
 

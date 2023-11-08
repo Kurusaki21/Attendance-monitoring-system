@@ -3,6 +3,7 @@
     include_once '../classes/db.classes.php';
     include_once '../classes/student.classes.php';
     include_once '../classes/student-contr.classes.php';
+    include "../includes/sms_gateway.php";
 
     $student = new StudentCntr();
 
@@ -22,7 +23,7 @@
         return $student->selectLastInsertScoolId($_GET['get_school_id']);
     }
     if(isset($_GET['school_id'])){
-        return $student->studentSChoolId($_GET['school_id']);
+        $student->studentSChoolId($_GET['school_id']);
     }
 
 ?>

@@ -1,9 +1,7 @@
 <?php
   include "../classes/userContr.classes.php";
   include "../includes/student.inc.php";
-  include "../includes/subject.inc.php";
   require '../vendor/autoload.php';
-
   $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
   $userdata = new UserCntr();
   $user = $userdata->get_userdata();
@@ -88,56 +86,87 @@ if(isset($user)){
                 
             </li>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
+             <!-- Divider -->
+             <hr class="sidebar-divider">
 
-            <li class="nav-item">
-                <a class="nav-link" href="index.php">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Dashboard</span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>List of Accounts</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Registered Users</h6>
-                        <a class="collapse-item" href="students.php">Students</a>
-                        <a class="collapse-item" href="professors.php">Professors</a>
-                        <a class="collapse-item" href="users.php">Sub-Admin</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Dashboard</span></a>
+                </li>
+                <?php if($user['account_setting'] == 1){ ?>
+                <li class="nav-item active">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                        aria-expanded="true" aria-controls="collapseUtilities">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>List of Accounts</span>
+                    </a>
+                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Registered Users</h6>
+                            <a class="collapse-item" href="students.php">Students</a>
+                            <a class="collapse-item" href="professors.php">Professors</a>
+                            <a class="collapse-item" href="users.php">Users</a>
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+                <?php }
+                else{
+                    echo '';
+                }
+                ?>
 
-            <li class="nav-item">
-                <a class="nav-link" href="subjects.php">
-                    <i class="fas fa-fw fa-clipboard"></i>
-                    <span>Subjects</span></a>
-            </li>
-            
-            <li class="nav-item ">
-                    <a class="nav-link" href="records.php">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Records</span></a>
-            </li>
+                <?php if($user['subject_setting'] == 1){ ?> 
+                    <li class="nav-item">
+                        <a class="nav-link" href="subjects.php">
+                            <i class="fas fa-fw fa-clipboard"></i>
+                            <span>Subjects</span></a>
+                    </li>
+                <?php }
+                else{
+                    echo '';
+                }
+                ?>
 
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="sms.php">
-                    <i class="fas fa-fw fa-sms"></i>
-                    <span>SMS</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="barcode.php">
-                    <i class="fas fa-fw fa-sms"></i>
-                    <span>Barcode Scanner</span></a>
-            </li>
+                <?php if($user['records_setting'] == 1){ ?> 
+                    <li class="nav-item">
+                        <a class="nav-link" href="records.php">
+                            <i class="fas fa-fw fa-chart-area"></i>
+                            <span>Records</span></a>
+                    </li>
+                <?php }
+                else{
+                    echo '';
+                }
+                ?>
 
-            <!-- Divider -->
+                <!-- Nav Item - Tables -->
+                <?php if($user['sms_setting'] == 1){ ?> 
+                    <li class="nav-item">
+                        <a class="nav-link" href="sms.php">
+                            <i class="fas fa-fw fa-sms"></i>
+                            <span>SMS</span></a>
+                    </li>
+                <?php }
+                else{
+                    echo '';
+                }
+                ?>
+
+                <?php if($user['barcode_setting'] == 1){ ?>     
+                <li class="nav-item">
+                    <a class="nav-link" href="barcode.php">
+                        <i class="fas fa-fw fa-sms"></i>
+                        <span>Barcode Scanner</span></a>
+                </li>
+                <?php }
+                else{
+                    echo '';
+                }
+                ?>
+
+                <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
             <!-- Sidebar Toggler (Sidebar) -->
@@ -309,7 +338,8 @@ if(isset($user)){
                 <div class="modal-body">
                     <form method="POST" action="../includes/student.inc.php" enctype="multipart/form-data">
                         <div class="form-group">
-                         
+                            <?= 
+                                 $generator->getBarcode($students['school_id'], $generator::TYPE_CODE_128); ?>
                             <label for="student_email">Student ID</label>
                             <input type="text" class="form-control" name="stud_id" id='school_id' readonly>
                         </div>
@@ -371,11 +401,6 @@ if(isset($user)){
                                     <option value="C">C</option>
                                     <option value="D">D</option>
                                 </select>
-                            </div>
-
-                            <div class="form-group col-md-3">
-                                 <label for="block">School Year</label>
-                                 <input type="text" class="form-control" name="school_year" value="<?= $subject->getSchoolYear()['school_year']; ?>" readonly>
                             </div>
 
                             <div class="form-row col-md-12">

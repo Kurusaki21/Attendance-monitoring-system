@@ -9,8 +9,9 @@ class ProfessorCntr extends Professor{
             $email = $_POST['email'];
             $address = $_POST['address'];
             $password = $_POST['password'];
+            $school_year = $_POST['school_year'];
 
-           $this->addProf($fname, $lname, $email,  $address, $password);
+           $this->addProf($fname, $lname, $email,  $address, $password, $school_year);
         }
     }
 

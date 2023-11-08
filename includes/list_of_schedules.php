@@ -1,5 +1,8 @@
 <?php
 include 'subject_details.inc.php';
+include "../classes/userContr.classes.php";
+$userdata = new UserCntr();
+$user = $userdata->get_userdata();
 
 if(isset($_POST['prof_id']) && isset($_POST['subject_id'])){
     $s = $subject_details->getProfessorSchedule($_POST['prof_id'], $_POST['subject_id']);
@@ -17,7 +20,16 @@ if(isset($_POST['prof_id']) && isset($_POST['subject_id'])){
         <div class="card">
             <div class="card-header" id="headingOne">
                 <div class="col-md-6">
-                <button class="btn btn-sm btn-danger" onclick="deleteSched(<?= $data['id'].','.$_POST['prof_id'].','. $_POST['subject_id'].','. $subject_details->decimalHours($data['time_in'])?>)" id="delete_schedule"><i class="fa fa-trash"></i></button>
+                <?php if($user['role'] == 3){ ?>
+
+                    <div class="text-danger">Room# <?= $data['room_number'] ?></div>
+
+                <?php
+                }
+                 else{ ?>
+                <button class="btn btn-sm btn-danger" onclick="deleteSched(<?= $data['id'].','.$_POST['prof_id'].','. $_POST['subject_id'].','. $subject_details->decimalHours($data['time_in'])?>)" id="delete_schedule"><i class="fa fa-trash"></i></button> <div class="text-dark">Room <?= $data['room_number'] ?></div>
+                    <?php } ?>
+               
                 <button class="btn btn-link" data-toggle="collapse" onclick="showData(<?= $_POST['prof_id'].','.$_POST['subject_id'].','.$data['id']; ?>)" data-target="#collapse_<?= $data['id']; ?>" aria-expanded="true" aria-controls="collapseOne">
                     <?= $data['day'].' | '.$data['time_in'].'-'.$data['time_out']; ?>
                 </button>

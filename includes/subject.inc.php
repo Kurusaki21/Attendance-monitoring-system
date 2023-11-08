@@ -36,3 +36,18 @@
     if(isset($_POST['btn_schedule_submit'])){
         return $subject->insertSchedule();
     }
+
+    if(isset($_POST['btn_room_submit'])){
+        $subject->insertRoomNumber($_POST['room_no']);
+    }
+
+    if(isset($_GET['delete_rrom'])){
+        $subject->deleteRoom($_GET['delete_rrom']);
+    }
+
+    if(isset($_POST['btn_submit_schoolyear'])){
+        $subject->addSchoolyear($_POST['school_year']);
+    }
+
+
+    

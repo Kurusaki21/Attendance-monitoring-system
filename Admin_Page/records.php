@@ -1,18 +1,10 @@
 <?php
   include "../classes/userContr.classes.php";
-  include "../includes/subject.inc.php";
-  include "../includes/professor.inc.php";
+  include "../includes/records.inc.php";
   $userdata = new UserCntr();
   $user = $userdata->get_userdata();
 
-  $subject = new SubjectCntr();
-  $subjectlist = $subject->subjects();
-
-  $professors =  new ProfessorCntr();
-  $list_of_professors = $professors->Professor();
-
-
-
+$rm = $recoords->getRecords();
 
 if(isset($user)){
       
@@ -109,13 +101,13 @@ if(isset($user)){
                 </div>
             </li>
 
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="subjects.php">
                     <i class="fas fa-fw fa-clipboard"></i>
                     <span>Subjects</span></a>
             </li>
             
-            <li class="nav-item ">
+            <li class="nav-item active">
                 <a class="nav-link" href="records.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Records</span></a>
@@ -188,14 +180,8 @@ if(isset($user)){
                 <div class="container-fluid">
                     <!-- Content Row -->
                     <div class="row">
-                         <h4><b>Subjects</b></h4>  
+                         <h4><b>All Records</b></h4>  
                          <div class="row card-student ">
-                         <div class="row col-sm-12">
-                                <button type="button" data-toggle="modal" data-target=".addRoom" class="btn btn-sm btn-default">Rooms</button> &nbsp;
-                                 <button type="button" data-toggle="modal" data-target=".school_year" class="btn btn-sm btn-warning">School Year</button> &nbsp;
-                                 <button type="button" data-toggle="modal" data-target=".addSubject" class="btn btn-sm btn-primary">New Subject</button> 
-                               
-                            </div>
 
                         </div>
                         <div class="admin-container">
@@ -205,25 +191,28 @@ if(isset($user)){
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Subject Name</th>
-                                            <th>Description</th>
-                                            <th>Professor Assigned</th>
-                                            <th>Action</th>
+                                            <th>Student Name</th>
+                                            <th>Status</th>
+                                            <th>Current Attendance</th>
+                                            <th>Professor</th>
+                                            <th>Created At</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                          <?php
-                                            if($subjectlist == false){
+                                            if($rm == false){
 
                                             }
                                             else{
-                                            foreach($subjectlist as $subjects){ ?>
-                                                <tr id="records_<?= $subjects['id'];?>">
-                                                <td> <?= $subjects['subject_name']; ?></td>
-                                                <td> <?= $subjects['subject_description']; ?></td>
+                                            foreach($rm as $sr){ ?>
+                                                <tr>
+                                                <td> <?= $sr['first_name'].' '.$sr['last_name']; ?></td>
+                                                <td> <?= $sr['status'] == '1' ? 'Time IN' : 'Time Out'; ?></td>
+                                                <td> <?= $sr['has_sent'] == '1' ? 'Gate Entry' : 'Professor Attendance'; ?></td>
                                                 
-                                                <td><?= $subjects['subj_id'];?></td>
-                                                <td><button type="button" data-toggle="tooltip" data-placement="top" title="edit" onclick="editSubjectModal(<?= $subjects['id'];?>)" class="btn btn-sm btn-success"><i class="far fa-edit"></i></button> <a href="show-assigned-professor.php?subject_id=<?= $subjects['id'];?>" class="btn btn-sm btn-warning" data-toggle="tooltip" data-placement="top" title="show assigned professors"><i class="fas fa-eye"></i></i></a> <button class="btn btn-sm btn-warning" data-toggle="tooltip" onclick="assignProfessorModal(<?= $subjects['id'];?>)" data-placement="top" title="assign professor"><i class="fas fa-network-wired"></i></button> <button type="button" onclick="deleteSubject(<?= $subjects['id'];?>)" class="btn-sm btn-danger dlt_record" data-toggle="tooltip" data-placement="top" title="delete subject"><i class="fa fa-trash"></button></td>
+                                                <td><?= $sr['prof_fname'].' '.$sr['prof_lname'];?></td>
+                                                <td><?= $sr['created_at'];?></td>
+                                              
                                             <?php  
                                             }
                                             }
@@ -288,7 +277,7 @@ if(isset($user)){
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Subject</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -307,26 +296,6 @@ if(isset($user)){
                                 <textarea class="form-control" name="subject_description" rows="3" placeholder="subject description"></textarea>
                             </div>
                         </div>
-
-                        <div class="form-row justify-content-center">
-                            <div class="form-group col-md-6">
-                                <label for="exampleFormControlTextarea1">School Year</label>
-                                <input type="text" name="school_year" class="form-control" readonly value="<?= $subject->getSchoolYear()['school_year']; ?>">
-                            </div>
-                        </div>
-
-                        <div class="form-row justify-content-center">
-                            <div class="form-group col-md-6">
-                                <label for="exampleFormControlTextarea1">Semester</label>
-                                <select class="form-control" name="school_sem">
-                                    <option value="1">1st</option>
-                                    <option value="2">2nd</option>
-                                    <option value="3">3rd</option>
-                                    <option value="4">4th</option>
-                                </select>
-                            </div>
-                        </div>
-
                         <div class="form-row justify-content-center">
                             <div class="form-group col-md-6">
                                 <button type="submit" name="btn_submit" class="btn btn-primary">Submit</button>
@@ -339,113 +308,13 @@ if(isset($user)){
         </div>
     </div>
 
-       <!-- Add Subject Modal -->
-       <div class="modal fade school_year" id="school_year" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Subject</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="post" action="../includes/subject.inc.php">
-                        <div class="form-row justify-content-center">
-                            <div class="form-group col-md-6">
-                                <input type="text" class="form-control" name="school_year" placeholder="school year">
-                            </div>
-                        </div>
-                        <div class="form-row justify-content-center">
-                            <div class="form-group col-md-6">
-                                <label for="exampleFormControlTextarea1">Current School Year</label>
-                                <span class="badge bg-success"><?= $subject->getSchoolYear()['school_year']; ?></span>
-                            </div>
-                        </div>
-                        <div class="form-row justify-content-center">
-                            <div class="form-group col-md-6">
-                                <button type="submit" name="btn_submit_schoolyear" class="btn btn-primary">Submit</button>
-                            </div>
-                        </div>
-                       
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-     <!-- Add Room Modal -->
-     <div class="modal fade addRoom" id="addRoom" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Room</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                <div class="alert alert-danger error_alert1" role="alert">
-                                <div class="error_div">
-
-                                </div>
-                            </div>
-                            <div class="alert alert-success success_alert1" role="alert">
-                                <div class="success_div1">
-                                                    
-                                </div>
-                            </div>
-                    <form method="post">
-                        <div class="form-row justify-content-center">
-                            <div class="form-group col-md-6">
-                                <input type="number" class="form-control" name="room_number" id="room_number" placeholder="room name">
-                            </div>
-                        </div>
-                        <div class="form-row justify-content-center">
-                            <div class="form-group col-md-6">
-                                <center><button type="button" id="btn_submit_room" class="btn btn-primary">Submit</button></center>
-                            </div>
-                        </div>
-                       
-                    </form>
-                    <div class="d-flex justify-content-center">
-                        <table class="table room_table">
-                            <thead>
-                                <tr>
-                                    <td>Room ID</td>
-                                    <td>Room Number</td>
-                                    <td>Action</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php 
-                                foreach($subject->getAllRooms() as $rooms){
-                                ?>
-                                <tr id="data_<?= $rooms['id'];?>">
-                                    <td><?= $rooms['id'] ?></td>
-                                    <td><?= $rooms['room_number'] ?></td>
-                                    <td><button class="btn btn-sm btn-danger" onclick="deleteRoom(<?= $rooms['id'] ?>)"><i class="fa fa-trash"></i></button></td>
-                                </tr>
-                                <?php
-                                     }
-                                ?>
-                            </tbody>
-                        
-                        </table>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
 
     <!-- Edit Subject Modal -->
     <div class="modal fade" id="editSubject" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Subject</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -453,7 +322,6 @@ if(isset($user)){
                 <div class="modal-body">
                     <form method="post" action="">
                         <div class="form-row justify-content-center">
-                          
                             <div class="form-group col-md-6">
                                 <label for="student_first_name">Subject Name</label>
                                 <input type="text" class="form-control" name="subject_name" id="subject_name" placeholder="subject name">
@@ -541,104 +409,7 @@ if(isset($user)){
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
     <!-- Page level custom scripts -->
     <script src="../js/demo/datatables-demo.js"></script>
-    <script>
-        $('.error_alert1').hide();
-        $('.success_alert1').hide();
-        $('#btn_submit_room').on('click', function (e){
-           var room_number = $('#room_number').val();
-          
-            $.ajax({
-                method: "post",
-                dataType: "json",
-                data: {
-                    room_no : room_number,
-                    btn_room_submit : 'btn_sbmt_room'
-                },
-                url: "../includes/subject.inc.php",
-                success: function (response){
-                    if(response.success){
-                        $('.success_div1').html(response.success)
-                        $( ".success_alert1" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
-                        rooms(response.room_id, response.room_number)
-                    }
-                }
-            })
-        })
-
-        function rooms(room_id,room_number){
-            var html = '';
-        html += '<tr id="data_'+room_id+'">';
-        html += '<td>'+room_id+'</td>';
-        html += '<td>'+room_number+'</td>';
-        html += '<td><button class="btn btn-sm btn-danger" onclick="deleteRoom('+room_id+')" ><i class="fa fa-trash"></i></button></td>';
-        html += '</tr>';
     
-         $('.room_table').append(html);
- 
-    
-    }
-
-        function deleteRoom(id){
-            var confirmation = confirm("are you sure you want to remove this room?");
-
-            if(confirmation){
-                $.ajax({
-                    method: "get",
-                    url: "../includes/subject.inc.php?delete_rrom=" + id,
-                    success: function (response){
-                    $("#data_"+id).remove();
-                    }
-                })
-            }
-        }
-     
-        $('.my-select').selectpicker();
-        function editSubjectModal(id){
-            $.ajax({
-                method: "get",
-                dataType: "json",
-                url: "../includes/subject.inc.php?id=" + id,
-                success: function (response){
-                $.each(response, function(index, data) {
-                        $('#subject_name').val(data.subject_name)
-                        $('#subject_description').val(data.subject_description)
-                        $('#subj_id').val(data.id)
-                    });
-                }
-            })
-            $('#editSubject').modal(); 
-        }
-
-        function assignProfessorModal(id){
-            // $.ajax({
-            //     method: "get",
-            //     dataType: "json",
-            //     url: "../includes/subject.inc.php?id=" + id,
-            //     success: function (response){
-            //     $.each(response, function(index, data) {
-            //             $('#subject_name').val(data.subject_name)
-            //             $('#subject_description').val(data.subject_description)
-            //         });
-            //     }
-            // })
-            $('#subj_prof_id').val(id);
-            $('#assignProfessor').modal(); 
-        }
-
-        function deleteSubject(id){
-            var confirmation = confirm("are you sure you want to remove this subject?");
-
-            if(confirmation){
-                $.ajax({
-                    method: "get",
-                    url: "../includes/subject.inc.php?delete_user=" + id,
-                    success: function (response){
-                    $("#records_"+id).remove();
-                    }
-                })
-            }
-        }
-    </script>
 </body>
 
 </html>

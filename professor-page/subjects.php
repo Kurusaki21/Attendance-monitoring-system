@@ -23,8 +23,8 @@ if(isset($user)){
     border: none;
     color: #fff;
     text-align: center;
-    font-size: 7px;
-    width:70px;
+    font-size: 10px;
+    width:100px;
     transition: all 0.5s;
     cursor: pointer;
     }
