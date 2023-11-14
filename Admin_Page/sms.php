@@ -2,10 +2,9 @@
   include "../classes/userContr.classes.php";
   include "../includes/subject.inc.php";
   include "../includes/professor.inc.php";
+  include "../includes/student.inc.php";
   $userdata = new UserCntr();
   $user = $userdata->get_userdata();
-
-
 
 if(isset($user)){
       
@@ -192,26 +191,27 @@ if(isset($user)){
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Subject Name</th>
                                             <th>Full name</th>
                                             <th>Status</th>
+                                            <th>Parents Contact</th>
+                                            <th>SMS Sent</th>
                                             <th>Datetime</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                          <?php
-                                            if($subjectlist == false){
+                                            if($student->SMSList() == false){
 
                                             }
                                             else{
-                                            foreach($subjectlist as $subjects){ ?>
-                                                <tr id="records_<?= $subjects['id'];?>">
-                                                <td> <?= $subjects['subject_name']; ?></td>
-                                                <td> <?= $subjects['subject_description']; ?></td>
-                                                <td> <?= $subjects['subject_description']; ?></td>
+                                            foreach( $student->SMSList() as $student){ ?>
+                                                <tr id="records_<?= $student['id'];?>">
+                                                <td> <?= $student['first_name'].' '.$student['last_name']; ?></td>
+                                                <td> <?= $student['status']; ?></td>
+                                                <td> <?= $student['parents_contact']; ?></td>
                                                 
-                                                <td><?= $subjects['subj_id'];?></td>
-                                              
+                                                <td><?= $student['has_sent'] == '1' ? 'True' : 'False';?></td>
+                                                <td> <?= $student['created_at']; ?></td>
                                             <?php  
                                             }
                                             }

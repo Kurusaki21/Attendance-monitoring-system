@@ -85,6 +85,9 @@ class SubjectCntr extends AddSubject{
             if($this->matchRoom($prof_id, $subj_id, $chkl, $time_in, $room_id) == true){
                 echo json_encode(array('error'=>'Conflict of Schedule', 'prof_id' => $prof_id, 'subj_id' => $subj_id));
             }
+            elseif($this->matchProf($prof_id, $subj_id, $chkl, $time_in, $room_id) == true){
+
+            }
             else{
                 echo json_encode($this->setSchedule($prof_id, $subj_id,$time_in, $time_out, $chkl, $room_id));
             }
@@ -112,6 +115,18 @@ class SubjectCntr extends AddSubject{
         $result;
 
         if($this->validateRoomAndTime($prof_id, $subj_id, $chkl,$time_in,$room_id)){
+            $result = true;
+        }
+        else{
+            $result = false;
+        }
+        return $result;
+    }
+
+    public function matchProf($prof_id, $subj_id, $chkl, $time_in, $room_id){
+        $result;
+
+        if($this->validateProfessorRoomAndTime($prof_id, $subj_id, $chkl,$time_in,$room_id)){
             $result = true;
         }
         else{

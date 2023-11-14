@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+
 define("SERVER", "https://app.sms-gateway.app");
 define("API_KEY", "e59cd9ef18630e0e4cf5a0fa569612bc3424f492");
 
@@ -26,10 +28,11 @@ function sendSingleMessage($number, $message, $device = 0, $schedule = null, $is
         'message' => $message,
         'schedule' => $schedule,
         'key' => API_KEY,
-        'devices' => $device,
+        'devices' => "8333|1",
         'type' => $isMMS ? "mms" : "sms",
         'attachments' => $attachments,
         'prioritize' => $prioritize ? 1 : 0
+ 
     );
     return sendRequest($url, $postData)["messages"][0];
 }
@@ -72,7 +75,8 @@ function sendMessages($messages, $option = USE_SPECIFIED, $devices = [], $schedu
         'key' => API_KEY,
         'devices' => json_encode($devices),
         'option' => $option,
-        'useRandomDevice' => $useRandomDevice
+        'useRandomDevice' => $useRandomDevice,
+     
     ];
     return sendRequest($url, $postData)["messages"];
 }

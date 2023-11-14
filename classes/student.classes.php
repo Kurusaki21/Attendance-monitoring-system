@@ -131,5 +131,31 @@ class Student extends DB{
 
     }
 
+    protected function insertSMSEntry($id, $status = 1, $has_sent = null, $datetime, $school_id){
+    
+
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare('INSERT INTO sms_entry (stud_id, status, has_sent, created_at) VALUES (?,?,?,?)');
+        $stmt->execute([$id,$status, $has_sent, $datetime]);
+
+    }
+
+    protected function getSMSdata(){
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("SELECT * FROM sms_entry LEFT JOIN students ON students.id = sms_entry.stud_id WHERE students.school_year  = '".$this->getCurrentSchoolYear()['school_year']."'");
+        $stmt->execute();
+        $data = $stmt->fetchall();
+        $total = $stmt->rowCount();
+
+            if($total > 0){
+                return $data;
+            }
+            else{
+                return false;
+             }
+   
+
+    }
+
 
 }

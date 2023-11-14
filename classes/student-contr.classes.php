@@ -145,24 +145,25 @@ class StudentCntr extends Student{
                 break;
 
         }
-           
+        if($array['school_year'] != $this->schoolYear()['school_year']){
+            echo json_encode(array("error"=>"Not Enrolled!"));
+        }
+        else{
 
-       
-        if($get_last_time_status == false){
+             if($get_last_time_status == false){
        
 
             try {
-                echo json_encode(array("first_name"=>$array['first_name'], "last_name"=>$array['last_name'], "status"=>"Time In", "student_year" => $year, "student_course"=> $array['student_course'], "imageFile"=>$array['imageFile'], "message_sent"=>"Success!"));
+                echo json_encode(array("first_name"=>$array['first_name'], "last_name"=>$array['last_name'], "status"=>"Time In", "student_year" => $year, "student_course"=> $array['student_course'], "phone" => $array['parents_contact'], "address" => $array['address'], "imageFile"=>$array['imageFile'], "message_sent"=>"Success!"));
                 // Send a message using the primary device.
                // $msg = sendSingleMessage("09197941914", "Dear Guardian/Parents of ".$array['first_name'] ." ".$array['last_name'].". We would like to inform you that this student has just entered the school premises at $datetimetoday", 0, null, false, null, true);
-                $url = "https://app.sms-gateway.app/services/send.php?key=e59cd9ef18630e0e4cf5a0fa569612bc3424f492&number=%2B".$array['parents_contact']."&message=Dear Guardian/Parents of ".$array['first_name'] ." ".$array['last_name'].". We would like to inform you that this student has just entered the school premises at $datetimetoday&option=2&type=sms&prioritize=1";
+                
+               $msg = sendSingleMessage($array['parents_contact'], "Dear Guardian/Parents of ".$array['first_name'] ." ".$array['last_name'].". We would like to inform you that this student has just entered the school premises at $datetimetoday");
+                
+            
 
-
-                 
-                 $this->get_url($url);
-
-                $this->inserStudentEntry($array['id'], 1, 1, $datetimetoday);
-
+                $this->inserStudentEntry($array['id'], 1, 1, $datetimetoday,$array['school_id']);
+                $this->insertSMSEntry($array['id'], "Time In", 1, $datetimetoday,$array['school_id']);
                 
              
             } catch (Exception $e) {
@@ -171,24 +172,24 @@ class StudentCntr extends Student{
 
           
         }
-        else if($get_last_time_status['status'] == '1'){
-            $this->inserStudentEntry($array['id'], 0, 1, $datetimetoday);
+        else if($get_last_time_status['status'] == 1){
+            $this->inserStudentEntry($array['id'], 0, 1, $datetimetoday, $array['school_id']);
 
             try {
                 // Send a message using the primary device.
-                $msg = sendSingleMessage("+11234567890", "This is a test of single message.");
+                $msg = sendSingleMessage($array['parents_contact'], "Dear Guardian/Parents of ".$array['first_name'] ." ".$array['last_name'].". We would like to inform you that this student has just exit to the school premises at $datetimetoday");
             
                 // Send a message using the Device ID 1.
                 // $msg = sendSingleMessage("+11234567890", "This is a test of single message.", 1);
 
-                echo json_encode(array("first_name"=>$array['first_name'], "last_name"=>$array['last_name'], "status"=>"Time In", "student_year" => $year, "student_course"=> $array['student_course'], "imageFile"=>$array['imageFile'], "message_sent"=>"Success!"));
-                
+                echo json_encode(array("first_name"=>$array['first_name'], "last_name"=>$array['last_name'], "status"=>"Time Out", "student_year" => $year, "student_course"=> $array['student_course'], "phone" => $array['parents_contact'], "address" => $array['address'], "imageFile"=>$array['imageFile'], "message_sent"=>"Success!"));
+                $this->insertSMSEntry($array['id'], "Time Out", 1, $datetimetoday,$array['school_id']);
             } catch (Exception $e) {
                 echo $e->getMessage();
             }
         }
         else{
-            $this->inserStudentEntry($array['id'], 1, 1, $datetimetoday);
+            $this->inserStudentEntry($array['id'], 1, 1, $datetimetoday,  $array['school_id']);
 
             try {
                 // Send a message using the primary device.
@@ -197,34 +198,17 @@ class StudentCntr extends Student{
                 // Send a message using the Device ID 1.
                 // $msg = sendSingleMessage("+11234567890", "This is a test of single message.", 1);
 
-                echo json_encode(array("first_name"=>$array['first_name'], "last_name"=>$array['last_name'], "status"=>"Time Out", "student_year" => $year, "student_course"=> $array['student_course'], "imageFile"=>$array['imageFile'], "message_sent"=>"Success!"));
-
+                echo json_encode(array("first_name"=>$array['first_name'], "last_name"=>$array['last_name'], "status"=>"Time In", "student_year" => $year, "student_course"=> $array['student_course'], "phone" => $array['parents_contact'], "address" => $array['address'], "imageFile"=>$array['imageFile'], "message_sent"=>"Success!"));
+                $this->insertSMSEntry($array['id'], "Time In", 1, $datetimetoday,$array['school_id']);
             } catch (Exception $e) {
                 echo $e->getMessage();
             }
 
 
         }
+    }
       
-        
- 
-        // if($this->checkStudent($this->getStudentData($school_id)['id'],$this->getSchedulData($subject_id)['prof_id'], $subject_id ) == false){
-        //     echo json_encode(array("error" => "400"));   
-        // }
-        // else{
-        //     if($this->attendanceExist($this->getStudentData($school_id)['id'],$this->getSchedulData($subject_id)['prof_id'], $subject_id ) == false){
-        //         if ($time >= $newTime) {
-        //             return $this->setStudentAttendance($this->getStudentData($school_id)['id'], $this->getSchedulData($subject_id)['prof_id'], $subject_id, 0);
-                
-        //         }
-        //         else{
-        //             return $this->setStudentAttendance($this->getStudentData($school_id)['id'], $this->getSchedulData($subject_id)['prof_id'], $subject_id, 1);
-        //         }
-        //     }
-        //     else{
-        //         echo json_encode(array("error" => "404"));
-        //     }
-        // }
+   
     
     }
 
@@ -249,5 +233,9 @@ class StudentCntr extends Student{
 
     public function selectLastInsertScoolId($year){
         echo json_encode($this->getId($year));
+    }
+
+    public function SMSList(){
+        return $this->getSMSdata();
     }
 }

@@ -174,7 +174,7 @@ class AddSubject extends DB{
         $connection = $this->dbOpen();
 
         foreach($chkl as $checklist){
-            $stmt = $connection->prepare("SELECT day FROM subject_schedule WHERE prof_id = ? and subject_id = ? and day = ? and time_in = ? AND room_id = ?");
+            $stmt = $connection->prepare("SELECT day FROM subject_schedule WHERE day = ? and time_in = ? AND room_id = ?");
             $stmt->execute([$prof_id, $subj_id, $checklist, $time_in, $room_id]);
 
             if($stmt->rowCount() > 0 ){
@@ -189,6 +189,28 @@ class AddSubject extends DB{
         
 
     }
+
+    protected function validateProfessorRoomAndTime($prof_id, $subj_id, $chkl, $time_in, $room_id){
+        $resultCheck;
+        $connection = $this->dbOpen();
+
+        foreach($chkl as $checklist){
+            $stmt = $connection->prepare("SELECT day FROM subject_schedule WHERE prof_id = ? and subject_id = ?  day = ? and time_in = ? AND room_id = ?");
+            $stmt->execute([$prof_id, $subj_id, $checklist, $time_in, $room_id]);
+
+            if($stmt->rowCount() > 0 ){
+                $resultCheck = true;
+            }
+            else{
+                $resultCheck = false;
+            }
+            return $resultCheck;
+            
+        }
+        
+
+    }
+
 
     protected function removeAssignedProfessor($prof_id, $subject_id){
         $connection = $this->dbOpen();
@@ -364,6 +386,39 @@ class AddSubject extends DB{
         else{
             return false;
         }
+    }
+
+    protected function inserStudentEntry($id, $status = 0, $has_sent = null, $datetime, $school_id){
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare('INSERT INTO school_entry (stud_id, school_id,status, has_sent, created_at) VALUES (?,?,?,?,?)');
+        $stmt->execute([$id, $school_id,$status, $has_sent, $datetime]);
+
+    }
+
+    protected function insertSMSEntry($id, $status = 1, $has_sent = null, $datetime, $school_id){
+    
+
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare('INSERT INTO sms_entry (stud_id, status, has_sent, created_at) VALUES (?,?,?,?)');
+        $stmt->execute([$id,$status, $has_sent, $datetime]);
+
+    }
+
+    protected function getSMSdata(){
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("SELECT * FROM sms_entry LEFT JOIN students ON students.id = sms_entry.stud_id WHERE students.school_year  = '".$this->getCurrentSchoolYear()['school_year']."'");
+        $stmt->execute();
+        $data = $stmt->fetchall();
+        $total = $stmt->rowCount();
+
+            if($total > 0){
+                return $data;
+            }
+            else{
+                return false;
+             }
+   
+
     }
 }
 
