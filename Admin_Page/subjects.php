@@ -191,7 +191,7 @@ if(isset($user)){
                          <h4><b>Subjects</b></h4>  
                          <div class="row card-student ">
                          <div class="row col-sm-12">
-                                <button type="button" data-toggle="modal" data-target=".addRoom" class="btn btn-sm btn-default">Rooms</button> &nbsp;
+                                <button type="button" data-toggle="modal" data-target=".addRoom" class="btn btn-sm btn-success">Rooms</button> &nbsp;
                                  <button type="button" data-toggle="modal" data-target=".school_year" class="btn btn-sm btn-warning">School Year</button> &nbsp;
                                  <button type="button" data-toggle="modal" data-target=".addSubject" class="btn btn-sm btn-primary">New Subject</button> 
                                

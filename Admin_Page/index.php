@@ -1,5 +1,6 @@
 <?php
   include "../classes/userContr.classes.php";
+  include "../includes/records.inc.php";
   $userdata = new UserCntr();
   $user = $userdata->get_userdata();
 
@@ -180,11 +181,11 @@ if(isset($user)){
                            
                                     <div class="card">
                                     <div class="dashboard-image1">
-                                      <img  src="../img/students.png" width="150" height="150">
+                                      <img  src="../img/lg/Studs.jpg" width="150" height="150">
                                       </div>
                                         <div class="card-body">
                                           <p class="text-right mb-0 font-weight-bold text-gray-800">Students</p>
-                                          <p class="text-right text-gray-800">Count</p>
+                                          <p class="text-right text-gray-800"><?=  $recoords->countAllStudents()['count']; ?></p>
                                           <hr>
                                           <div class="d-flex justify-content-center"><a href="students.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
                                         </div>
@@ -193,14 +194,14 @@ if(isset($user)){
 
                                   <div class="col-sm-6 p-5">
                                     <div class="dashboard-image1">
-                                     <img  src="../img/presents.png" width="150" height="150">
+                                     <img  src="../img/lg/professor.png" width="150" height="150">
                                     </div>
                                     <div class="card">
                                       <div class="card-body">
-                                          <p class="text-right mb-0 font-weight-bold text-gray-800">Presents</p>
-                                          <p class="text-right text-gray-800">(present count)</p>
+                                          <p class="text-right mb-0 font-weight-bold text-gray-800">Professor</p>
+                                          <p class="text-right text-gray-800"><?=  $recoords->countAllProfessors(); ?></p>
                                           <hr>
-                                          <div class="d-flex justify-content-center"><a href="students.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
+                                          <div class="d-flex justify-content-center"><a href="professors.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
                                       </div>
                                     </div>
                                   </div>
@@ -209,28 +210,28 @@ if(isset($user)){
                                 <div class="row d-flex justify-content-center">
                                     <div class="col-sm-6 p-5">
                                         <div class="dashboard-image1">
-                                        <img  src="../img/absents.png" width="150" height="150">
+                                        <img  src="../img/lg/Sub_admin.jpg" width="150" height="150">
                                         </div>
                                         <div class="card">
                                           <div class="card-body">
-                                            <p class="text-right mb-0 font-weight-bold text-gray-800">Presents</p>
-                                            <p class="text-right text-gray-800">(present count)</p>
+                                            <p class="text-right mb-0 font-weight-bold text-gray-800">Sub-Admin</p>
+                                            <p class="text-right text-gray-800"><?=  $recoords->countAllSubAdmin(); ?></p>
                                             <hr>
-                                            <div class="d-flex justify-content-center"><a href="students.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
+                                            <div class="d-flex justify-content-center"><a href="users.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
                                           </div>
                                         </div>
                                       </div>
 
                                     <div class="col-sm-6 p-5">
                                         <div class="dashboard-image1">
-                                        <img  src="../img/late_comers.png" width="150" height="150">
+                                        <img  src="../img/lg/Records.png" width="150" height="150">
                                         </div>
                                         <div class="card">
                                           <div class="card-body">
-                                            <p class="text-right mb-0 font-weight-bold text-gray-800">Presents</p>
-                                            <p class="text-right text-gray-800">(present count)</p>
+                                            <p class="text-right mb-0 font-weight-bold text-gray-800">Records</p>
+                                            <p class="text-right text-gray-800"><?= $recoords->countAllRecords(); ?></p>
                                             <hr>
-                                            <div class="d-flex justify-content-center"><a href="students.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
+                                            <div class="d-flex justify-content-center"><a href="records.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
                                           </div>
                                         </div>
                                     </div>
