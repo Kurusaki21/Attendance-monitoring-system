@@ -1,15 +1,10 @@
 <?php
   include "../classes/userContr.classes.php";
-  include "../includes/subject.inc.php";
-  include "../includes/professor.inc.php";
+  include "../includes/records.inc.php";
   $userdata = new UserCntr();
   $user = $userdata->get_userdata();
 
-  $subject = new SubjectCntr();
-  $subjectlist = $subject->subjects();
-
-  $professors =  new ProfessorCntr();
-  $list_of_professors = $professors->Professor();
+$rm = $recoords->getRecords();
 
 if(isset($user)){
       
@@ -81,87 +76,57 @@ if(isset($user)){
                 
             </li>
 
-             <!-- Divider -->
-             <hr class="sidebar-divider">
+            <!-- Divider -->
+            <hr class="sidebar-divider">
 
-                <li class="nav-item ">
-                    <a class="nav-link" href="index.php">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Dashboard</span></a>
-                </li>
-                <?php if($user['account_setting'] == 1){ ?>
-                <li class="nav-item ">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                        aria-expanded="true" aria-controls="collapseUtilities">
-                        <i class="fas fa-fw fa-users"></i>
-                        <span>List of Accounts</span>
-                    </a>
-                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                        data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Registered Users</h6>
-                            <a class="collapse-item" href="students.php">Students</a>
-                            <a class="collapse-item" href="professors.php">Professors</a>
-                            <a class="collapse-item" href="users.php">Users</a>
-                        </div>
+            <li class="nav-item">
+                <a class="nav-link" href="index.php">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Dashboard</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>List of Accounts</span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Registered Users</h6>
+                        <a class="collapse-item" href="students.php">Students</a>
+                        <a class="collapse-item" href="professors.php">Professors</a>
+                        <a class="collapse-item" href="users.php">Sub-Admin</a>
                     </div>
-                </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
+                </div>
+            </li>
 
-                <?php if($user['subject_setting'] == 1){ ?> 
-                    <li class="nav-item ">
-                        <a class="nav-link" href="subjects.php">
-                            <i class="fas fa-fw fa-clipboard"></i>
-                            <span>Subjects</span></a>
-                    </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
+            <li class="nav-item">
+                <a class="nav-link" href="subjects.php">
+                    <i class="fas fa-fw fa-clipboard"></i>
+                    <span>Subjects</span></a>
+            </li>
+            
+            <li class="nav-item active">
+                <a class="nav-link" href="records.php">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Records</span></a>
+            </li>
 
-                <?php if($user['records_setting'] == 1){ ?> 
-                    <li class="nav-item active">
-                        <a class="nav-link" href="records.php">
-                            <i class="fas fa-fw fa-chart-area"></i>
-                            <span>Records</span></a>
-                    </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
+            <!-- Nav Item - Tables -->
+            <li class="nav-item">
+                <a class="nav-link" href="sms.php">
+                    <i class="fas fa-fw fa-sms"></i>
+                    <span>SMS</span></a>
+            </li>
 
-                <!-- Nav Item - Tables -->
-                <?php if($user['sms_setting'] == 1){ ?> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="sms.php">
-                            <i class="fas fa-fw fa-sms"></i>
-                            <span>SMS</span></a>
-                    </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
+            <li class="nav-item">
+                <a class="nav-link" href="barcode.php">
+                    <i class="fas fa-fw fa-sms"></i>
+                    <span>Barcode Scanner</span></a>
+            </li>
 
-                <?php if($user['barcode_setting'] == 1){ ?>     
-                <li class="nav-item">
-                    <a class="nav-link" href="barcode.php">
-                        <i class="fas fa-fw fa-sms"></i>
-                        <span>Barcode Scanner</span></a>
-                </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
-
-                <!-- Divider -->
+            <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
             <!-- Sidebar Toggler (Sidebar) -->
@@ -226,25 +191,27 @@ if(isset($user)){
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Subject Name</th>
-                                            <th>Full name</th>
+                                            <th>Student Name</th>
                                             <th>Status</th>
-                                            <th>Datetime</th>
+                                            <th>Current Attendance</th>
+                                            <th>Professor</th>
+                                            <th>Created At</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                          <?php
-                                            if($subjectlist == false){
+                                            if($rm == false){
 
                                             }
                                             else{
-                                            foreach($subjectlist as $subjects){ ?>
-                                                <tr id="records_<?= $subjects['id'];?>">
-                                                <td> <?= $subjects['subject_name']; ?></td>
-                                                <td> <?= $subjects['subject_description']; ?></td>
-                                                <td> <?= $subjects['subject_description']; ?></td>
+                                            foreach($rm as $sr){ ?>
+                                                <tr>
+                                                <td> <?= $sr['first_name'].' '.$sr['last_name']; ?></td>
+                                                <td> <?= $sr['status'] == '1' ? 'Time IN' : 'Time Out'; ?></td>
+                                                <td> <?= $sr['has_sent'] == '1' ? 'Gate Entry' : 'Professor Attendance'; ?></td>
                                                 
-                                                <td><?= $subjects['subj_id'];?></td>
+                                                <td><?= $sr['prof_fname'].' '.$sr['prof_lname'];?></td>
+                                                <td><?= $sr['created_at'];?></td>
                                               
                                             <?php  
                                             }
@@ -299,7 +266,7 @@ if(isset($user)){
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../includes/logout.php">Logout</a>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
                 </div>
             </div>
         </div>

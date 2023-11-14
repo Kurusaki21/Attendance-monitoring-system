@@ -2,10 +2,9 @@
   include "../classes/userContr.classes.php";
   include "../includes/subject.inc.php";
   include "../includes/professor.inc.php";
+  include "../includes/student.inc.php";
   $userdata = new UserCntr();
   $user = $userdata->get_userdata();
-
-
 
 if(isset($user)){
       
@@ -80,84 +79,54 @@ if(isset($user)){
             <!-- Divider -->
             <hr class="sidebar-divider">
 
-                <li class="nav-item ">
-                    <a class="nav-link" href="index.php">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Dashboard</span></a>
-                </li>
-                <?php if($user['account_setting'] == 1){ ?>
-                <li class="nav-item ">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                        aria-expanded="true" aria-controls="collapseUtilities">
-                        <i class="fas fa-fw fa-users"></i>
-                        <span>List of Accounts</span>
-                    </a>
-                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                        data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Registered Users</h6>
-                            <a class="collapse-item" href="students.php">Students</a>
-                            <a class="collapse-item" href="professors.php">Professors</a>
-                            <a class="collapse-item" href="users.php">Users</a>
-                        </div>
+            <li class="nav-item">
+                <a class="nav-link" href="index.php">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Dashboard</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>List of Accounts</span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Registered Users</h6>
+                        <a class="collapse-item" href="students.php">Students</a>
+                        <a class="collapse-item" href="professors.php">Professors</a>
+                        <a class="collapse-item" href="users.php">Sub-Admin</a>
                     </div>
-                </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
+                </div>
+            </li>
 
-                <?php if($user['subject_setting'] == 1){ ?> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="subjects.php">
-                            <i class="fas fa-fw fa-clipboard"></i>
-                            <span>Subjects</span></a>
-                    </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
+            <li class="nav-item">
+                <a class="nav-link" href="subjects.php">
+                    <i class="fas fa-fw fa-clipboard"></i>
+                    <span>Subjects</span></a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="records.php">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Records</span></a>
+            </li>
 
-                <?php if($user['records_setting'] == 1){ ?> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="records.php">
-                            <i class="fas fa-fw fa-chart-area"></i>
-                            <span>Records</span></a>
-                    </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
+            <!-- Nav Item - Tables -->
+            <li class="nav-item active">
+                <a class="nav-link" href="sms.php">
+                    <i class="fas fa-fw fa-sms"></i>
+                    <span>SMS</span></a>
+            </li>
 
-                <!-- Nav Item - Tables -->
-                <?php if($user['sms_setting'] == 1){ ?> 
-                    <li class="nav-item active">
-                        <a class="nav-link" href="sms.php">
-                            <i class="fas fa-fw fa-sms"></i>
-                            <span>SMS</span></a>
-                    </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
+            <li class="nav-item">
+                <a class="nav-link" href="barcode.php">
+                    <i class="fas fa-fw fa-sms"></i>
+                    <span>Barcode Scanner</span></a>
+            </li>
 
-                <?php if($user['barcode_setting'] == 1){ ?>     
-                <li class="nav-item">
-                    <a class="nav-link" href="barcode.php">
-                        <i class="fas fa-fw fa-sms"></i>
-                        <span>Barcode Scanner</span></a>
-                </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
-
-                <!-- Divider -->
+            <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
             <!-- Sidebar Toggler (Sidebar) -->
@@ -222,26 +191,27 @@ if(isset($user)){
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Subject Name</th>
                                             <th>Full name</th>
                                             <th>Status</th>
+                                            <th>Parents Contact</th>
+                                            <th>SMS Sent</th>
                                             <th>Datetime</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                          <?php
-                                            if($subjectlist == false){
+                                            if($student->SMSList() == false){
 
                                             }
                                             else{
-                                            foreach($subjectlist as $subjects){ ?>
-                                                <tr id="records_<?= $subjects['id'];?>">
-                                                <td> <?= $subjects['subject_name']; ?></td>
-                                                <td> <?= $subjects['subject_description']; ?></td>
-                                                <td> <?= $subjects['subject_description']; ?></td>
+                                            foreach( $student->SMSList() as $student){ ?>
+                                                <tr id="records_<?= $student['id'];?>">
+                                                <td> <?= $student['first_name'].' '.$student['last_name']; ?></td>
+                                                <td> <?= $student['status']; ?></td>
+                                                <td> <?= $student['parents_contact']; ?></td>
                                                 
-                                                <td><?= $subjects['subj_id'];?></td>
-                                              
+                                                <td><?= $student['has_sent'] == '1' ? 'True' : 'False';?></td>
+                                                <td> <?= $student['created_at']; ?></td>
                                             <?php  
                                             }
                                             }
