@@ -22,7 +22,8 @@ if(isset($user)){
 <!DOCTYPE html>
 <html lang="en">
 <?php include 'includes/header.php'; ?>
-
+<link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css" rel="stylesheet">
 <style>
     .dashboard-image1{
       position: absolute;
@@ -81,57 +82,87 @@ if(isset($user)){
                 
             </li>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
+             <!-- Divider -->
+             <hr class="sidebar-divider">
 
-            <li class="nav-item">
-                <a class="nav-link" href="index.php">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Dashboard</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>List of Accounts</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Registered Users</h6>
-                        <a class="collapse-item" href="students.php">Students</a>
-                        <a class="collapse-item" href="professors.php">Professors</a>
-                        <a class="collapse-item" href="users.php">Users</a>
+                <li class="nav-item ">
+                    <a class="nav-link" href="index.php">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Dashboard</span></a>
+                </li>
+                <?php if($user['account_setting'] == 1){ ?>
+                <li class="nav-item ">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                        aria-expanded="true" aria-controls="collapseUtilities">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>List of Accounts</span>
+                    </a>
+                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Registered Users</h6>
+                            <a class="collapse-item" href="students.php">Students</a>
+                            <a class="collapse-item" href="professors.php">Professors</a>
+                            <a class="collapse-item" href="users.php">Users</a>
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+                <?php }
+                else{
+                    echo '';
+                }
+                ?>
 
-            <li class="nav-item active">
-                <a class="nav-link" href="subjects.php">
-                    <i class="fas fa-fw fa-clipboard"></i>
-                    <span>Subjects</span></a>
-            </li>
-            
-            <li class="nav-item ">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Records</span></a>
-            </li>
+                <?php if($user['subject_setting'] == 1){ ?> 
+                    <li class="nav-item ">
+                        <a class="nav-link" href="subjects.php">
+                            <i class="fas fa-fw fa-clipboard"></i>
+                            <span>Subjects</span></a>
+                    </li>
+                <?php }
+                else{
+                    echo '';
+                }
+                ?>
 
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-sms"></i>
-                    <span>SMS</span></a>
-            </li>
+                <?php if($user['records_setting'] == 1){ ?> 
+                    <li class="nav-item active">
+                        <a class="nav-link" href="records.php">
+                            <i class="fas fa-fw fa-chart-area"></i>
+                            <span>Records</span></a>
+                    </li>
+                <?php }
+                else{
+                    echo '';
+                }
+                ?>
 
-            <li class="nav-item">
-                <a class="nav-link" href="barcode.php">
-                    <i class="fas fa-fw fa-sms"></i>
-                    <span>Barcode Scanner</span></a>
-            </li>
+                <!-- Nav Item - Tables -->
+                <?php if($user['sms_setting'] == 1){ ?> 
+                    <li class="nav-item">
+                        <a class="nav-link" href="sms.php">
+                            <i class="fas fa-fw fa-sms"></i>
+                            <span>SMS</span></a>
+                    </li>
+                <?php }
+                else{
+                    echo '';
+                }
+                ?>
 
-            <!-- Divider -->
+                <?php if($user['barcode_setting'] == 1){ ?>     
+                <li class="nav-item">
+                    <a class="nav-link" href="barcode.php">
+                        <i class="fas fa-fw fa-sms"></i>
+                        <span>Barcode Scanner</span></a>
+                </li>
+                <?php }
+                else{
+                    echo '';
+                }
+                ?>
+
+                <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
             <!-- Sidebar Toggler (Sidebar) -->
@@ -185,31 +216,21 @@ if(isset($user)){
                 <div class="container-fluid">
                     <!-- Content Row -->
                     <div class="row">
-                         <h4><b>Subjects</b></h4>  
+                         <h4><b>All Records</b></h4>  
                          <div class="row card-student ">
-                         <div class="row col-sm-12">
-<<<<<<< Updated upstream
-                                 <button type="button" data-toggle="modal" data-target=".addSubject" class="btn btn-sm btn-primary">New Subject</button>
-=======
-                                <button type="button" data-toggle="modal" data-target=".addRoom" class="btn btn-sm btn-success">Rooms</button> &nbsp;
-                                 <button type="button" data-toggle="modal" data-target=".school_year" class="btn btn-sm btn-warning">School Year</button> &nbsp;
-                                 <button type="button" data-toggle="modal" data-target=".addSubject" class="btn btn-sm btn-primary">New Subject</button> 
-                               
->>>>>>> Stashed changes
-                            </div>
 
                         </div>
                         <div class="admin-container">
                             <div class="admin-card">
 
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="display" id="example" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Subject Name</th>
-                                            <th>Description</th>
-                                            <th>Professor Assigned</th>
-                                            <th>Action</th>
+                                            <th>Full name</th>
+                                            <th>Status</th>
+                                            <th>Datetime</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -222,9 +243,10 @@ if(isset($user)){
                                                 <tr id="records_<?= $subjects['id'];?>">
                                                 <td> <?= $subjects['subject_name']; ?></td>
                                                 <td> <?= $subjects['subject_description']; ?></td>
+                                                <td> <?= $subjects['subject_description']; ?></td>
                                                 
                                                 <td><?= $subjects['subj_id'];?></td>
-                                                <td><button type="button" data-toggle="tooltip" data-placement="top" title="edit" onclick="editSubjectModal(<?= $subjects['id'];?>)" class="btn btn-sm btn-success"><i class="far fa-edit"></i></button> <a href="show-assigned-professor.php?subject_id=<?= $subjects['id'];?>" class="btn btn-sm btn-warning" data-toggle="tooltip" data-placement="top" title="show assigned professors"><i class="fas fa-eye"></i></i></a> <button class="btn btn-sm btn-warning" data-toggle="tooltip" onclick="assignProfessorModal(<?= $subjects['id'];?>)" data-placement="top" title="assign professor"><i class="fas fa-network-wired"></i></button> <button type="button" onclick="deleteSubject(<?= $subjects['id'];?>)" class="btn-sm btn-danger dlt_record" data-toggle="tooltip" data-placement="top" title="delete subject"><i class="fa fa-trash"></button></td>
+                                              
                                             <?php  
                                             }
                                             }
@@ -278,7 +300,7 @@ if(isset($user)){
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="../includes/logout.php">Logout</a>
                 </div>
             </div>
         </div>
@@ -419,56 +441,22 @@ if(isset($user)){
     <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
     <!-- Page level custom scripts -->
     <script src="../js/demo/datatables-demo.js"></script>
     <script>
-        $('.my-select').selectpicker();
-        function editSubjectModal(id){
-            $.ajax({
-                method: "get",
-                dataType: "json",
-                url: "../includes/subject.inc.php?id=" + id,
-                success: function (response){
-                $.each(response, function(index, data) {
-                        $('#subject_name').val(data.subject_name)
-                        $('#subject_description').val(data.subject_description)
-                        $('#subj_id').val(data.id)
-                    });
-                }
-            })
-            $('#editSubject').modal(); 
-        }
-
-        function assignProfessorModal(id){
-            // $.ajax({
-            //     method: "get",
-            //     dataType: "json",
-            //     url: "../includes/subject.inc.php?id=" + id,
-            //     success: function (response){
-            //     $.each(response, function(index, data) {
-            //             $('#subject_name').val(data.subject_name)
-            //             $('#subject_description').val(data.subject_description)
-            //         });
-            //     }
-            // })
-            $('#subj_prof_id').val(id);
-            $('#assignProfessor').modal(); 
-        }
-
-        function deleteSubject(id){
-            var confirmation = confirm("are you sure you want to remove this subject?");
-
-            if(confirmation){
-                $.ajax({
-                    method: "get",
-                    url: "../includes/subject.inc.php?delete_user=" + id,
-                    success: function (response){
-                    $("#records_"+id).remove();
-                    }
-                })
-            }
-        }
+    $(document).ready(function() {
+        $('#example').DataTable( {
+            dom: 'Bfrtip',
+            buttons: [
+                'print'
+            ]
+        } );
+    } );
     </script>
+    
 </body>
 
 </html>

@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
     <link href="css/index.css" rel="stylesheet">
-    <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    
+   
 
 </head>

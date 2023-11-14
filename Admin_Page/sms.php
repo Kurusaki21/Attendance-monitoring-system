@@ -2,14 +2,9 @@
   include "../classes/userContr.classes.php";
   include "../includes/subject.inc.php";
   include "../includes/professor.inc.php";
+  include "../includes/student.inc.php";
   $userdata = new UserCntr();
   $user = $userdata->get_userdata();
-
-  $subject = new SubjectCntr();
-  $subjectlist = $subject->subjects();
-
-  $professors =  new ProfessorCntr();
-  $list_of_professors = $professors->Professor();
 
 if(isset($user)){
       
@@ -101,26 +96,26 @@ if(isset($user)){
                         <h6 class="collapse-header">Registered Users</h6>
                         <a class="collapse-item" href="students.php">Students</a>
                         <a class="collapse-item" href="professors.php">Professors</a>
-                        <a class="collapse-item" href="users.php">Users</a>
+                        <a class="collapse-item" href="users.php">Sub-Admin</a>
                     </div>
                 </div>
             </li>
 
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="subjects.php">
                     <i class="fas fa-fw fa-clipboard"></i>
                     <span>Subjects</span></a>
             </li>
             
-            <li class="nav-item ">
-                <a class="nav-link" href="charts.html">
+            <li class="nav-item">
+                <a class="nav-link" href="records.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Records</span></a>
             </li>
 
             <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+            <li class="nav-item active">
+                <a class="nav-link" href="sms.php">
                     <i class="fas fa-fw fa-sms"></i>
                     <span>SMS</span></a>
             </li>
@@ -185,18 +180,8 @@ if(isset($user)){
                 <div class="container-fluid">
                     <!-- Content Row -->
                     <div class="row">
-                         <h4><b>Subjects</b></h4>  
+                         <h4><b>SMS Logs</b></h4>  
                          <div class="row card-student ">
-                         <div class="row col-sm-12">
-<<<<<<< Updated upstream
-                                 <button type="button" data-toggle="modal" data-target=".addSubject" class="btn btn-sm btn-primary">New Subject</button>
-=======
-                                <button type="button" data-toggle="modal" data-target=".addRoom" class="btn btn-sm btn-success">Rooms</button> &nbsp;
-                                 <button type="button" data-toggle="modal" data-target=".school_year" class="btn btn-sm btn-warning">School Year</button> &nbsp;
-                                 <button type="button" data-toggle="modal" data-target=".addSubject" class="btn btn-sm btn-primary">New Subject</button> 
-                               
->>>>>>> Stashed changes
-                            </div>
 
                         </div>
                         <div class="admin-container">
@@ -206,25 +191,27 @@ if(isset($user)){
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Subject Name</th>
-                                            <th>Description</th>
-                                            <th>Professor Assigned</th>
-                                            <th>Action</th>
+                                            <th>Full name</th>
+                                            <th>Status</th>
+                                            <th>Parents Contact</th>
+                                            <th>SMS Sent</th>
+                                            <th>Datetime</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                          <?php
-                                            if($subjectlist == false){
+                                            if($student->SMSList() == false){
 
                                             }
                                             else{
-                                            foreach($subjectlist as $subjects){ ?>
-                                                <tr id="records_<?= $subjects['id'];?>">
-                                                <td> <?= $subjects['subject_name']; ?></td>
-                                                <td> <?= $subjects['subject_description']; ?></td>
+                                            foreach( $student->SMSList() as $student){ ?>
+                                                <tr id="records_<?= $student['id'];?>">
+                                                <td> <?= $student['first_name'].' '.$student['last_name']; ?></td>
+                                                <td> <?= $student['status']; ?></td>
+                                                <td> <?= $student['parents_contact']; ?></td>
                                                 
-                                                <td><?= $subjects['subj_id'];?></td>
-                                                <td><button type="button" data-toggle="tooltip" data-placement="top" title="edit" onclick="editSubjectModal(<?= $subjects['id'];?>)" class="btn btn-sm btn-success"><i class="far fa-edit"></i></button> <a href="show-assigned-professor.php?subject_id=<?= $subjects['id'];?>" class="btn btn-sm btn-warning" data-toggle="tooltip" data-placement="top" title="show assigned professors"><i class="fas fa-eye"></i></i></a> <button class="btn btn-sm btn-warning" data-toggle="tooltip" onclick="assignProfessorModal(<?= $subjects['id'];?>)" data-placement="top" title="assign professor"><i class="fas fa-network-wired"></i></button> <button type="button" onclick="deleteSubject(<?= $subjects['id'];?>)" class="btn-sm btn-danger dlt_record" data-toggle="tooltip" data-placement="top" title="delete subject"><i class="fa fa-trash"></button></td>
+                                                <td><?= $student['has_sent'] == '1' ? 'True' : 'False';?></td>
+                                                <td> <?= $student['created_at']; ?></td>
                                             <?php  
                                             }
                                             }
@@ -421,54 +408,7 @@ if(isset($user)){
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
     <!-- Page level custom scripts -->
     <script src="../js/demo/datatables-demo.js"></script>
-    <script>
-        $('.my-select').selectpicker();
-        function editSubjectModal(id){
-            $.ajax({
-                method: "get",
-                dataType: "json",
-                url: "../includes/subject.inc.php?id=" + id,
-                success: function (response){
-                $.each(response, function(index, data) {
-                        $('#subject_name').val(data.subject_name)
-                        $('#subject_description').val(data.subject_description)
-                        $('#subj_id').val(data.id)
-                    });
-                }
-            })
-            $('#editSubject').modal(); 
-        }
-
-        function assignProfessorModal(id){
-            // $.ajax({
-            //     method: "get",
-            //     dataType: "json",
-            //     url: "../includes/subject.inc.php?id=" + id,
-            //     success: function (response){
-            //     $.each(response, function(index, data) {
-            //             $('#subject_name').val(data.subject_name)
-            //             $('#subject_description').val(data.subject_description)
-            //         });
-            //     }
-            // })
-            $('#subj_prof_id').val(id);
-            $('#assignProfessor').modal(); 
-        }
-
-        function deleteSubject(id){
-            var confirmation = confirm("are you sure you want to remove this subject?");
-
-            if(confirmation){
-                $.ajax({
-                    method: "get",
-                    url: "../includes/subject.inc.php?delete_user=" + id,
-                    success: function (response){
-                    $("#records_"+id).remove();
-                    }
-                })
-            }
-        }
-    </script>
+    
 </body>
 
 </html>

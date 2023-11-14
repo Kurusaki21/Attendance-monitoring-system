@@ -5,7 +5,7 @@
 
 if(isset($user)){
       
-  $name = $user['name'];
+  $name = $user['first_name'].' '.$user['last_name'];
   $role = $user['role'];
   if(isset($role) == '1'){
 
@@ -66,6 +66,7 @@ if(isset($user)){
                 
             </li>
 
+           
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -74,6 +75,7 @@ if(isset($user)){
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Dashboard</span></a>
             </li>
+            <?php if($user['account_setting'] == 1){ ?>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
@@ -90,31 +92,60 @@ if(isset($user)){
                     </div>
                 </div>
             </li>
+            <?php }
+            else{
+                echo '';
+            }
+            ?>
 
-            <li class="nav-item">
-                <a class="nav-link" href="subjects.php">
-                    <i class="fas fa-fw fa-clipboard"></i>
-                    <span>Subjects</span></a>
-            </li>
+            <?php if($user['subject_setting'] == 1){ ?> 
+                <li class="nav-item">
+                    <a class="nav-link" href="subjects.php">
+                        <i class="fas fa-fw fa-clipboard"></i>
+                        <span>Subjects</span></a>
+                </li>
+            <?php }
+            else{
+                echo '';
+            }
+            ?>
             
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Records</span></a>
-            </li>
+            <?php if($user['records_setting'] == 1){ ?> 
+                <li class="nav-item">
+                    <a class="nav-link" href="records.php">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Records</span></a>
+                </li>
+            <?php }
+            else{
+                echo '';
+            }
+            ?>
 
             <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-sms"></i>
-                    <span>SMS</span></a>
-            </li>
+            <?php if($user['sms_setting'] == 1){ ?> 
+                <li class="nav-item">
+                    <a class="nav-link" href="sms.php">
+                        <i class="fas fa-fw fa-sms"></i>
+                        <span>SMS</span></a>
+                </li>
+            <?php }
+            else{
+                echo '';
+            }
+            ?>
 
+            <?php if($user['barcode_setting'] == 1){ ?>     
             <li class="nav-item">
                 <a class="nav-link" href="barcode.php">
                     <i class="fas fa-fw fa-sms"></i>
                     <span>Barcode Scanner</span></a>
             </li>
+            <?php }
+            else{
+                echo '';
+            }
+            ?>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -182,7 +213,7 @@ if(isset($user)){
                                                        <div id="student_preview"></div>
                                                 </div>
                                                 <div class="row justify-content-center">
-                                                        <h4 class="display-1 stud_name"></h4>
+                                                        <h1 class="display-1 stud_name"></h1>
                                                 </div>
                                                 <div class="row justify-content-center">
                                                        <h4 class="display-4 stud_course"></h3>
@@ -190,18 +221,6 @@ if(isset($user)){
                                                 <div class="row justify-content-center">
                                                       <h4 class="display-4 stud_year"></h3>
                                                 </div>
-<<<<<<< Updated upstream
-=======
-                                                <div class="row justify-content-center">
-                                                      <h4 class="display-4 stud_address"></h3>
-                                                </div>
-                                                <div class="row justify-content-center">
-                                                      <h4 class="display-4 stud_contact"></h3>
-                                                </div>
-                                                <div class="row justify-content-center">
-                                                      <h4 class="display-4 time_in text-danger"></h3>
-                                                </div>
->>>>>>> Stashed changes
                                           </div>
                                     </div>
                                     <div class="col-md-6">
@@ -269,24 +288,6 @@ if(isset($user)){
         </div>
     </div>
 
-    <div class="modal fade" id="not_enrolled" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                <h5><i class="icon fas fa-info"></i> Warning!</h5>
-                    <button type="button" class="sched_close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-warning alert-dismissible">
-                        <center><b>Student not enrolled in this school year</b></center>
-                    </div>    
-                </div>
-                </div>
-            </div>
-    </div>
-
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -307,7 +308,7 @@ if(isset($user)){
 
         var config = {
         fps: 10,
-        qrbox: {width: 500, height: 300},
+        qrbox: {width: 300, height: 300},
         rememberLastUsedCamera: true,
         // Only support camera scan type.
         supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
@@ -324,7 +325,6 @@ if(isset($user)){
                 dataType: "json",
                 url: "../includes/student.inc.php?school_id=" + id,
                 success: function (response){
-<<<<<<< Updated upstream
                 $.each(response, function(index, data) {
                     console.log(data);
                         $('.stud_name').html(data.first_name+' '+data.last_name);
@@ -332,31 +332,6 @@ if(isset($user)){
                         $('.stud_course').html(data.student_course);
                         document.getElementById('student_preview').innerHTML = '<img class="rounded-circle" width="200" height="200" src="'+data.imageFile+'">';
                     });
-=======
-                // $.each(response, function(index, data) {
-                //     console.log(data.last_name)
-                //      
-                //     });
-
-
-                if(response.error == "Not Enrolled!"){
-                    $('#not_enrolled').modal('show')
-
-                }
-                else{
-
-                    $('.stud_name').html(response.first_name+' '+response.last_name);
-                    $('.stud_year').html(response.student_year);
-                    $('.stud_course').html(response.student_course);
-                    $('.stud_contact').html(response.phone);
-                    $('.stud_address').html(response.address);
-                    $('.time_in').html(response.status);
-                    document.getElementById('student_preview').innerHTML = '<img class="rounded-circle" width="200" height="200" src="'+response.imageFile+'">';
-                    const myTimeout = setTimeout(timeInterval, 2000);
-
-                }
-        
->>>>>>> Stashed changes
                 }
                
             })

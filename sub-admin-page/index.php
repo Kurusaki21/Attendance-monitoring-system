@@ -1,12 +1,16 @@
 <?php
   include "../classes/userContr.classes.php";
+  include "../includes/records.inc.php";
   $userdata = new UserCntr();
   $user = $userdata->get_userdata();
 
 if(isset($user)){
       
-  $name = $user['name'];
+  $name = $user['first_name'].' ' .$user['last_name'];
+;
   $role = $user['role'];
+
+
   if(isset($role) == '1'){
 
 
@@ -14,14 +18,12 @@ if(isset($user)){
 <!DOCTYPE html>
 <html lang="en">
 <?php include 'includes/header.php'; ?>
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-
 <style>
     .dashboard-image1{
       position: absolute;
-      margin-top: -70px;
       z-index: 999999;
-      margin-left:1em;
+      margin-top: 5px;
+      margin-left: 5px;
     }
   
 </style>
@@ -74,6 +76,7 @@ if(isset($user)){
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Dashboard</span></a>
             </li>
+            <?php if($user['account_setting'] == 1){ ?>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
@@ -90,31 +93,60 @@ if(isset($user)){
                     </div>
                 </div>
             </li>
+            <?php }
+            else{
+                echo '';
+            }
+            ?>
 
-            <li class="nav-item">
-                <a class="nav-link" href="subjects.php">
-                    <i class="fas fa-fw fa-clipboard"></i>
-                    <span>Subjects</span></a>
-            </li>
+            <?php if($user['subject_setting'] == 1){ ?> 
+                <li class="nav-item">
+                    <a class="nav-link" href="subjects.php">
+                        <i class="fas fa-fw fa-clipboard"></i>
+                        <span>Subjects</span></a>
+                </li>
+            <?php }
+            else{
+                echo '';
+            }
+            ?>
             
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Records</span></a>
-            </li>
+            <?php if($user['records_setting'] == 1){ ?> 
+                <li class="nav-item">
+                    <a class="nav-link" href="records.php">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Records</span></a>
+                </li>
+            <?php }
+            else{
+                echo '';
+            }
+            ?>
 
             <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-sms"></i>
-                    <span>SMS</span></a>
-            </li>
+            <?php if($user['sms_setting'] == 1){ ?> 
+                <li class="nav-item">
+                    <a class="nav-link" href="sms.php">
+                        <i class="fas fa-fw fa-sms"></i>
+                        <span>SMS</span></a>
+                </li>
+            <?php }
+            else{
+                echo '';
+            }
+            ?>
 
+            <?php if($user['barcode_setting'] == 1){ ?>     
             <li class="nav-item">
                 <a class="nav-link" href="barcode.php">
                     <i class="fas fa-fw fa-sms"></i>
                     <span>Barcode Scanner</span></a>
             </li>
+            <?php }
+            else{
+                echo '';
+            }
+            ?>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -146,7 +178,7 @@ if(isset($user)){
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?=   $name ?></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $name; ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -172,47 +204,101 @@ if(isset($user)){
                     <!-- Content Row -->
                     <div class="row">
                        
-                        <div class="admin-container">
-                            <div class="admin-card">
-                                <h4><b>Bar Code Scanner</b></h4>   <br> 
-                                <div class="row">
-                                    <div class="col-md-6">
-                                          <div class="container">
-                                                <div class="row justify-content-center">
-                                                       <div id="student_preview"></div>
-                                                </div>
-                                                <div class="row justify-content-center">
-                                                        <h4 class="display-1 stud_name"></h4>
-                                                </div>
-                                                <div class="row justify-content-center">
-                                                       <h4 class="display-4 stud_course"></h3>
-                                                </div>
-                                                <div class="row justify-content-center">
-                                                      <h4 class="display-4 stud_year"></h3>
-                                                </div>
-<<<<<<< Updated upstream
-=======
-                                                <div class="row justify-content-center">
-                                                      <h4 class="display-4 stud_address"></h3>
-                                                </div>
-                                                <div class="row justify-content-center">
-                                                      <h4 class="display-4 stud_contact"></h3>
-                                                </div>
-                                                <div class="row justify-content-center">
-                                                      <h4 class="display-4 time_in text-danger"></h3>
-                                                </div>
->>>>>>> Stashed changes
-                                          </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <center> <div id="reader" width="600px"></div> </center>
-                                    
-                                    </div>
-                                </div>
+                       <div class="admin-container">
+                           <div class="admin-card">
+                               <h4><b>Dashboard</b></h4>   <br> 
+                 
+                               <div class="row d-flex justify-content-center">
+                                 <div class="col-sm-6 p-5">
+                          
+                                   <div class="card">
+                                   <div class="dashboard-image1">
+                                     <img  src="../img/students.png" width="150" height="150">
+                                     </div>
+                                       <div class="card-body">
+                                         <p class="text-right mb-0 font-weight-bold text-gray-800">Students</p>
+                                         <p class="text-right text-gray-800"><?=  $recoords->countAllStudents()['count']; ?></p>
+                                         <hr>
+                                         <div class="d-flex justify-content-center"><a href="students.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
+                                       </div>
+                                   </div>
+                                 </div>
+
+                                 <div class="col-sm-6 p-5">
+                                   <div class="dashboard-image1">
+                                    <img  src="../img/presents.png" width="150" height="150">
+                                   </div>
+                                   <div class="card">
+                                     <div class="card-body">
+                                         <p class="text-right mb-0 font-weight-bold text-gray-800">Professor</p>
+                                         <p class="text-right text-gray-800"><?=  $recoords->countAllProfessors(); ?></p>
+                                         <hr>
+                                         <div class="d-flex justify-content-center"><a href="professors.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
+                                     </div>
+                                   </div>
+                                 </div>
+                               </div>
+                   
+                               <div class="row d-flex justify-content-center">
+                                   <div class="col-sm-6 p-5">
+                                       <div class="dashboard-image1">
+                                       <img  src="../img/absents.png" width="150" height="150">
+                                       </div>
+                                       <div class="card">
+                                         <div class="card-body">
+                                           <p class="text-right mb-0 font-weight-bold text-gray-800">Sub-Admin</p>
+                                           <p class="text-right text-gray-800"><?=  $recoords->countAllSubAdmin(); ?></p>
+                                           <hr>
+                                           <div class="d-flex justify-content-center"><a href="users.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
+                                         </div>
+                                       </div>
+                                     </div>
+
+                                   <div class="col-sm-6 p-5">
+                                       <div class="dashboard-image1">
+                                       <img  src="../img/late_comers.png" width="150" height="150">
+                                       </div>
+                                       <div class="card">
+                                         <div class="card-body">
+                                           <p class="text-right mb-0 font-weight-bold text-gray-800">Records</p>
+                                           <p class="text-right text-gray-800">(present count)</p>
+                                           <hr>
+                                           <div class="d-flex justify-content-center"><a href="records.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
+                                         </div>
+                                       </div>
+                                   </div>
+                                 </div>
+
+                                 <div class="row mt-5 d-flex justify-content-center">
+                                   <div class="col-sm-6 mb-4">
+                                     <div class="card">
+                                       <div class="card-body">
+                                         <h5 class="card-title mb-0 font-weight-bold text-gray-800 text-center">Absentees in 1 month</h5>
+
+                                           <div class="card-body">
+                                               <div class="chart-pie pt-4 pb-2">
+                                                   <canvas id="myPieChart"></canvas>
+                                               </div>
+                                               <div class="text-center small">
+                                                 <span class="mr-2">
+                                                     <i class="fas fa-circle text-primary"></i> Direct
+                                                 </span>
+                                                 <span class="mr-2">
+                                                     <i class="fas fa-circle text-success"></i> Social
+                                                 </span>
+                                                 <span class="mr-2">
+                                                     <i class="fas fa-circle text-info"></i> Referral
+                                                 </span>
+                                               </div>
+                                             </div>
+
+                                       </div>
+                                     </div>
+                                   </div>
+                                 </div>
                                
-                                
-                            </div>
-                          </div> 
+                           </div>
+                         </div> 
 
 
                     <!-- Content Row -->
@@ -263,28 +349,10 @@ if(isset($user)){
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../login.php">Logout</a>
+                    <a class="btn btn-primary" href="../includes/logout.php">Logout</a>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="modal fade" id="not_enrolled" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                <h5><i class="icon fas fa-info"></i> Warning!</h5>
-                    <button type="button" class="sched_close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-warning alert-dismissible">
-                        <center><b>Student not enrolled in this school year</b></center>
-                    </div>    
-                </div>
-                </div>
-            </div>
     </div>
 
     <!-- Bootstrap core JavaScript-->
@@ -296,73 +364,12 @@ if(isset($user)){
 
     <!-- Custom scripts for all pages-->
     <script src="../js/sb-admin-2.min.js"></script>
-    <script>
-        function onScanSuccess(decodedText, decodedResult) {
-        var sound = new Audio("../includes/barcode.wav");
-        // handle the scanned code as you like, for example:
-        console.log(`Code matched = ${decodedText}`, decodedResult);
-        getStudentRecord(decodedText);
-        sound.play();
-        }
+       <!-- Page level plugins -->
+    <script src="../vendor/chart.js/Chart.min.js"></script>
 
-        var config = {
-        fps: 10,
-        qrbox: {width: 500, height: 300},
-        rememberLastUsedCamera: true,
-        // Only support camera scan type.
-        supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
-        };
+    <!-- Page level custom scripts -->
+    <script src="../js/demo/chart-pie-demo.js"></script>
 
-        let html5QrcodeScanner = new Html5QrcodeScanner(
-        "reader", config, /* verbose= */ false);
-
-        html5QrcodeScanner.render(onScanSuccess);
-
-        function getStudentRecord(id){
-            $.ajax({
-                method: "get",
-                dataType: "json",
-                url: "../includes/student.inc.php?school_id=" + id,
-                success: function (response){
-<<<<<<< Updated upstream
-                $.each(response, function(index, data) {
-                    console.log(data);
-                        $('.stud_name').html(data.first_name+' '+data.last_name);
-                        $('.stud_year').html(data.student_year);
-                        $('.stud_course').html(data.student_course);
-                        document.getElementById('student_preview').innerHTML = '<img class="rounded-circle" width="200" height="200" src="'+data.imageFile+'">';
-                    });
-=======
-                // $.each(response, function(index, data) {
-                //     console.log(data.last_name)
-                //      
-                //     });
-
-
-                if(response.error == "Not Enrolled!"){
-                    $('#not_enrolled').modal('show')
-
-                }
-                else{
-
-                    $('.stud_name').html(response.first_name+' '+response.last_name);
-                    $('.stud_year').html(response.student_year);
-                    $('.stud_course').html(response.student_course);
-                    $('.stud_contact').html(response.phone);
-                    $('.stud_address').html(response.address);
-                    $('.time_in').html(response.status);
-                    document.getElementById('student_preview').innerHTML = '<img class="rounded-circle" width="200" height="200" src="'+response.imageFile+'">';
-                    const myTimeout = setTimeout(timeInterval, 2000);
-
-                }
-        
->>>>>>> Stashed changes
-                }
-               
-            })
-        }
-
-    </script>
 </body>
 
 </html>

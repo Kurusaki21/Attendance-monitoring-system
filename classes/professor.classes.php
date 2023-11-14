@@ -188,7 +188,7 @@ class Professor extends DB{
         $resultCheck;
         $datetimetoday = date("Y-m-d");
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT created_at FROM student_attendance WHERE student_id = ? AND prof_id = ? AND sched_id = ? ORDER BY created_at DESC LIMIT 1");
+        $stmt = $connection->prepare("SELECT created_at FROM student_attendance WHERE student_id = ? AND prof_id = ? AND sched_id = ? and date(created_at) = CURDATE() ORDER BY created_at DESC LIMIT 1");
 
         if(!$stmt->execute([$student_id, $prof_id, $subject_id])){
             $stmt = null;

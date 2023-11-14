@@ -43,9 +43,9 @@ body {
     color: #fff;
     align-items: center;
     border: 1px solid rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.126);
+    background: rgba(190, 13, 13, 0.126);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(50px);
     margin:1%
 }

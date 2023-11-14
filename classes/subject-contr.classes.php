@@ -102,6 +102,33 @@ class SubjectCntr extends AddSubject{
         return $result;
     }
 
+<<<<<<< Updated upstream
+=======
+    public function matchRoom($prof_id, $subj_id, $chkl, $time_in, $room_id){
+        $result;
+
+        if($this->validateRoomAndTime($prof_id, $subj_id, $chkl,$time_in,$room_id)){
+            $result = true;
+        }
+        else{
+            $result = false;
+        }
+        return $result;
+    }
+
+    public function matchProfSchedule($prof_id, $subj_id, $chkl, $time_in, $room_id){
+        $result;
+
+        if($this->validateProfessorRoomAndTime($prof_id, $subj_id, $chkl,$time_in,$room_id)){
+            $result = true;
+        }
+        else{
+            $result = false;
+        }
+        return $result;
+    }
+
+>>>>>>> Stashed changes
     public function removeProfonSchedule($prof_id, $subj_id){
         return $this->removeAssignedProfessor($prof_id, $subj_id);
      

@@ -22,9 +22,7 @@ require_once 'includes/config_session_inc.php';
                                                         
                                                         <input type="submit" name="submit" value="login now" class="submit-btn">
                                                 </div>
-                                        <p class="container ">don't have an account? <a href="register.php" ><span> Sign up</span></a></p>
                                 </form> 
-                                
                 </div>
         </div> 
 

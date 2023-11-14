@@ -169,6 +169,51 @@ class AddSubject extends DB{
 
     }
 
+<<<<<<< Updated upstream
+=======
+    protected function validateRoomAndTime($prof_id, $subj_id, $chkl, $time_in, $room_id){
+        $resultCheck;
+        $connection = $this->dbOpen();
+
+        foreach($chkl as $checklist){
+            $stmt = $connection->prepare("SELECT day FROM subject_schedule WHERE  day = ? and time_in = ? AND room_id = ?");
+            $stmt->execute([$checklist, $time_in, $room_id]);
+
+            if($stmt->rowCount() > 0 ){
+                $resultCheck = true;
+            }
+            else{
+                $resultCheck = false;
+            }
+            return $resultCheck;
+            
+        }
+        
+
+    }
+
+    protected function validateProfessorRoomAndTime($prof_id, $subj_id, $chkl, $time_in, $room_id){
+        $resultCheck;
+        $connection = $this->dbOpen();
+
+        foreach($chkl as $checklist){
+            $stmt = $connection->prepare("SELECT day FROM subject_schedule WHERE prof_id = ? and subject_id = ?  day = ? and time_in = ? AND room_id = ?");
+            $stmt->execute([$prof_id, $subj_id, $checklist, $time_in, $room_id]);
+
+            if($stmt->rowCount() > 0 ){
+                $resultCheck = true;
+            }
+            else{
+                $resultCheck = false;
+            }
+            return $resultCheck;
+            
+        }
+        
+
+    }
+
+>>>>>>> Stashed changes
     protected function removeAssignedProfessor($prof_id, $subject_id){
         $connection = $this->dbOpen();
         $stmt = $connection->prepare("DELETE FROM subject_schedule WHERE prof_id = ? and subject_id = ?");

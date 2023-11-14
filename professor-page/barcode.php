@@ -163,6 +163,12 @@ if(isset($user)){
                                                 <div class="row justify-content-center">
                                                       <h4 class="display-4 stud_year_professor"></h3>
                                                 </div>
+                                                <div class="row justify-content-center">
+                                                      <h4 class="display-4 stud_contact_professor"></h3>
+                                                </div>
+                                                <div class="row justify-content-center">
+                                                      <h4 class="display-4 stud_address_professor"></h3>
+                                                </div>
                                           </div>
                                     </div>
                                     <div class="col-md-6">
@@ -285,7 +291,7 @@ if(isset($user)){
 
         var config = {
         fps: 10,
-        qrbox: {width: 300, height: 300},
+        qrbox: {width: 450, height: 300},
         rememberLastUsedCamera: true,
         // Only support camera scan type.
         supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
@@ -322,6 +328,8 @@ if(isset($user)){
                             $('.stud_name_professor').html(data.first_name+' '+data.last_name);
                             $('.stud_year_professor').html(data.student_year);
                             $('.stud_course_professor').html(data.student_course);
+                            $('.stud_contact_professor').html(data.parents_contact);
+                            $('.stud_address_professor').html(data.address);
                             document.getElementById('student_preview_professor').innerHTML = '<img class="rounded-circle" width="200" height="200" src="'+data.imageFile+'">';
                         }
                           

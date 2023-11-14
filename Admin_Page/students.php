@@ -226,7 +226,7 @@ if(isset($user)){
                                                     <td> 
                                                           <p class="small"><?= $students['school_id']?></p>
                                                     </td>
-                                                    <td align="center"><img src="<?=$students['imageFile'] ?>" width="50px" height="50px"> </td>
+                                                    <td align="center"><img src="<?=$students['imageFile'] != null ? $students['imageFile'] : '../img/Profile.png' ?>" width="50px" height="50px"> </td>
                                                     <td> <?= $students['first_name'].' '.$students['last_name']; ?></td>
                                                     <td> <?= $students['email']; ?></td>
                                                     <td> <?= $students['address']; ?></td>
@@ -339,14 +339,10 @@ if(isset($user)){
                                 
                                 <label for="inputState">Select Course</label>
                                 <select class="custom-select" name="course">
-                                    <optgroup label="Department of Computer and Engineering">
-                                        <option value="CpE">Computer Engineering</option>
-                                        <option value="IT">Information Technology</option>
-                                        <option value="CS">Copmuter Science</option>
-                                    </optgroup>
-                                    <optgroup label="Department of Education">
-                                        <option value="Educ">Education</option>
-                                    </optgroup>
+                                    <option value="BSIT">BSIT</option>
+                                    <option value="BSEE">BSEE</option>
+                                    <option value="BSBA">BSBA</option>
+                                    <option value="BEED">BEED</option>
                                 </select>
 
                             </div>
@@ -522,7 +518,6 @@ if(isset($user)){
                     url: "../includes/student.inc.php?get_school_id=" + year,
                     success: function (response){
                     $.each(response, function(index, data) {
-               
 
                            var databasevalue = data;
                            var incrementvalue = (+databasevalue) + 1;
