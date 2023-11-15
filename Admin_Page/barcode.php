@@ -192,6 +192,12 @@ if(isset($user)){
                                                       <h4 class="display-4 stud_year"></h3>
                                                 </div>
                                                 <div class="row justify-content-center">
+                                                      <h4 class="display-4 stud_address"></h3>
+                                                </div>
+                                                <div class="row justify-content-center">
+                                                      <h4 class="display-4 stud_contact"></h3>
+                                                </div>
+                                                <div class="row justify-content-center">
                                                       <h4 class="display-4 time_in text-danger"></h3>
                                                 </div>
                                           </div>
@@ -299,7 +305,7 @@ if(isset($user)){
 
         var config = {
         fps: 10,
-        qrbox: {width: 300, height: 300},
+        qrbox: {width: 500, height: 300},
         rememberLastUsedCamera: true,
         // Only support camera scan type.
         supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
@@ -324,6 +330,9 @@ if(isset($user)){
                 $('.stud_name').html(response.first_name+' '+response.last_name);
                 $('.stud_year').html(response.student_year);
                 $('.stud_course').html(response.student_course);
+                $('.stud_contact').html(response.phone);
+                $('.stud_address').html(response.address);
+                $('.time_in').html(response.status);
                 $('.time_in').html(response.status);
                 document.getElementById('student_preview').innerHTML = '<img class="rounded-circle" width="200" height="200" src="'+response.imageFile+'">';
                 const myTimeout = setTimeout(timeInterval, 2000);

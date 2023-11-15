@@ -238,4 +238,8 @@ class StudentCntr extends Student{
     public function SMSList(){
         return $this->getSMSdata();
     }
+
+    public function schoolYear(){
+        return $this->getCurrentSchoolYear();
+    }
 }

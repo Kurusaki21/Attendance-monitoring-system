@@ -175,7 +175,7 @@ class AddSubject extends DB{
 
         foreach($chkl as $checklist){
             $stmt = $connection->prepare("SELECT day FROM subject_schedule WHERE day = ? and time_in = ? AND room_id = ?");
-            $stmt->execute([$prof_id, $subj_id, $checklist, $time_in, $room_id]);
+            $stmt->execute([$checklist, $time_in, $room_id]);
 
             if($stmt->rowCount() > 0 ){
                 $resultCheck = true;

@@ -96,7 +96,7 @@ class Student extends DB{
 
     protected function getSchoolId($id){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT id, school_id, first_name, last_name, student_course,student_year, imageFile,parents_contact, student_course  FROM students WHERE school_id = ? ORDER BY school_id DESC LIMIT 1");
+        $stmt = $connection->prepare("SELECT id, school_id, first_name, last_name, student_course,student_year,school_year, imageFile,parents_contact, student_course,address  FROM students WHERE school_id = ? ORDER BY school_id DESC LIMIT 1");
         $stmt->execute([$id]);
         $data = $stmt->fetch();
         $total = $stmt->rowCount();
@@ -111,7 +111,7 @@ class Student extends DB{
 
     protected function lastTimeIn($id){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT status,created_at FROM school_entry WHERE stud_id = ? ORDER BY created_at DESC LIMIT 1");
+        $stmt = $connection->prepare("SELECT status,created_at FROM school_entry WHERE school_id = ? ORDER BY created_at DESC LIMIT 1");
         $stmt->execute([$id]);
         $data = $stmt->fetch();
         $total = $stmt->rowCount();
@@ -124,14 +124,14 @@ class Student extends DB{
              }
     }
 
-    protected function inserStudentEntry($id, $status = 0, $has_sent = null, $datetime){
+    protected function inserStudentEntry($id, $status = 0, $has_sent = null, $datetime, $school_id){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare('INSERT INTO school_entry (stud_id, status, has_sent, created_at) VALUES (?,?,?,?)');
-        $stmt->execute([$id, $status, $has_sent, $datetime]);
+        $stmt = $connection->prepare('INSERT INTO school_entry (stud_id, status, has_sent, created_at, school_id) VALUES (?,?,?,?,?)');
+        $stmt->execute([$id, $status, $has_sent, $datetime, $school_id]);
 
     }
 
-    protected function insertSMSEntry($id, $status = 1, $has_sent = null, $datetime, $school_id){
+    protected function insertSMSEntry($id, $status = 1, $has_sent = null, $datetime){
     
 
         $connection = $this->dbOpen();

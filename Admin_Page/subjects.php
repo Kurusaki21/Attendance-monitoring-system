@@ -321,8 +321,6 @@ if(isset($user)){
                                 <select class="form-control" name="school_sem">
                                     <option value="1">1st</option>
                                     <option value="2">2nd</option>
-                                    <option value="3">3rd</option>
-                                    <option value="4">4th</option>
                                 </select>
                             </div>
                         </div>
