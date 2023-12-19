@@ -190,7 +190,7 @@ if(isset($user)){
                                                
                                                     <div class="form-group col-md-12">
                                                       <h6 class="card-title mb-2  font-weight-bold text-gray-500">Date</h6>
-                                                          <input type="date" name="today_date" class="form-control" value="<?php echo date('2023-09-14'); ?>" readonly/>
+                                                          <input type="date" name="today_date" class="form-control" value="<?php echo date('Y-m-d'); ?>" readonly/>
                                                     </div>
                                                     <button type="submit" name ="btn_start_attendance" class="btn btn-primary btn-lg btn-block">Start Attendance</button>
                                                 </div>

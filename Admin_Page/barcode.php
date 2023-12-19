@@ -15,7 +15,7 @@ if(isset($user)){
 <!DOCTYPE html>
 <html lang="en">
 <?php include 'includes/header.php'; ?>
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="../includes/html5-qrcode.min.js" type="text/javascript"></script>
 
 <style>
     .dashboard-image1{

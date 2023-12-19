@@ -102,7 +102,7 @@ class Professor extends DB{
 
         $data = $stmt->fetchall();
         if($date1 == 'sunday'){
-            echo 'No Schedule For this day';
+            header("location: ../professor-page/index.php?error=no-schedule");
         }
         else{
             foreach($data as $datas){

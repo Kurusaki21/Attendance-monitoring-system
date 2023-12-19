@@ -14,7 +14,7 @@ if(isset($user)){
 <!DOCTYPE html>
 <html lang="en">
 <?php include 'includes/header.php'; ?>
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="../includes/html5-qrcode.min.js" type="text/javascript"></script>
 
 <style>
     .dashboard-image1{
@@ -279,7 +279,7 @@ else{
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../login.php">Logout</a>
+                    <a class="btn btn-primary" href="../logout.php">Logout</a>
                 </div>
             </div>
         </div>
@@ -305,7 +305,7 @@ else{
 
         var config = {
         fps: 10,
-        qrbox: {width: 300, height: 300},
+        qrbox: {width: 500, height: 300},
         rememberLastUsedCamera: true,
         // Only support camera scan type.
         supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]

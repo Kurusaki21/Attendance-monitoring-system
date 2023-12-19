@@ -142,7 +142,7 @@ class Student extends DB{
 
     protected function getSMSdata(){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT * FROM sms_entry LEFT JOIN students ON students.id = sms_entry.stud_id WHERE students.school_year  = '".$this->getCurrentSchoolYear()['school_year']."'");
+        $stmt = $connection->prepare("SELECT sms_entry.id,students.first_name, students.last_name, sms_entry.status, students.parents_contact, sms_entry.has_sent, sms_entry.created_at FROM sms_entry LEFT JOIN students ON students.id = sms_entry.stud_id WHERE students.school_year  = '".$this->getCurrentSchoolYear()['school_year']."'");
         $stmt->execute();
         $data = $stmt->fetchall();
         $total = $stmt->rowCount();

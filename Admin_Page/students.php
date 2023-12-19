@@ -289,7 +289,7 @@ if(isset($user)){
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../login.php">Logout</a>
+                    <a class="btn btn-primary" href="../includes/logout.php">Logout</a>
                 </div>
             </div>
         </div>
@@ -430,14 +430,10 @@ if(isset($user)){
                                 
                                 <label for="inputState">Select Course</label>
                                 <select class="custom-select" name="course">
-                                    <optgroup label="Department of Computer and Engineering">
-                                        <option value="CpE">Computer Engineering</option>
-                                        <option value="IT">Information Technology</option>
-                                        <option value="CS">Copmuter Science</option>
-                                    </optgroup>
-                                    <optgroup label="Department of Education">
-                                        <option value="Educ">Education</option>
-                                    </optgroup>
+                                    <option value="BSIT">BSIT</option>
+                                    <option value="BSEE">BSEE</option>
+                                    <option value="BSBA">BSBA</option>
+                                    <option value="BEED">BEED</option>
                                 </select>
 
                             </div>

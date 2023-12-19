@@ -7,10 +7,10 @@ body {
 }
 
 .sidebar-brand{
-    background: linear-gradient(to bottom,#FFFF00, rgba(249, 174, 70, 0.764));
+    background: linear-gradient(to bottom,#FFFF00, rgba(109, 109, 105, 0.884));
 }
 .navbar{
-    background: linear-gradient(to bottom,#FFFF00, rgba(249, 174, 70, 0.764));
+    background: linear-gradient(to bottom,#FFFF00, rgba(231, 249, 70, 0.884));
     
 }
 .sidebar-brand img{
@@ -21,6 +21,7 @@ body {
 .navbar-nav{
     /* background: rgba(255, 255, 255, 0.179); */
     background: rgba(255, 255, 255, 0.179);
+    backdrop-filter: blur(500px);
 
 }
 #content-wrapper{
@@ -46,6 +47,6 @@ body {
     background: rgba(255, 255, 255, 0.126);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(50px);
+    backdrop-filter: blur(500px);
     margin:1%
 }

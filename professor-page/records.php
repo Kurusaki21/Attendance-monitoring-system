@@ -20,6 +20,8 @@ if(isset($user)){
 <html lang="en">
 <?php include 'includes/header.php'; ?>
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css" rel="stylesheet">
 
 <style>
     .dashboard-image1{
@@ -156,7 +158,7 @@ if(isset($user)){
                                 <h4><b>Records</b></h4>   <br> 
                               
                                 <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="display" id="example" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
@@ -272,58 +274,23 @@ if(isset($user)){
     <!-- Custom scripts for all pages-->
     <script src="../js/sb-admin-2.min.js"></script>
     
-    <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 
     <!-- Page level custom scripts -->
     <script src="../js/demo/datatables-demo.js"></script>
     <script>
-        
-        function onScanSuccess(decodedText, decodedResult) {
-        var sound = new Audio("../includes/barcode.wav");
-        setInterval(getStudentRecord(decodedText), 5000);
-        sound.play();
-        }
 
-        var config = {
-        fps: 10,
-        qrbox: {width: 300, height: 300},
-        rememberLastUsedCamera: true,
-        // Only support camera scan type.
-        supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
-        };
-
-        let html5QrcodeScanner = new Html5QrcodeScanner(
-        "reader", config, /* verbose= */ false);
-
-        html5QrcodeScanner.render(onScanSuccess);
-
-        function getStudentRecord(id){
-            var subject_id = $('#prof_id').val();
-            $.ajax({
-                method: "get",
-                dataType: "json",
-                url: "../includes/professor.inc.php?school_id=" + id+'&subj_id='+subject_id,
-                success: function (response){
-                    $.each(response, function(index, data) {
-                        if(data == 404){
-                            $('#is_present_professor').modal('show')
-
-                            setTimeout(function(){
-                                $('#is_present_professor').modal('hide')
-                            }, 2000);
-                        }
-                        else{
-                            $('.stud_name_professor').html(data.first_name+' '+data.last_name);
-                            $('.stud_year_professor').html(data.student_year);
-                            $('.stud_course_professor').html(data.student_course);
-                            document.getElementById('student_preview_professor').innerHTML = '<img class="rounded-circle" width="200" height="200" src="'+data.imageFile+'">';
-                        }
-                          
-                    });
-                }
-            })
-        }
+        $(document).ready(function() {
+            $('#example').DataTable( {
+                dom: 'Bfrtip',
+                
+                buttons: [
+                    'print'
+                ]
+            } );
+        } );
 
     </script>
 </body>
