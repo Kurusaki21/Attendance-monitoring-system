@@ -212,7 +212,7 @@ if(isset($user)){
                                                     <td> <?= $professors['first_name'].' '.$professors['last_name']; ?></td>
                                                     <td> <?= $professors['email']; ?></td>
                                                     <td> <?= $professors['address']; ?></td>
-                                                    <td><button type="button" data-toggle="tooltip" data-placement="top" title="edit" onclick="editProfessorModal(<?= $professors['id'];?>)" class="btn btn-sm btn-success"><i class="far fa-edit"></i></button> <button class="btn btn-sm btn-warning" data-toggle="tooltip" data-placement="top" title="show student's profile"><i class="fas fa-eye"></i></i></button> <button type="button" onclick="deleteUser(<?= $professors['id'];?>)" class="btn-sm btn-danger dlt_record" data-toggle="tooltip" data-placement="top" title="delete subject"><i class="fa fa-trash"></button></td>
+                                                    <td><button type="button" data-toggle="tooltip" data-placement="top" title="edit" onclick="editProfessorModal(<?= $professors['id'];?>)" class="btn btn-sm btn-success"><i class="far fa-edit"></i></button> <button type="button" onclick="deleteUser(<?= $professors['id'];?>)" class="btn-sm btn-danger dlt_record" data-toggle="tooltip" data-placement="top" title="delete subject"><i class="fa fa-trash"></button></td>
                                                 </tr>
                                             <?php  
                                             }

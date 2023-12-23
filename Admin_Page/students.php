@@ -226,7 +226,8 @@ if(isset($user)){
                                             foreach($list_of_students as $students){ ?>
                                                <tr id="records_<?= $students['id'];?>">
                                                     <td> 
-                                                          <p class="small"><?= $students['school_id']?></p>
+                                                
+                                                          <p class="small"><?= $generator->getBarcode($students['school_id'], $generator::TYPE_CODE_128);  ?></p>
                                                     </td>
                                                     <td align="center"><img src="<?=$students['imageFile'] ?>" width="50px" height="50px"> </td>
                                                     <td> <?= $students['first_name'].' '.$students['last_name']; ?></td>

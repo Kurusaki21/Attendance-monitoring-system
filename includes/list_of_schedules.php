@@ -38,10 +38,10 @@ if(isset($_POST['prof_id']) && isset($_POST['subject_id'])){
 
             <div id="collapse_<?= $data['id']; ?>" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
             <div class="card-body">
-                    <div class="col">
+                    <!-- <div class="col">
                         <button class="add_button" onclick="add_button_function(<?= $data['id']; ?>)" id="add_button_<?= $data['id']; ?>"><span>Add Student</span></button>
                         <button class="add_button btn-danger" onclick="hide_button_function(<?= $data['id']; ?>)" id="hidden_button_<?= $data['id']; ?>"><span>Close</span></button>
-                    </div>
+                    </div> -->
                     <div class="col" id="hide_me_<?= $data['id']; ?>"> 
                             <input type="hidden" value="<?= $_POST['prof_id'] ?>" id="sub_prof_id">
                             <input type="hidden" value="<?= $_POST['subject_id'] ?>" id="sub_id">
@@ -57,7 +57,7 @@ if(isset($_POST['prof_id']) && isset($_POST['subject_id'])){
                                         <tr>
                                             <th>School ID</th>
                                             <th>Full Name</th>
-                                            <th>Action</th>
+                                          
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -143,7 +143,7 @@ function listofStudents(id){
                 html +='<tr>';
                 html +='<td>'+ value.school_id + '</td>';
                 html +='<td>'+ value.first_name +' '+ value.last_name+ '</td>';
-                html +='<td><button class="btn btn-sm btn-danger" onclick="deleteAssignedStudent('+value.student_id+', '+id+')"><i class="fa fa-trash"></i></button></td>';
+                // html +='<td><button class="btn btn-sm btn-danger" onclick="deleteAssignedStudent('+value.student_id+', '+id+')"><i class="fa fa-trash"></i></button></td>';
                 html +='</tr>';
             });
             $('.schedules_table_'+id+' tbody').html(html);
