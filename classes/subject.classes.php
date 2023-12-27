@@ -420,6 +420,38 @@ class AddSubject extends DB{
    
 
     }
+
+    protected function checkIfExist($room_no){
+        $result = '';
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("SELECT * FROM rooms WHERE room_number = ?");
+        $stmt->execute([$room_no]);
+        $total = $stmt->rowCount();
+
+        if($total > 0){
+            $result = true;
+        }
+        else{
+            $result = false;
+        }
+        return $result;
+    }
+
+    protected function subjectExist($subject){
+        $result = '';
+        $connection = $this->dbOpen();
+        $stmt = $connection->prepare("SELECT * FROM subject WHERE subject_name = ?");
+        $stmt->execute([$subject]);
+        $total = $stmt->rowCount();
+
+        if($total > 0){
+            $result = true;
+        }
+        else{
+            $result = false;
+        }
+        return $result;
+    }
 }
 
 ?>

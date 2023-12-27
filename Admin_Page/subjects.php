@@ -383,7 +383,7 @@ if(isset($user)){
                     </button>
                 </div>
                 <div class="modal-body">
-                <div class="alert alert-danger error_alert1" role="alert">
+                             <div class="alert alert-danger error_alert1" role="alert">
                                 <div class="error_div">
 
                                 </div>
@@ -524,6 +524,27 @@ if(isset($user)){
         </div>
     </div>
 
+      <!-- Assign Professor Modal -->
+      <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                 <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Assign Professor</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                             <div class="alert alert-danger" role="alert">
+                                <div class="error_modal">   
+                                        Subject Already Exist!
+                                </div>
+                            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -539,7 +560,19 @@ if(isset($user)){
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
     <!-- Page level custom scripts -->
     <script src="../js/demo/datatables-demo.js"></script>
+    <?php
+        if(isset($_GET['success'])){
+            if($_GET['success']==0 ){
+                // echo '<scrtipt> $("#errorModal").modal(); </script>';
+                echo "<script type='text/javascript'> $('#errorModal').modal('show'); </script>";
+            }
+           
+        }
+        
+        
+        ?>
     <script>
+       
         $('.error_alert1').hide();
         $('.success_alert1').hide();
         $('#btn_submit_room').on('click', function (e){
@@ -554,11 +587,17 @@ if(isset($user)){
                 },
                 url: "../includes/subject.inc.php",
                 success: function (response){
-                    if(response.success){
-                        $('.success_div1').html(response.success)
-                        $( ".success_alert1" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
-                        rooms(response.room_id, response.room_number)
-                    }
+                        if(response.error){
+                            $('.error_div').html(response.error)
+                            $( ".error_alert1" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
+                        }
+                        else{
+                            $('.success_div1').html(response.success)
+                            $( ".success_alert1" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
+                            rooms(response.room_id, response.room_number)
+                        }
+             
+                   
                 }
             })
         })

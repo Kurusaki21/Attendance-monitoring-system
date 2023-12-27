@@ -7,8 +7,23 @@ class SubjectCntr extends AddSubject{
             $subject_description = $_POST['subject_description'];
             $school_year = $_POST['school_year'];
             $school_sem = $_POST['school_sem'];
+            if($this->checkIfSubjectExist($subject) == true){
+                header("location: ../admin_page/subjects.php?success=0");
+            }
+            else{
+             $this->addSubject($subject, $subject_description, $school_year, $school_sem);
+            }
+         
+        
+        }
+    }
 
-            $this->addSubject($subject, $subject_description, $school_year, $school_sem);
+    public function checkIfSubjectExist($subject){
+        if($this->subjectExist($subject) == 1 ){
+            return true;
+        }
+        else{
+            return false;
         }
     }
 
@@ -201,7 +216,23 @@ class SubjectCntr extends AddSubject{
     }
 
     public function insertRoomNumber($room_no){
-        echo $this->insertRoom($room_no);
+        if($this->checkIfRoomExist($room_no) == true){
+            echo json_encode(array('error'=>'Room Exist','room_number'=>$room_no));
+        }
+        else{
+            echo $this->insertRoom($room_no);
+        }
+   
+      
+    }
+
+    public function checkIfRoomExist($room_no){
+        if($this->checkIfExist($room_no) == 1){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public function getAllRooms(){

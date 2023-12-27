@@ -2,9 +2,10 @@
   include "../classes/userContr.classes.php";
   include "../includes/student.inc.php";
   include "../includes/subject.inc.php";
-  require '../vendor/autoload.php';
+//   require '../vendor/autoload.php';
+  require_once __DIR__.'/../vendor/autoload.php';
 
-  $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
+  $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
   $userdata = new UserCntr();
   $user = $userdata->get_userdata();
 
@@ -22,6 +23,12 @@ if(isset($user)){
 <html lang="en">
 <?php include 'includes/header.php'; ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
+<link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js" rel="stylesheet">
 <style>
     .dashboard-image1{
       position: absolute;
@@ -204,7 +211,7 @@ if(isset($user)){
                             <div class="admin-card">
 
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <table id="example-table" class="table table-striped table-bordered dt-responsive nowrap payment_table" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
                                             <th>Shoold ID</th>
@@ -227,8 +234,8 @@ if(isset($user)){
                                             foreach($list_of_students as $students){ ?>
                                                <tr id="records_<?= $students['id'];?>">
                                                     <td> 
-                                                
-                                                          <p class="small"><?= $generator->getBarcode($students['school_id'], $generator::TYPE_CODE_128);  ?></p>
+                                                            <?php echo '<img src="data:image/png;base64,' . base64_encode($generator->getBarcode($students['school_id'], $generator::TYPE_CODE_128)) . '">'; ?>
+                                                      
                                                     </td>
                                                     <td align="center"><img src="<?=$students['imageFile'] ?>" width="50px" height="50px"> </td>
                                                     <td> <?= $students['first_name'].' '.$students['last_name']; ?></td>
@@ -313,7 +320,7 @@ if(isset($user)){
                         <div class="form-group">
                          
                             <label for="student_email">Student ID</label>
-                            <input type="text" class="form-control" name="stud_id" id='school_id' readonly>
+                            <input type="text" class="form-control" name="stud_id">
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
@@ -487,7 +494,7 @@ if(isset($user)){
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
@@ -496,12 +503,28 @@ if(isset($user)){
     <!-- Custom scripts for all pages-->
     <script src="../js/sb-admin-2.min.js"></script>
 
-    <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="../vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="../vendor/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="../vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../vendor/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="../vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="../vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="../vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="../vendor/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="../vendor/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="../vendor/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../vendor/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="../vendor/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <script src="../vendor/jszip/dist/jszip.min.js"></script>
+    <script src="../vendor/pdfmake/build/pdfmake.min.js"></script>
+    <script src="../vendor/pdfmake/build/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="../js/demo/datatables-demo.js"></script>
+
     <script tpye="application/javascript">
+
+    
 
     var loadFile = function(event) {
     var output = document.getElementById('preview');
@@ -519,6 +542,84 @@ if(isset($user)){
     };
     </script>
     <script>
+
+$(document).ready(function () {
+    // Setup - add a text input to each footer cell
+    $('#example-table thead tr')
+        .clone(true)
+        .addClass('filters')
+        .appendTo('#example-table thead');
+ 
+        var table = $('#example-table').DataTable({
+          
+            orderCellsTop: true,
+            fixedHeader: true,
+            
+            initComplete: function () {
+                var api = this.api();
+    
+                // For each column
+                api
+                    .columns(":not(:last-child)")
+                    .eq(0)
+                    .each(function (colIdx) {
+                        // Set the header cell to contain the input element
+                        var cell = $('.filters th').eq(
+                            $(api.column(colIdx).header()).index()
+                        );
+                        var title = $(cell).text();
+                        $(cell).html('<input type="text" placeholder="' + title + '" />');
+    
+                        // On every keypress in this input
+                        $(
+                            'input',
+                            $('.filters th').eq($(api.column(colIdx).header()).index())
+                        )
+                            .off('keyup change')
+                            .on('change', function (e) {
+                                // Get the search value
+                                $(this).attr('title', $(this).val());
+                                var regexr = '({search})'; //$(this).parents('th').find('select').val();
+    
+                                var cursorPosition = this.selectionStart;
+                                // Search the column for that value
+                                api
+                                    .column(colIdx)
+                                    .search(
+                                        this.value != ''
+                                            ? regexr.replace('{search}', '(((' + this.value + ')))')
+                                            : '',
+                                        this.value != '',
+                                        this.value == ''
+                                    )
+                                    .draw();
+                            })
+                            .on('keyup', function (e) {
+                                e.stopPropagation();
+    
+                                $(this).trigger('change');
+                                $(this)
+                                    .focus()[0]
+                                    .setSelectionRange(cursorPosition, cursorPosition);
+                            });
+                    });
+            },
+            dom: 'Bfrtip',
+            buttons: [
+            {
+                extend: 'print',
+                exportOptions: {
+                    stripHtml : false,
+                    columns: ':visible'
+                }
+            },
+            'colvis'
+        ],
+        columnDefs: [ {
+            visible: false
+        } ]
+        });
+      });
        
       $(document).on('click', '#getstudentid', function () {
         const d = new Date();
@@ -595,6 +696,7 @@ if(isset($user)){
  
     }
 </script>
+
 </body>
 
 </html>
