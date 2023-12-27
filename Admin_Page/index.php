@@ -237,7 +237,7 @@ if(isset($user)){
                                     </div>
                                   </div>
 
-                                  <div class="row mt-5 d-flex justify-content-center">
+                                  <!-- <div class="row mt-5 d-flex justify-content-center">
                                     <div class="col-sm-6 mb-4">
                                       <div class="card">
                                         <div class="card-body">
@@ -263,7 +263,7 @@ if(isset($user)){
                                         </div>
                                       </div>
                                     </div>
-                                  </div>
+                                  </div> -->
                                 
                             </div>
                           </div> 

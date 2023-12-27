@@ -23,12 +23,6 @@ if(isset($user)){
 <html lang="en">
 <?php include 'includes/header.php'; ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
-<link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet">
-<link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css" rel="stylesheet">
-<link href="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js" rel="stylesheet">
-<link href="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js" rel="stylesheet">
-<link href="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js" rel="stylesheet">
-<link href="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js" rel="stylesheet">
 <style>
     .dashboard-image1{
       position: absolute;
@@ -211,7 +205,7 @@ if(isset($user)){
                             <div class="admin-card">
 
                             <div class="table-responsive">
-                            <table id="example-table" class="table table-striped table-bordered dt-responsive nowrap payment_table" cellspacing="0" width="100%">
+                            <table id="example-table" class="table table-striped table-bordered dt-responsive d" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
                                             <th>Shoold ID</th>
@@ -244,7 +238,7 @@ if(isset($user)){
                                                     <td> <?= $students['parents_contact']; ?></td>
                                                     <td> <?= $students['student_year']; ?></td>
                                                     <td> <?= $students['student_course']; ?></td>
-                                                    <td><button type="button" data-toggle="tooltip" data-placement="top" title="edit" onclick="editStudentModal(<?= $students['id'];?>)" class="btn btn-sm btn-success"><i class="far fa-edit"></i></button> <button class="btn btn-sm btn-warning" data-toggle="tooltip" data-placement="top" title="show student's profile"><i class="fas fa-eye"></i></i></button> <button type="button" onclick="deleteUser(<?= $students['id'];?>)" class="btn-sm btn-danger dlt_record" data-toggle="tooltip" data-placement="top" title="delete subject"><i class="fa fa-trash"></button></td>
+                                                    <td><button type="button" data-toggle="tooltip" data-placement="top" title="edit" onclick="editStudentModal(<?= $students['id'];?>)" class="btn btn-sm btn-success"><i class="far fa-edit"></i></button><button type="button" onclick="deleteUser(<?= $students['id'];?>)" class="btn-sm btn-danger dlt_record" data-toggle="tooltip" data-placement="top" title="delete subject"><i class="fa fa-trash"></button></td>
                                                 </tr>
                                             <?php  
                                             }
@@ -497,13 +491,8 @@ if(isset($user)){
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="../js/sb-admin-2.min.js"></script>
-
-    <script src="../vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="../vendor/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
     <script src="../vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
     <script src="../vendor/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
@@ -522,6 +511,8 @@ if(isset($user)){
 
     <!-- Page level custom scripts -->
 
+        <!-- Custom scripts for all pages-->
+    <script src="../js/sb-admin-2.min.js"></script>
     <script tpye="application/javascript">
 
     

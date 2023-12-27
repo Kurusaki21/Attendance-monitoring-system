@@ -20,6 +20,14 @@ if(isset($user)){
 <html lang="en">
 <?php include 'includes/header.php'; ?>
 <style>
+    .field-icon {
+    float: right;
+    margin-right: 30px;
+    margin-top: -30px;
+    position: relative;
+    z-index: 2;
+    color: black;
+    }
     .dashboard-image1{
       position: absolute;
       margin-top: -70px;
@@ -299,12 +307,14 @@ if(isset($user)){
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="user_email">Password</label>
+                            <label for="user_password">Password</label>
                             <input type="password" class="form-control" name="password" id="user_password">
+                            <span id="togglePassword" class="fa fa-fw fa-eye-slash field-icon toggle-password"></span>
                         </div>
                         <div class="form-group">
-                            <label for="user_email">Confirm Password</label>
+                            <label for="prof_confirm_password">Confirm Password</label>
                             <input type="password" class="form-control" name="confirm_password" id="prof_confirm_password">
+                            <span id="toggleConfirmPassword" class="fa fa-fw fa-eye-slash field-icon toggle-confirm-password"></span>
                         </div>
                         <p id="conpasscheck" style="color: red;"></p>
                         <div class="form-group">
@@ -514,6 +524,32 @@ if(isset($user)){
         }
 
     </script>
+     <script>
+              const togglePassword = document.querySelector("#togglePassword");
+              const toggleConfirmPassword = document.querySelector("#toggleConfirmPassword");
+              const password = document.querySelector("#user_password");
+              const confirm_password = document.querySelector("#prof_confirm_password");
+              togglePassword.addEventListener("click", function () {
+                // toggle the type attribute
+                const type = password.getAttribute("type") === "password" ? "text" : "password";
+                password.setAttribute("type", type);
+                
+                // toggle the icon
+                this.classList.toggle("fa-eye");
+          
+             });
+             toggleConfirmPassword.addEventListener("click", function () {
+                // toggle the type attribute
+                const type = confirm_password.getAttribute("type") === "password" ? "text" : "password";
+                confirm_password.setAttribute("type", type);
+                
+                // toggle the icon
+                this.classList.toggle("fa-eye");
+          
+             });
+
+               
+        </script>
 
 </body>
 
