@@ -7,11 +7,11 @@ body {
 }
 
 .sidebar-brand{
-    background: linear-gradient(to bottom,#FFFF00, rgba(109, 109, 105, 0.884));
+    background: linear-gradient(to bottom,#0616CC, rgba(254, 254, 0));
 
 }
 .navbar{
-    background: linear-gradient(to bottom,#FFFF00, rgba(231, 249, 70, 0.884));
+    background: linear-gradient(to bottom,#0616CC, rgba(24, 55, 254, 0.884));
 
     
 }
