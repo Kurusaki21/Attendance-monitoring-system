@@ -112,20 +112,20 @@ if(isset($user)){
                     </button>
 
                     <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ml-auto " >
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tabindex="999">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $name; ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in "
                                 aria-labelledby="userDropdown">
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal" >
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -139,13 +139,13 @@ if(isset($user)){
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                <h4><b>Dashboard</b></h4>   <br> 
                     <!-- Content Row -->
                     <div class="row">
                        
                         <div class="admin-container">
                             <div class="admin-card">
-                                <h4><b>Dashboard</b></h4>   <br> 
+                        
                   
                                 <div class="row d-flex justify-content-center">
                                   <div class="col-sm-6 p-5">

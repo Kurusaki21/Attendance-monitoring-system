@@ -16,15 +16,27 @@ class Professor extends DB{
         
     }
 
-    protected function editProfessor($id, $fname, $lname, $email,  $address){
+    protected function editProfessor($id, $fname, $lname, $email,$password,  $address){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("UPDATE professors SET first_name = ?, last_name = ?, email = ?, address = ? WHERE id = ?");
-        if(!$stmt->execute([$fname, $lname, $email,  $address, $id])){
+        if(empty($password)){   
+            $stmt = $connection->prepare("UPDATE professors SET first_name = ?, last_name = ?, email = ?, address = ? WHERE id = ?");
+            if(!$stmt->execute([$fname, $lname, $email,  $address, $id])){
+                $stmt = null;
+                header("location: index.php?errors=stmtfailed");
+                exit();
+            }
+                header("location: ../admin_page/professors.php?success=1");
+        }
+        else{
+        $stmt = $connection->prepare("UPDATE professors SET first_name = ?, last_name = ?, email = ?, address = ?, password = ? WHERE id = ?");
+        if(!$stmt->execute([$fname, $lname, $email,  $address,$password, $id])){
             $stmt = null;
             header("location: index.php?errors=stmtfailed");
             exit();
         }
             header("location: ../admin_page/professors.php?success=1");
+        }
+     
     }
 
     protected function getProfessor(){
@@ -275,7 +287,7 @@ class Professor extends DB{
         $datetimetoday = date("Y-m-d");
         $date1 = $this->getWeekday($datetimetoday);
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT *  FROM `subject_schedule` WHERE prof_id = ? AND day = '$date1'");
+        $stmt = $connection->prepare("SELECT *  FROM `subject_schedule` WHERE prof_id = ? group by  subject_id");
         $stmt->execute([$id]);
 
         $data = $stmt->rowCount();

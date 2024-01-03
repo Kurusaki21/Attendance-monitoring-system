@@ -27,12 +27,6 @@ if(isset($user)){
     z-index: 2;
     color: black;
     }
-    .dashboard-image1{
-      position: absolute;
-      margin-top: -70px;
-      z-index: 999999;
-      margin-left:1em;
-    }
     .card-student{
         width: 100%;
         justify-content: center;
@@ -40,6 +34,11 @@ if(isset($user)){
     }
     .table-bordered{
         color:white;
+    }
+    
+    .navbar-nav{
+        z-index: 9999;
+
     }
   
 </style>
@@ -342,7 +341,7 @@ if(isset($user)){
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Professor</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Professor</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -360,6 +359,17 @@ if(isset($user)){
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="user_email">Password</label>
+                            <input type="password" class="form-control" name="password" id="edit_professor_password">
+                            <span id="toggleEditPassword" class="fa fa-fw fa-eye-slash field-icon toggle-password"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="user_email">Confirm Password</label>
+                            <input type="password" class="form-control" name="confirm_password" id="edit_professor_confirm_password">
+                            <span id="toggleEditConfirmPassword" class="fa fa-fw fa-eye-slash field-icon toggle-confirm-password"></span>
+                        </div>
+                        <p id="conpasscheck1" style="color: red;"></p>
+                        <div class="form-group">
                             <label for="user_email">Email</label>
                             <input type="email" class="form-control" name="email" id="prof_email">
                         </div>
@@ -367,9 +377,10 @@ if(isset($user)){
                             <label for="inputAddress2">Address</label>
                             <input type="text" class="form-control" name="address" id="prof_address">
                         </div>
+                     
                         <input type="hidden" name="prof_id" id="prof_uid">
                        
-                        <button type="submit" name="edit_submit" id="btn_submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" name="edit_submit" id="btn_submit_edit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
                
@@ -396,9 +407,13 @@ if(isset($user)){
     $(document).ready(function () {
         $("#conpasscheck").hide();
         $("#btn_submit").hide();
+        // $("#btn_submit_edit").hide();
         let confirmPasswordError = true;
         $("#prof_confirm_password").keyup(function () {
             validateConfirmPassword();
+        });
+        $("#edit_professor_confirm_password").keyup(function () {
+            validateConfirmPassword1();
         });
 
         function validateConfirmPassword() {
@@ -409,11 +424,31 @@ if(isset($user)){
             $("#conpasscheck").html("Password didn't Match");
             $("#conpasscheck").css("color", "red");
             confirmPasswordError = false;
+            
             return false;
         } else {
             $("#conpasscheck").hide();
             $("#btn_submit").show();
         }
+    }
+
+    function validateConfirmPassword1() {
+        let confirmPasswordValue1 = $("#edit_professor_confirm_password").val();
+        let passwordValue = $("#edit_professor_password").val();
+        if (passwordValue != confirmPasswordValue1) {
+            $("#conpasscheck1").show();
+            $("#conpasscheck1").html("Password didn't Match");
+            $("#conpasscheck1").css("color", "red");
+            confirmPasswordError = false;
+            $('#btn_submit_edit').attr('disabled', 'disabled');
+            return false;
+        } else {
+            $("#conpasscheck1").hide();
+            $('#btn_submit_edit').removeAttr("disabled");
+        }
+        // if(!passwordValue && !confirmPasswordValue1){
+        //     $('#btn_submit_edit').removeAttr("disabled");
+        // }
     }
 
     
@@ -460,6 +495,11 @@ if(isset($user)){
               const toggleConfirmPassword = document.querySelector("#toggleConfirmPassword");
               const password = document.querySelector("#user_password");
               const confirm_password = document.querySelector("#prof_confirm_password");
+              const toggleEditPassword = document.querySelector("#toggleEditPassword");
+              const toggleEditConfirmPassword = document.querySelector("#toggleEditConfirmPassword");
+              const edit_password = document.querySelector("#edit_professor_password");
+              const edit_confirm_password = document.querySelector("#edit_professor_confirm_password");
+
               togglePassword.addEventListener("click", function () {
                 // toggle the type attribute
                 const type = password.getAttribute("type") === "password" ? "text" : "password";
@@ -473,6 +513,25 @@ if(isset($user)){
                 // toggle the type attribute
                 const type = confirm_password.getAttribute("type") === "password" ? "text" : "password";
                 confirm_password.setAttribute("type", type);
+                
+                // toggle the icon
+                this.classList.toggle("fa-eye");
+          
+             });
+             toggleEditPassword.addEventListener("click", function () {
+                // toggle the type attribute
+                const type = edit_password.getAttribute("type") === "password" ? "text" : "password";
+                edit_password.setAttribute("type", type);
+                
+                // toggle the icon
+                this.classList.toggle("fa-eye");
+          
+             });
+
+             toggleEditConfirmPassword.addEventListener("click", function () {
+                // toggle the type attribute
+                const type = edit_confirm_password.getAttribute("type") === "password" ? "text" : "password";
+                edit_confirm_password.setAttribute("type", type);
                 
                 // toggle the icon
                 this.classList.toggle("fa-eye");

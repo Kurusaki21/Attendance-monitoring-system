@@ -28,12 +28,6 @@ if(isset($user)){
     z-index: 2;
     color: black;
     }
-    .dashboard-image1{
-      position: absolute;
-      margin-top: -70px;
-      z-index: 999999;
-      margin-left:1em;
-    }
     .card-student{
         width: 100%;
         justify-content: center;
@@ -43,6 +37,10 @@ if(isset($user)){
         color:white;
     }
   
+    .navbar-nav{
+        z-index: 9999;
+
+    }
 </style>
 <body id="page-top">
     <!-- Page Wrapper -->
@@ -379,7 +377,7 @@ if(isset($user)){
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit User</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -399,10 +397,12 @@ if(isset($user)){
                         <div class="form-group">
                             <label for="user_email">Password</label>
                             <input type="password" class="form-control" name="edit_user_password" id="edit_user_password">
+                            <span id="toggleEditPassword" class="fa fa-fw fa-eye-slash field-icon toggle-password"></span>
                         </div>
                         <div class="form-group">
                             <label for="user_email">Confirm Password</label>
                             <input type="password" class="form-control" name="edit_prof_confirm_password" id="edit_prof_confirm_password">
+                            <span id="toggleConfirmEditPassword" class="fa fa-fw fa-eye-slash field-icon toggle-password"></span>
                         </div>
                         <p id="conpasscheck" style="color: red;"></p>
                         <div class="form-group">
@@ -529,6 +529,13 @@ if(isset($user)){
               const toggleConfirmPassword = document.querySelector("#toggleConfirmPassword");
               const password = document.querySelector("#user_password");
               const confirm_password = document.querySelector("#prof_confirm_password");
+
+              const toggleEditPassword = document.querySelector("#toggleEditPassword");
+              const toggleConfirmEditPassword = document.querySelector("#toggleConfirmEditPassword");
+              const editPassword = document.querySelector("#edit_user_password");
+              const confirm_edit_password = document.querySelector("#edit_prof_confirm_password");
+
+
               togglePassword.addEventListener("click", function () {
                 // toggle the type attribute
                 const type = password.getAttribute("type") === "password" ? "text" : "password";
@@ -542,6 +549,26 @@ if(isset($user)){
                 // toggle the type attribute
                 const type = confirm_password.getAttribute("type") === "password" ? "text" : "password";
                 confirm_password.setAttribute("type", type);
+                
+                // toggle the icon
+                this.classList.toggle("fa-eye");
+          
+             });
+
+
+             toggleEditPassword.addEventListener("click", function () {
+                // toggle the type attribute
+                const type = editPassword.getAttribute("type") === "password" ? "text" : "password";
+                editPassword.setAttribute("type", type);
+                
+                // toggle the icon
+                this.classList.toggle("fa-eye");
+          
+             });
+             toggleConfirmEditPassword.addEventListener("click", function () {
+                // toggle the type attribute
+                const type = confirm_edit_password.getAttribute("type") === "password" ? "text" : "password";
+                confirm_edit_password.setAttribute("type", type);
                 
                 // toggle the icon
                 this.classList.toggle("fa-eye");

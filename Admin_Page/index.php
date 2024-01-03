@@ -19,9 +19,13 @@ if(isset($user)){
 <style>
     .dashboard-image1{
       position: absolute;
+      margin-top: -70px;
       z-index: 999999;
-      margin-top: 5px;
-      margin-left: 5px;
+      margin-left:1em;
+    }
+    .navbar-nav{
+        z-index: 9999;
+
     }
   
 </style>
@@ -82,7 +86,7 @@ if(isset($user)){
                 </a>
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                    <div class="bg-white py-2 collapse-inner rounded showme">
                         <h6 class="collapse-header">Registered Users</h6>
                         <a class="collapse-item" href="students.php">Students</a>
                         <a class="collapse-item" href="professors.php">Professors</a>
@@ -168,13 +172,13 @@ if(isset($user)){
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                <h4><b>Dashboard</b></h4>   <br> 
                     <!-- Content Row -->
                     <div class="row">
                        
                         <div class="admin-container">
                             <div class="admin-card">
-                                <h4><b>Dashboard</b></h4>   <br> 
+                        
                   
                                 <div class="row d-flex justify-content-center">
                                   <div class="col-sm-6 p-5">

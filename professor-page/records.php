@@ -149,15 +149,15 @@ if(isset($user)){
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                <h4><b>Records</b></h4>   <br> 
                     <!-- Content Row -->
                     <div class="row">
                        
                         <div class="admin-container">
                             <div class="admin-card">
-                                <h4><b>Records</b></h4>   <br> 
+                            
                               
-                                <div class="table-responsive">
+                                <div class="table table-responsive">
                                 <table class="display" id="example" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
@@ -285,6 +285,7 @@ if(isset($user)){
         $(document).ready(function() {
             $('#example').DataTable( {
                 dom: 'Bfrtip',
+            
                 
                 buttons: [
                     'print'

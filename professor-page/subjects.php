@@ -178,13 +178,13 @@ if(isset($user)){
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                <h4><b>Subjects and Schedules</b></h4>   <br> 
                     <!-- Content Row -->
                     <div class="row">
                        
                         <div class="admin-container">
                             <div class="admin-card">
-                                <h4><b>Subjects and Schedules</b></h4>   <br> 
+                       
                                
                                 <div class="row d-flex">
                                     <div class="col-sm-12 mb-4">
@@ -347,7 +347,7 @@ if(isset($user)){
                 prof_id: id,
                 subject_id: subj_id
             },
-            url: "../includes/list_of_schedules.php",
+            url: "../includes/list_of_schedules_prof.php",
             success: function(result) {
                  $('.hide_me_card').show();
                 $(".accordion_schedules_professor").html(result);

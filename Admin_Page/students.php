@@ -24,12 +24,6 @@ if(isset($user)){
 <?php include 'includes/header.php'; ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
 <style>
-    .dashboard-image1{
-      position: absolute;
-      margin-top: -70px;
-      z-index: 999999;
-      margin-left:1em;
-    }
     .card-student{
         width: 100%;
         justify-content: center;
@@ -46,6 +40,11 @@ if(isset($user)){
         height: 100px;
         width: 100px;
     }
+    
+    .navbar-nav{
+        z-index: 9999;
+
+    }
   
 </style>
 
@@ -54,7 +53,7 @@ if(isset($user)){
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" tabindex="9999">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -204,8 +203,7 @@ if(isset($user)){
                         <div class="admin-container">
                             <div class="admin-card">
 
-                            <div class="table-responsive">
-                            <table id="example-table" class="table table-striped table-bordered dt-responsive d" cellspacing="0" width="100%">
+                            <table id="example-table" class="table table-striped table-bordered " width="100%">
                                     <thead>
                                         <tr>
                                             <th>Shoold ID</th>
@@ -246,7 +244,7 @@ if(isset($user)){
                                         ?>
                                     </tbody>
                                 </table>
-                            </div>
+                            
                         </div>
                     </div>
                                   
@@ -596,6 +594,7 @@ $(document).ready(function () {
                     });
             },
             dom: 'Bfrtip',
+            responsive: true,
             buttons: [
             {
                 extend: 'print',

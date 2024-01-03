@@ -19,12 +19,6 @@ if(isset($user)){
 <?php include 'includes/header.php'; ?>
 
 <style>
-    .dashboard-image1{
-      position: absolute;
-      margin-top: -70px;
-      z-index: 999999;
-      margin-left:1em;
-    }
     .card-student{
         width: 100%;
         justify-content: center;
@@ -32,6 +26,11 @@ if(isset($user)){
     }
     .table-bordered{
         color:white;
+    }
+    
+    .navbar-nav{
+        z-index: 9999;
+
     }
   
 </style>

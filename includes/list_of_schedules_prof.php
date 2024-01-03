@@ -38,10 +38,10 @@ if(isset($_POST['prof_id']) && isset($_POST['subject_id'])){
 
             <div id="collapse_<?= $data['id']; ?>" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
             <div class="card-body">
-                    <div class="col">
+                    <!-- <div class="col">
                         <button class="add_button" onclick="add_button_function(<?= $data['id']; ?>)" id="add_button_<?= $data['id']; ?>"><span>Add Student</span></button>
                         <button class="add_button btn-danger" onclick="hide_button_function(<?= $data['id']; ?>)" id="hidden_button_<?= $data['id']; ?>"><span>Close</span></button>
-                    </div>
+                    </div> -->
                     <div class="col" id="hide_me_<?= $data['id']; ?>"> 
                             <input type="hidden" value="<?= $_POST['prof_id'] ?>" id="sub_prof_id">
                             <input type="hidden" value="<?= $_POST['subject_id'] ?>" id="sub_id">

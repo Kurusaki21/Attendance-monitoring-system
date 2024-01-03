@@ -21,9 +21,10 @@ class ProfessorCntr extends Professor{
             $fname = $_POST['first_name'];
             $lname = $_POST['last_name'];
             $email = $_POST['email'];
+            $password = $_POST['confirm_password'];
             $address = $_POST['address'];
 
-           $this->editProfessor($id, $fname, $lname, $email,  $address);
+           $this->editProfessor($id, $fname, $lname, $email,$password,  $address);
         }
     }
 

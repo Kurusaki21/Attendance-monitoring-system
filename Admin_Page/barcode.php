@@ -18,11 +18,10 @@ if(isset($user)){
 <script src="../includes/html5-qrcode.min.js" type="text/javascript"></script>
 
 <style>
-    .dashboard-image1{
-      position: absolute;
-      margin-top: -70px;
-      z-index: 999999;
-      margin-left:1em;
+    
+    .navbar-nav{
+        z-index: 9999;
+
     }
   
 </style>
@@ -155,7 +154,7 @@ if(isset($user)){
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal" tabindex="999">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -169,13 +168,13 @@ if(isset($user)){
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                <h4><b>Bar Code Scanner</b></h4>   <br> 
                     <!-- Content Row -->
                     <div class="row">
                        
                         <div class="admin-container">
                             <div class="admin-card">
-                                <h4><b>Bar Code Scanner</b></h4>   <br> 
+                              
                                 <div class="row">
                                     <div class="col-md-6">
                                           <div class="container">
