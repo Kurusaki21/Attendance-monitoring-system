@@ -210,7 +210,7 @@ if(isset($user)){
                                                 <td> <?= $student['parents_contact']; ?></td>
                                                 
                                                 <td><?= $student['has_sent'] == '1' ? 'True' : 'False';?></td>
-                                                <td> <?= $student['created_at']; ?></td>
+                                                <td><?= date("M d Y H:i:s A", strtotime($student['created_at']))?></td>
                                             <?php  
                                             }
                                             }

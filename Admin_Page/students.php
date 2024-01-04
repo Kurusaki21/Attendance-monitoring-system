@@ -45,7 +45,14 @@ if(isset($user)){
         z-index: 9999;
 
     }
-  
+
+    canvas {
+    height:100%;
+    width: 100%;
+    }
+
+
+        
 </style>
 
 <body id="page-top">
@@ -202,7 +209,7 @@ if(isset($user)){
                         </div>
                         <div class="admin-container">
                             <div class="admin-card">
-
+                            <div class="card-box table-responsive">
                             <table id="example-table" class="table table-striped table-bordered " width="100%">
                                     <thead>
                                         <tr>
@@ -244,7 +251,7 @@ if(isset($user)){
                                         ?>
                                     </tbody>
                                 </table>
-                            
+                                        </div>
                         </div>
                     </div>
                                   
@@ -385,11 +392,24 @@ if(isset($user)){
                                     </div>
                                  
                             </div>
-                            <div class="form-row col-md-12">   <div id="my_camera"></div></div>
-                            <div class="form-row col-md-12 ">
-                                <img id="preview" src="#" /> 
+                    
+                            <div class="form-row col-md-3 ">
+                                <canvas id="canvas" src="#" width="640" height="420" /> 
                             </div>
-
+                            <div class="form-row col-md-6 justify-content-center"> 
+                                <div id="my_camera">
+                                    <video id="video" width="150" height="150" autoplay></video>    <div class="col-md-6+ captured_image">
+                                    <!-- <canvas id="canvas"  width="640" height="420"></canvas> -->
+                                    </div>
+                                    <button id="capture" type="button">Capture</button>
+                                    <button id="close_div" type="button" onclick="closeDiv()">Close</button>
+                                
+                                 
+                                </div>
+                            </div>
+                            <div class="form-row col-md-3 ">
+                              
+                            </div>
                         </div>
                         <hr>
                         <button type="submit" name="submit" class="btn btn-primary">Submit</button>
@@ -513,11 +533,11 @@ if(isset($user)){
     <script src="../js/sb-admin-2.min.js"></script>
     <script tpye="application/javascript">
 
-    
+    $('#my_camera').hide();
 
     var loadFile = function(event) {
-    var output = document.getElementById('preview');
-    output.src = URL.createObjectURL(event.target.files[0]);
+    var output = document.getElementById('canvas');
+    output.canvas = URL.createObjectURL(event.target.files[0]);
         output.onload = function() {
         URL.revokeObjectURL(output.src) // free memory
         }
@@ -668,23 +688,84 @@ $(document).ready(function () {
 
     </script>
     <script language="JavaScript">
-    Webcam.set({
-        width: 490,
-        height: 390,
-        image_format: 'jpeg',
-        jpeg_quality: 90
-    });
-  
-    Webcam.attach( '#my_camera' );
+
   
     function take_snapshot(e) {
-        Webcam.snap( function(data_uri) {
-           var img = $(".image-tag").val(data_uri);
-            document.getElementById('preview').append('<img src="'+data_uri+'"/>');
-            console.log(data_uri)
-        } );
- 
+      
+        $('#my_camera').show();
     }
+
+    function closeDiv(){
+        $('#my_camera').hide(); 
+    }
+
+    window.onload = function() {
+    var video = document.getElementById('video');
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var capture = document.getElementById('capture');
+
+    // Check if the browser supports the getUserMedia API
+    if (navigator.getUserMedia) {
+        navigator.getUserMedia({video: true}, function(stream) {
+            video.srcObject = stream;
+        }, function(error) {
+            console.log('Error: ', error);
+        });
+    } else {
+        console.log('The getUserMedia API is not supported in this browser.');
+    }
+
+    capture.addEventListener('click', function() {
+        context.drawImage(video, 0, 0, 640, 480);
+
+        // Get the image as a data URL
+        var dataURL = canvas.toDataURL('image/png');
+
+        // Get the image as a Blob
+        var blob = dataURLtoBlob(dataURL);
+
+        // Save the image using the Blob
+        saveImage(blob);
+        
+    });
+
+    function dataURLtoBlob(dataURL) {
+        var binary = atob(dataURL.split(',')[1]);
+        var array = [];
+        for (var i = 0; i < binary.length; i++) {
+            array.push(binary.charCodeAt(i));
+        }
+        return new Blob([new Uint8Array(array)], {type: 'image/png'});
+    }
+
+    function saveImage(blob) {
+        var myImage = document.querySelector('img');
+        var formData = new FormData();
+        formData.append('image', blob, 'capture.png');
+
+        var objectURL = URL.createObjectURL(blob);
+ 
+
+        var request = new XMLHttpRequest();
+        request.open('POST', 'upload.php');
+        request.send(formData);
+
+        request.onload = function() {
+            if (request.status === 200) {
+              
+                const myJSON = JSON.stringify(request.response);
+                console.log(myJSON);
+                // $.each(request.response, function(index, data) {
+                //     console.log(data);
+                // })
+
+            } else {
+                console.log('Failed to save image: ', request.status);
+            }
+        };
+    }
+};
 </script>
 
 </body>

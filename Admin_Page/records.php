@@ -194,6 +194,7 @@ if(isset($user)){
                                             <th>Status</th>
                                             <th>Current Attendance</th>
                                             <th>Professor</th>
+                                            <th>Subject</th>
                                             <th>Created At</th>
                                         </tr>
                                     </thead>
@@ -208,9 +209,11 @@ if(isset($user)){
                                                 <td> <?= $sr['first_name'].' '.$sr['last_name']; ?></td>
                                                 <td> <?= $sr['status'] == '1' ? 'Time IN' : 'Time Out'; ?></td>
                                                 <td> <?= $sr['has_sent'] == '1' ? 'Gate Entry' : 'Professor Attendance'; ?></td>
+                                      
                                                 
                                                 <td><?= $sr['prof_fname'].' '.$sr['prof_lname'];?></td>
-                                                <td><?= $sr['created_at'];?></td>
+                                                <td><?= $sr['address'] ?></td>
+                                                <td><?= date("M d Y H:i:s A", strtotime($sr['created_at']))?></td>
                                               
                                             <?php  
                                             }

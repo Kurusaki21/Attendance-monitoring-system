@@ -19,9 +19,13 @@ if(isset($user)){
 <style>
     .dashboard-image1{
       position: absolute;
+      margin-top: -70px;
       z-index: 999999;
-      margin-top: 5px;
-      margin-left: 5px;
+      margin-left:1em;
+    }
+    .navbar-nav{
+        z-index: 9999;
+
     }
   
 </style>
@@ -74,78 +78,47 @@ if(isset($user)){
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Dashboard</span></a>
             </li>
-            <?php if($user['account_setting'] == 1){ ?>
-                <li class="nav-item active">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                        aria-expanded="true" aria-controls="collapseUtilities">
-                        <i class="fas fa-fw fa-users"></i>
-                        <span>List of Accounts</span>
-                    </a>
-                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                        data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Registered Users</h6>
-                            <a class="collapse-item" href="students.php">Students</a>
-                            <a class="collapse-item" href="professors.php">Professors</a>
-                            <a class="collapse-item" href="users.php">Users</a>
-                        </div>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>List of Accounts</span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded showme">
+                        <h6 class="collapse-header">Registered Users</h6>
+                        <a class="collapse-item" href="students.php">Students</a>
+                        <a class="collapse-item" href="professors.php">Professors</a>
+                        <a class="collapse-item" href="users.php">Sub-Admin</a>
                     </div>
-                </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
+                </div>
+            </li>
 
-                <?php if($user['subject_setting'] == 1){ ?> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="subjects.php">
-                            <i class="fas fa-fw fa-clipboard"></i>
-                            <span>Subjects</span></a>
-                    </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
+            <li class="nav-item">
+                <a class="nav-link" href="subjects.php">
+                    <i class="fas fa-fw fa-clipboard"></i>
+                    <span>Subjects</span></a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="records.php">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Records</span></a>
+            </li>
 
-                <?php if($user['records_setting'] == 1){ ?> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="records.php">
-                            <i class="fas fa-fw fa-chart-area"></i>
-                            <span>Records</span></a>
-                    </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
+            <!-- Nav Item - Tables -->
+            <li class="nav-item">
+                <a class="nav-link" href="sms.php">
+                    <i class="fas fa-fw fa-sms"></i>
+                    <span>SMS</span></a>
+            </li>
 
-                <!-- Nav Item - Tables -->
-                <?php if($user['sms_setting'] == 1){ ?> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="sms.php">
-                            <i class="fas fa-fw fa-sms"></i>
-                            <span>SMS</span></a>
-                    </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
-
-                <?php if($user['barcode_setting'] == 1){ ?>     
-                <li class="nav-item">
-                    <a class="nav-link" href="barcode.php">
-                        <i class="fas fa-fw fa-sms"></i>
-                        <span>Barcode Scanner</span></a>
-                </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
-
+            <li class="nav-item">
+                <a class="nav-link" href="barcode.php">
+                    <i class="fas fa-fw fa-sms"></i>
+                    <span>Barcode Scanner</span></a>
+            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -199,13 +172,13 @@ if(isset($user)){
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                <h4><b>Dashboard</b></h4>   <br> 
                     <!-- Content Row -->
                     <div class="row">
                        
                         <div class="admin-container">
                             <div class="admin-card">
-                                <h4><b>Dashboard</b></h4>   <br> 
+                        
                   
                                 <div class="row d-flex justify-content-center">
                                   <div class="col-sm-6 p-5">

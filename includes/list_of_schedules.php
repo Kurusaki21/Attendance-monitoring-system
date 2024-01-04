@@ -143,7 +143,7 @@ function listofStudents(id){
                 html +='<tr>';
                 html +='<td>'+ value.school_id + '</td>';
                 html +='<td>'+ value.first_name +' '+ value.last_name+ '</td>';
-                // html +='<td><button class="btn btn-sm btn-danger" onclick="deleteAssignedStudent('+value.student_id+', '+id+')"><i class="fa fa-trash"></i></button></td>';
+                html +='<td><button class="btn btn-sm btn-danger" onclick="deleteAssignedStudent('+value.student_id+', '+id+')"><i class="fa fa-trash"></i></button></td>';
                 html +='</tr>';
             });
             $('.schedules_table_'+id+' tbody').html(html);
