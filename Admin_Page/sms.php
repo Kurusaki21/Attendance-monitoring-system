@@ -187,7 +187,7 @@ if(isset($user)){
                             <div class="admin-card">
 
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered table-secondary" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Full name</th>
@@ -210,7 +210,7 @@ if(isset($user)){
                                                 <td> <?= $student['parents_contact']; ?></td>
                                                 
                                                 <td><?= $student['has_sent'] == '1' ? 'True' : 'False';?></td>
-                                                <td><?= date("M d Y H:i:s A", strtotime($student['created_at']))?></td>
+                                                <td><?= date("M d Y h:i:s a", strtotime($student['created_at']))?></td>
                                             <?php  
                                             }
                                             }

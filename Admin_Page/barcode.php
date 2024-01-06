@@ -185,17 +185,17 @@ if(isset($user)){
                                                         <h1 class="display-1 stud_name"></h1>
                                                 </div>
                                                 <div class="row justify-content-center">
-                                                       <h4 class="display-4 stud_course"></h3>
+                                                       <h4 class="display-4 stud_course"> </h3>
                                                 </div>
                                                 <div class="row justify-content-center">
-                                                      <h4 class="display-4 stud_year"></h3>
+                                                     
                                                 </div>
-                                                <div class="row justify-content-center">
-                                                      <h4 class="display-4 stud_address"></h3>
-                                                </div>
-                                                <div class="row justify-content-center">
-                                                      <h4 class="display-4 stud_contact"></h3>
-                                                </div>
+                                                <!-- <div class="row justify-content-center">
+                                                      <h4 class="display-4 stud_address">address</h3>
+                                                </div> -->
+                                                <!-- <div class="row justify-content-center">
+                                                      <h4 class="display-4 stud_contact">contact</h3>
+                                                </div> -->
                                                 <div class="row justify-content-center">
                                                       <h4 class="display-4 time_in text-danger"></h3>
                                                 </div>
@@ -266,6 +266,24 @@ if(isset($user)){
         </div>
     </div>
 
+    <div class="modal fade" id="undefined_student" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                <h5><i class="icon fas fa-info"></i> Undefined!</h5>
+                    <button type="button" class="sched_close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning alert-dismissible">
+                        <center><b>Student not enrolled in this school</b></center>
+                    </div>    
+                </div>
+                </div>
+            </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -321,20 +339,32 @@ if(isset($user)){
                 dataType: "json",
                 url: "../includes/student.inc.php?school_id=" + id,
                 success: function (response){
-                    console.log(response)
+                  
                 // $.each(response, function(index, data) {
                 //     console.log(data.last_name)
                 //      
                 //     });
-                $('.stud_name').html(response.first_name+' '+response.last_name);
-                $('.stud_year').html(response.student_year);
-                $('.stud_course').html(response.student_course);
+
+                if(response.error == "Not Enrolled!"){
+                    $('#undefined_student').modal('show')
+                    console.log(response.error)
+
+                    setTimeout(function(){
+                        $('#undefined_student').modal('hide')
+                    }, 2000);
+                    const myTimeout = setTimeout(timeInterval, 4000);
+                }
+                else{
+                $('.stud_name').html(response.first_name+' '+response.last_name+'.');
+                // $('.stud_year').html(response.student_year);
+                $('.stud_course').html(response.student_course + '-' + response.student_year);
                 $('.stud_contact').html(response.phone);
                 $('.stud_address').html(response.address);
-                $('.time_in').html(response.status);
-                $('.time_in').html(response.status);
+                $('.time_in').html(response.status+' ('+ response.created_at+')');
                 document.getElementById('student_preview').innerHTML = '<img class="rounded-circle" width="200" height="200" src="'+response.imageFile+'">';
                 const myTimeout = setTimeout(timeInterval, 2000);
+                }
+              
                 }
                
             })

@@ -19,7 +19,6 @@ if(isset($user)){
 <style>
     .dashboard-image1{
       position: absolute;
-      margin-top: -70px;
       z-index: 999999;
       margin-left:1em;
     }
@@ -182,64 +181,70 @@ if(isset($user)){
                   
                                 <div class="row d-flex justify-content-center">
                                   <div class="col-sm-6 p-5">
-                           
+                                  <a href="students.php" class="btn btn-link">
                                     <div class="card">
                                     <div class="dashboard-image1">
-                                      <img  src="../img/lg/Studs.jpg" width="150" height="150">
+                                      <img  src="../img/lg/Studs.jpg" width="100" height="100">
                                       </div>
                                         <div class="card-body">
                                           <p class="text-right mb-0 font-weight-bold text-gray-800">Students</p>
                                           <p class="text-right text-gray-800"><?=  $recoords->countAllStudents()['count']; ?></p>
                                           <hr>
-                                          <div class="d-flex justify-content-center"><a href="students.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
-                                        </div>
+                                        
+                                        </div>show all</a>
                                     </div>
                                   </div>
 
                                   <div class="col-sm-6 p-5">
-                                    <div class="dashboard-image1">
-                                     <img  src="../img/lg/professor.png" width="150" height="150">
-                                    </div>
+                                  <a href="professors.php" class="btn btn-link">
                                     <div class="card">
-                                      <div class="card-body">
+                                    <div class="dashboard-image1">
+                                    <img  src="../img/lg/professor.png" width="100" height="100">
+                                      </div>
+                                        <div class="card-body">
                                           <p class="text-right mb-0 font-weight-bold text-gray-800">Professor</p>
                                           <p class="text-right text-gray-800"><?=  $recoords->countAllProfessors(); ?></p>
                                           <hr>
-                                          <div class="d-flex justify-content-center"><a href="professors.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
-                                      </div>
+                                        
+                                        </div>show all</a>
                                     </div>
                                   </div>
                                 </div>
                     
-                                <div class="row d-flex justify-content-center">
-                                    <div class="col-sm-6 p-5">
-                                        <div class="dashboard-image1">
-                                        <img  src="../img/lg/Sub_admin.jpg" width="150" height="150">
-                                        </div>
-                                        <div class="card">
-                                          <div class="card-body">
-                                            <p class="text-right mb-0 font-weight-bold text-gray-800">Sub-Admin</p>
-                                            <p class="text-right text-gray-800"><?=  $recoords->countAllSubAdmin(); ?></p>
-                                            <hr>
-                                            <div class="d-flex justify-content-center"><a href="users.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
-                                          </div>
-                                        </div>
-                                      </div>
+                           
 
-                                    <div class="col-sm-6 p-5">
-                                        <div class="dashboard-image1">
-                                        <img  src="../img/lg/Records.png" width="150" height="150">
-                                        </div>
-                                        <div class="card">
-                                          <div class="card-body">
-                                            <p class="text-right mb-0 font-weight-bold text-gray-800">Records</p>
-                                            <p class="text-right text-gray-800"><?= $recoords->countAllRecords(); ?></p>
-                                            <hr>
-                                            <div class="d-flex justify-content-center"><a href="records.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
-                                          </div>
-                                        </div>
+                                      <div class="row d-flex justify-content-center">
+                                  <div class="col-sm-6 p-5">
+                                  <a href="users.php" class="btn btn-link">
+                                    <div class="card">
+                                    <div class="dashboard-image1">
+                                    <img  src="../img/lg/Sub_admin.jpg" width="100" height="100">
+                                      </div>
+                                        <div class="card-body">
+                                        <p class="text-right mb-0 font-weight-bold text-gray-800">Sub-Admin</p>
+                                            <p class="text-right text-gray-800"><?=  $recoords->countAllSubAdmin(); ?></p>
+                                          <hr>
+                                        
+                                        </div>show all</a>
                                     </div>
                                   </div>
+
+
+                                  <div class="col-sm-6 p-5">
+                                  <a href="records.php" class="btn btn-link">
+                                    <div class="card">
+                                    <div class="dashboard-image1">
+                                    <img  src="../img/lg/Records.png" width="100" height="100">
+                                      </div>
+                                        <div class="card-body">
+                                        <p class="text-right mb-0 font-weight-bold text-gray-800">Records</p>
+                                            <p class="text-right text-gray-800"><?= $recoords->countAllRecords(); ?></p>
+                                          <hr>
+                                        
+                                        </div>show all</a>
+                                    </div>
+                                  </div>
+                                </div>
 
                                   <!-- <div class="row mt-5 d-flex justify-content-center">
                                     <div class="col-sm-6 mb-4">

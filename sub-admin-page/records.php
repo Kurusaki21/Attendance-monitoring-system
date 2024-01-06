@@ -19,12 +19,6 @@ if(isset($user)){
 <?php include 'includes/header.php'; ?>
 
 <style>
-    .dashboard-image1{
-      position: absolute;
-      margin-top: -70px;
-      z-index: 999999;
-      margin-left:1em;
-    }
     .card-student{
         width: 100%;
         justify-content: center;
@@ -32,6 +26,11 @@ if(isset($user)){
     }
     .table-bordered{
         color:white;
+    }
+    
+    .navbar-nav{
+        z-index: 9999;
+
     }
   
 </style>
@@ -68,7 +67,7 @@ if(isset($user)){
                             <div class="admin-name">
                                 <?php echo $name; ?>
                                 <br>
-                                <small>Administrator</small>
+                                <small><?= $role == 2 ? 'Sub Admin' : ''; ?></small>
                             </div>
                         </div>
                     </div>
@@ -76,10 +75,11 @@ if(isset($user)){
                 
             </li>
 
-              <!-- Divider -->
-              <hr class="sidebar-divider">
+            <!-- Divider -->
+            <hr class="sidebar-divider">
 
-<li class="nav-item active">
+           
+<li class="nav-item ">
     <a class="nav-link" href="index.php">
         <i class="fas fa-fw fa-chart-area"></i>
         <span>Dashboard</span></a>
@@ -120,7 +120,7 @@ else{
 ?>
 
 <?php if($user['records_setting'] == 1){ ?> 
-    <li class="nav-item">
+    <li class="nav-item active">
         <a class="nav-link" href="records.php">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Records</span></a>
@@ -155,6 +155,8 @@ else{
     echo '';
 }
 ?>
+
+            <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
             <!-- Sidebar Toggler (Sidebar) -->
@@ -216,13 +218,14 @@ else{
                             <div class="admin-card">
 
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered table-secondary" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Student Name</th>
                                             <th>Status</th>
                                             <th>Current Attendance</th>
                                             <th>Professor</th>
+                                            <th>Subject</th>
                                             <th>Created At</th>
                                         </tr>
                                     </thead>
@@ -237,9 +240,11 @@ else{
                                                 <td> <?= $sr['first_name'].' '.$sr['last_name']; ?></td>
                                                 <td> <?= $sr['status'] == '1' ? 'Time IN' : 'Time Out'; ?></td>
                                                 <td> <?= $sr['has_sent'] == '1' ? 'Gate Entry' : 'Professor Attendance'; ?></td>
+                                      
                                                 
                                                 <td><?= $sr['prof_fname'].' '.$sr['prof_lname'];?></td>
-                                                <td><?= $sr['created_at'];?></td>
+                                                <td><?= $sr['address'] ?></td>
+                                                <td><?= date("M d Y H:i:s A", strtotime($sr['created_at']))?></td>
                                               
                                             <?php  
                                             }
@@ -294,7 +299,7 @@ else{
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../logout.php">Logout</a>
+                    <a class="btn btn-primary" href="../includes/logout.php">Logout</a>
                 </div>
             </div>
         </div>

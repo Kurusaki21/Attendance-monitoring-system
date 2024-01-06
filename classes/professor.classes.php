@@ -191,7 +191,7 @@ class Professor extends DB{
 
     protected function setStudentAttendance($student_id, $prof_id, $sched_id, $on_time){
         $datetimetoday = date("Y-m-d H:i:s");
-        $student_record = $this->getStudentRecord($student_id);
+      
         $connection = $this->dbOpen();
         $stmt = $connection->prepare('INSERT INTO student_attendance (student_id, prof_id, sched_id, is_present, on_time, created_at) VALUES (?,?,?,?,?,?)');
 
@@ -199,17 +199,17 @@ class Professor extends DB{
             $stmt = null;
             echo json_encode(array("error"=>"404"));
         }
-
-        echo json_encode($student_record);
+        $student_record = $this->getStudentRecord($student_id);
+        echo json_encode(["first_name"=>preg_replace("~\b". preg_quote($student_record['first_name'], '~') ."\b~i", $student_record['first_name'][0] . str_repeat('*', strlen($student_record['first_name']) - 1), $student_record['first_name']), "last_name"=>substr($student_record['last_name'], 0, 1), "student_course"=>$student_record['student_course'], "student_year"=>$student_record['student_year'], "created_at"=> date('h:i a', strtotime($student_record['created_at'])), "ontime" => $student_record['on_time'], "imageFile"=>$student_record['imageFile']]);
           
     }
 
     protected function getStudentRecord($student_id){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT * FROM students WHERE id = ?");
+        $stmt = $connection->prepare("SELECT * FROM students LEFT JOIN student_attendance ON student_attendance.student_id = students.id WHERE students.id = ? ORDER BY student_attendance.id DESC LIMIT 1;");
         $stmt->execute([$student_id]);
 
-        $data = $stmt->fetchall();
+        $data = $stmt->fetch();
         return $data;
     }
 
@@ -228,17 +228,18 @@ class Professor extends DB{
         $data = $stmt->fetch();
       
 
-        if($stmt->rowCount() == 0 ){
-            $resultCheck = 0;
-        }
-        else{
+        if($stmt->rowCount() >= 1 ){
+           
             $new_date_format = date('Y-m-d', strtotime($data['created_at']));
             if($datetimetoday != $new_date_format){
-                $resultCheck = 1;
+                $resultCheck = false;
             }
             else{
-                $resultCheck = 0;
+                $resultCheck = true;
             }
+        }
+        else{
+            $resultCheck = false;
         }
         return $resultCheck;
     }

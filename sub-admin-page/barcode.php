@@ -1,5 +1,6 @@
 <?php
   include "../classes/userContr.classes.php";
+  include "../includes/sms_gateway.php";
   $userdata = new UserCntr();
   $user = $userdata->get_userdata();
 
@@ -17,11 +18,10 @@ if(isset($user)){
 <script src="../includes/html5-qrcode.min.js" type="text/javascript"></script>
 
 <style>
-    .dashboard-image1{
-      position: absolute;
-      margin-top: -70px;
-      z-index: 999999;
-      margin-left:1em;
+    
+    .navbar-nav{
+        z-index: 9999;
+
     }
   
 </style>
@@ -66,10 +66,11 @@ if(isset($user)){
                 
             </li>
 
-              <!-- Divider -->
-              <hr class="sidebar-divider">
+            <!-- Divider -->
+            <hr class="sidebar-divider">
 
-<li class="nav-item active">
+           
+<li class="nav-item">
     <a class="nav-link" href="index.php">
         <i class="fas fa-fw fa-chart-area"></i>
         <span>Dashboard</span></a>
@@ -135,7 +136,7 @@ else{
 ?>
 
 <?php if($user['barcode_setting'] == 1){ ?>     
-<li class="nav-item">
+<li class="nav-item active">
     <a class="nav-link" href="barcode.php">
         <i class="fas fa-fw fa-sms"></i>
         <span>Barcode Scanner</span></a>
@@ -145,6 +146,8 @@ else{
     echo '';
 }
 ?>
+
+            <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
             <!-- Sidebar Toggler (Sidebar) -->
@@ -182,7 +185,7 @@ else{
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal" tabindex="999">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -196,16 +199,16 @@ else{
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                <h4><b>Bar Code Scanner</b></h4>   <br> 
                     <!-- Content Row -->
                     <div class="row">
                        
                         <div class="admin-container">
                             <div class="admin-card">
-                                <h4><b>Bar Code Scanner</b></h4>   <br> 
+                              
                                 <div class="row">
                                     <div class="col-md-6">
-                                          <div class="container">
+                                    <div class="container">
                                                 <div class="row justify-content-center">
                                                        <div id="student_preview"></div>
                                                 </div>
@@ -213,10 +216,19 @@ else{
                                                         <h1 class="display-1 stud_name"></h1>
                                                 </div>
                                                 <div class="row justify-content-center">
-                                                       <h4 class="display-4 stud_course"></h3>
+                                                       <h4 class="display-4 stud_course"> </h3>
                                                 </div>
                                                 <div class="row justify-content-center">
-                                                      <h4 class="display-4 stud_year"></h3>
+                                                     
+                                                </div>
+                                                <!-- <div class="row justify-content-center">
+                                                      <h4 class="display-4 stud_address">address</h3>
+                                                </div> -->
+                                                <!-- <div class="row justify-content-center">
+                                                      <h4 class="display-4 stud_contact">contact</h3>
+                                                </div> -->
+                                                <div class="row justify-content-center">
+                                                      <h4 class="display-4 time_in text-danger"></h3>
                                                 </div>
                                           </div>
                                     </div>
@@ -279,10 +291,28 @@ else{
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../logout.php">Logout</a>
+                    <a class="btn btn-primary" href="../login.php">Logout</a>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="modal fade" id="undefined_student" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                <h5><i class="icon fas fa-info"></i> Undefined!</h5>
+                    <button type="button" class="sched_close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning alert-dismissible">
+                        <center><b>Student not enrolled in this school</b></center>
+                    </div>    
+                </div>
+                </div>
+            </div>
     </div>
 
     <!-- Bootstrap core JavaScript-->
@@ -299,9 +329,27 @@ else{
         var sound = new Audio("../includes/barcode.wav");
         // handle the scanned code as you like, for example:
         console.log(`Code matched = ${decodedText}`, decodedResult);
+
+       
         getStudentRecord(decodedText);
+       
         sound.play();
+        html5QrcodeScanner.pause().then(_ => {
+            // the UI should be cleared here    
+        }).catch(error => {
+            // Could not stop scanning for reasons specified in `error`.
+            // This conditions should ideally not happen.
+        });
+
+    
+
         }
+
+        function onScanFailure(error) {
+        // handle scan failure, usually better to ignore and keep scanning
+             console.warn(`Barcode error = ${error}`);
+        }
+
 
         var config = {
         fps: 10,
@@ -322,16 +370,38 @@ else{
                 dataType: "json",
                 url: "../includes/student.inc.php?school_id=" + id,
                 success: function (response){
-                $.each(response, function(index, data) {
-                    console.log(data);
-                        $('.stud_name').html(data.first_name+' '+data.last_name);
-                        $('.stud_year').html(data.student_year);
-                        $('.stud_course').html(data.student_course);
-                        document.getElementById('student_preview').innerHTML = '<img class="rounded-circle" width="200" height="200" src="'+data.imageFile+'">';
-                    });
+                    console.log(response)
+                // $.each(response, function(index, data) {
+                //     console.log(data.last_name)
+                //      
+                //     });
+
+                if(response.error == "Not Enrolled!"){
+                    $('#undefined_student').modal('show')
+                    console.log(response.error)
+
+                    setTimeout(function(){
+                        $('#undefined_student').modal('hide')
+                    }, 2000);
+                    const myTimeout = setTimeout(timeInterval, 4000);
                 }
+                else{
+                $('.stud_name').html(response.first_name+' '+response.last_name+'.');
+                // $('.stud_year').html(response.student_year);
+                $('.stud_course').html(response.student_course + '-' + response.student_year);
+                $('.stud_contact').html(response.phone);
+                $('.stud_address').html(response.address);
+                $('.time_in').html(response.status+' ('+ response.created_at+')');
+                document.getElementById('student_preview').innerHTML = '<img class="rounded-circle" width="200" height="200" src="'+response.imageFile+'">';
+                const myTimeout = setTimeout(timeInterval, 2000);
+                }
+            }
                
             })
+        }
+
+        function timeInterval() {
+            html5QrcodeScanner.resume();
         }
 
     </script>

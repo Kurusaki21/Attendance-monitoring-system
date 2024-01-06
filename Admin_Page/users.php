@@ -200,7 +200,7 @@ if(isset($user)){
                             <div class="admin-card">
 
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered table-secondary" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
@@ -293,35 +293,35 @@ if(isset($user)){
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="../includes/users.inc.php">
+                    <form method="post" onSubmit="if(!confirm('Is the form filled out correctly?')){return false;}" action="../includes/users.inc.php">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="Name">First Name</label>
-                                <input type="text" class="form-control" name="first_name" id="first_name">
+                                <input type="text" class="form-control" name="first_name" id="first_name" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="user_email">Last Name</label>
-                                <input type="text" class="form-control" name="last_name" id="last_name">
+                                <input type="text" class="form-control" name="last_name" id="last_name" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="user_password">Password</label>
-                            <input type="password" class="form-control" name="password" id="user_password">
+                            <input type="password" class="form-control" name="password" id="user_password" required>
                             <span id="togglePassword" class="fa fa-fw fa-eye-slash field-icon toggle-password"></span>
                         </div>
                         <div class="form-group">
                             <label for="prof_confirm_password">Confirm Password</label>
-                            <input type="password" class="form-control" name="confirm_password" id="prof_confirm_password">
+                            <input type="password" class="form-control" name="confirm_password" id="prof_confirm_password" required>
                             <span id="toggleConfirmPassword" class="fa fa-fw fa-eye-slash field-icon toggle-confirm-password"></span>
                         </div>
                         <p id="conpasscheck" style="color: red;"></p>
                         <div class="form-group">
                             <label for="user_email">Email</label>
-                            <input type="email" class="form-control" name="email" id="user_email">
+                            <input type="email" class="form-control" name="email" id="user_email" required>
                         </div>
                         <div class="form-group">
                             <label for="inputAddress2">Address</label>
-                            <input type="text" class="form-control" name="address" id="user_address">
+                            <input type="text" class="form-control" name="address" id="user_address" required>
                         </div>
 
                         <div class="form-group col-sm-3">
@@ -383,35 +383,35 @@ if(isset($user)){
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="../includes/users.inc.php">
+                    <form method="post" onSubmit="if(!confirm('Is the form filled out correctly?')){return false;}" action="../includes/users.inc.php">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="Name">First Name</label>
-                                <input type="text" class="form-control" name="edit_first_name" id="edit_first_name">
+                                <input type="text" class="form-control" name="edit_first_name" id="edit_first_name" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="user_email">Last Name</label>
-                                <input type="text" class="form-control" name="edit_last_name" id="edit_last_name">
+                                <input type="text" class="form-control" name="edit_last_name" id="edit_last_name" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="user_email">Password</label>
-                            <input type="password" class="form-control" name="edit_user_password" id="edit_user_password">
+                            <input type="password" class="form-control" name="edit_user_password" id="edit_user_password" required>
                             <span id="toggleEditPassword" class="fa fa-fw fa-eye-slash field-icon toggle-password"></span>
                         </div>
                         <div class="form-group">
                             <label for="user_email">Confirm Password</label>
-                            <input type="password" class="form-control" name="edit_prof_confirm_password" id="edit_prof_confirm_password">
+                            <input type="password" class="form-control" name="edit_prof_confirm_password" id="edit_prof_confirm_password" required>
                             <span id="toggleConfirmEditPassword" class="fa fa-fw fa-eye-slash field-icon toggle-password"></span>
                         </div>
-                        <p id="conpasscheck" style="color: red;"></p>
+                        <p id="conpasscheck1" style="color: red;"></p>
                         <div class="form-group">
                             <label for="user_email">Email</label>
-                            <input type="email" class="form-control" name="edit_user_email" id="edit_user_email">
+                            <input type="email" class="form-control" name="edit_user_email" id="edit_user_email" required>
                         </div>
                         <div class="form-group">
                             <label for="inputAddress2">Address</label>
-                            <input type="text" class="form-control" name="edit_user_address" id="edit_user_address">
+                            <input type="text" class="form-control" name="edit_user_address" id="edit_user_address" required>
                         </div>
                         <label for="user_email">Restriction</label>
 
@@ -474,6 +474,57 @@ if(isset($user)){
     <script src="../js/demo/datatables-demo.js"></script>
 
     <script>
+         $(document).ready(function () {
+        $("#conpasscheck").hide();
+        $("#conpasscheck1").hide();
+        $("#btn_submit").hide();
+        // $("#btn_submit_edit").hide();
+        let confirmPasswordError = true;
+        $("#prof_confirm_password").keyup(function () {
+            validateConfirmPassword();
+        });
+        $("#edit_professor_confirm_password").keyup(function () {
+            validateConfirmPassword1();
+        });
+
+        function validateConfirmPassword() {
+        let confirmPasswordValue = $("#prof_confirm_password").val();
+        let passwordValue = $("#user_password").val();
+        if (passwordValue != confirmPasswordValue) {
+            $("#conpasscheck").show();
+            $("#conpasscheck").html("Password didn't Match");
+            $("#conpasscheck").css("color", "red");
+            confirmPasswordError = false;
+            
+            return false;
+        } else {
+            $("#conpasscheck").hide();
+            $("#btn_submit").show();
+        }
+    }
+
+    function validateConfirmPassword1() {
+        let confirmPasswordValue1 = $("#edit_professor_confirm_password").val();
+        let passwordValue = $("#edit_professor_password").val();
+        if (passwordValue != confirmPasswordValue1) {
+            $("#conpasscheck1").show();
+            $("#conpasscheck1").html("Password didn't Match");
+            $("#conpasscheck1").css("color", "red");
+            confirmPasswordError = false;
+            $('#btn_submit_edit').attr('disabled', 'disabled');
+            return false;
+        } else {
+            $("#conpasscheck1").hide();
+            $('#btn_submit_edit').removeAttr("disabled");
+        }
+        // if(!passwordValue && !confirmPasswordValue1){
+        //     $('#btn_submit_edit').removeAttr("disabled");
+        // }
+    }
+
+    
+        
+    });
          function deleteUser(id){
             var confirmation = confirm("are you sure you want to remove the item?");
 

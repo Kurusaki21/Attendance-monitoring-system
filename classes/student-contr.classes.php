@@ -17,8 +17,9 @@ class StudentCntr extends Student{
             $school_year = $_POST['school_year'];
             $imageName = $_FILES["item_photo"];
 
-         
-            // var_dump($imageName);
+
+            if(empty($_POST['webcam_pic'])){
+
            if($_FILES['item_photo']['size'] == 0){
                 return $this->addStudent($id, $fname, $lname, $email,  $address, $phone, $course, $year, null, $school_year);
             }
@@ -27,6 +28,52 @@ class StudentCntr extends Student{
                
                 return $this->addStudent($id, $fname, $lname, $email,  $address, $phone, $course, $year, $imageFile, $school_year);
             }
+
+            }
+            else{
+                $change_name = $_POST['webcam_pic'];
+                $str = substr($change_name, strpos($change_name, '/') + 1);
+              
+
+                $target_dir = "../admin_page/images/";
+                $uploadErr = "";
+                $from = $target_dir .$str;
+                $to_dir = "../uploads/".$str;
+                $uploadOk = 0;
+                // $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+            
+                if(file_exists($to_dir)) {
+                    $target_file  = '../uploads/'.$this->random_string().'.png';
+                    $uploadOk = 1;
+                    $this->move_file($from, $target_file);
+
+                    if($uploadOk == 1){
+                        return $this->addStudent($id, $fname, $lname, $email,  $address, $phone, $course, $year, $target_file, $school_year);
+                    }
+                    else{
+                      echo 'move file fail';
+
+                    }
+                   
+                }
+
+               
+
+                
+                
+       
+
+            }
+   
+        }
+    }
+
+    function move_file($path,$to){
+        if(copy($path, $to)){
+           unlink($path);
+           return true;
+        } else {
+          return false;
         }
     }
 
@@ -42,14 +89,45 @@ class StudentCntr extends Student{
             $year = $_POST['year'];
             $block = $_POST['block'];
             $imageName = $_FILES["item_photo"];
+            $student_number = $_POST['student_id_number'];
 
-            if($_FILES['item_photo']['size'] == 0){
-                return $this->editStudent($id, $fname, $lname, $email,  $address, $phone, $course, $year, null);
+            if(empty($_POST['webcam_pic'])){
+                if($_FILES['item_photo']['size'] == 0){
+                    return $this->editStudent($id, $fname, $lname, $email,  $address, $phone, $course, $year, null, $student_number);
+                }
+                else{
+                    $imageFile = $this->uploadImage($imageName);
+                    return $this->editStudent($id, $fname, $lname, $email,  $address, $phone, $course, $year,$imageFile, $student_number);
+                }
             }
             else{
-                $imageFile = $this->uploadImage($imageName);
-                return $this->editStudent($id, $fname, $lname, $email,  $address, $phone, $course, $year,$imageFile);
+                $change_name = $_POST['webcam_pic'];
+                $str = substr($change_name, strpos($change_name, '/') + 1);
+              
+
+                $target_dir = "../admin_page/images/";
+                $uploadErr = "";
+                $from = $target_dir .$str;
+                $to_dir = "../uploads/".$str;
+                $uploadOk = 0;
+                // $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+            
+                if(file_exists($to_dir)) {
+                    $target_file  = '../uploads/'.$this->random_string().'.png';
+                    $uploadOk = 1;
+                    $this->move_file($from, $target_file);
+
+                    if($uploadOk == 1){
+                        return $this->editStudent($id, $fname, $lname, $email,  $address, $phone, $course, $year,$target_file, $student_number);
+                    }
+                    else{
+                      echo 'move file fail';
+
+                    }
+                   
+                }
             }
+         
            
         }
     
@@ -78,7 +156,7 @@ class StudentCntr extends Student{
 
      
 
-        if($imageName["size"] > 500000) {
+        if($imageName["size"] > 5000000000) {
             echo "Sorry, your file is too large.";
             $uploadOk = 0;
         }
@@ -132,16 +210,16 @@ class StudentCntr extends Student{
 
         switch ($array['student_year']){
            case  '4':
-                $year = '4th year';
+                $year = '4';
                 break;
             case '3':
-                $year = '3rd year';
+                $year = '3';
                 break;
             case '2';
-                $year = '2nd year';
+                $year = '2';
                 break;
             case '1';
-                $year = '1st year';
+                $year = '1';
                 break;
 
         }
@@ -154,7 +232,7 @@ class StudentCntr extends Student{
        
 
             try {
-                echo json_encode(array("first_name"=>$array['first_name'], "last_name"=>$array['last_name'], "status"=>"Time In", "student_year" => $year, "student_course"=> $array['student_course'], "phone" => $array['parents_contact'], "address" => $array['address'], "imageFile"=>$array['imageFile'], "message_sent"=>"Success!"));
+                echo json_encode(array("first_name"=>preg_replace("~\b". preg_quote($array['first_name'], '~') ."\b~i", $array['first_name'][0] . str_repeat('*', strlen($array['first_name']) - 1), $array['first_name']), "last_name"=>substr($array['last_name'], 0, 1), "status"=>"Time In", "student_year" => $year, "student_course"=> $array['student_course'], "phone" => $array['parents_contact'], "imageFile"=>$array['imageFile'], "message_sent"=>"Success!", "created_at" => date('h:i a', strtotime($array['created_at']))));
                 // Send a message using the primary device.
                // $msg = sendSingleMessage("09197941914", "Dear Guardian/Parents of ".$array['first_name'] ." ".$array['last_name'].". We would like to inform you that this student has just entered the school premises at $datetimetoday", 0, null, false, null, true);
                 
@@ -182,7 +260,7 @@ class StudentCntr extends Student{
                 // Send a message using the Device ID 1.
                 // $msg = sendSingleMessage("+11234567890", "This is a test of single message.", 1);
 
-                echo json_encode(array("first_name"=>$array['first_name'], "last_name"=>$array['last_name'], "status"=>"Time Out", "student_year" => $year, "student_course"=> $array['student_course'], "phone" => $array['parents_contact'], "address" => $array['address'], "imageFile"=>$array['imageFile'], "message_sent"=>"Success!"));
+                echo json_encode(array("first_name"=>preg_replace("~\b". preg_quote($array['first_name'], '~') ."\b~i", $array['first_name'][0] . str_repeat('*', strlen($array['first_name']) - 1), $array['first_name']), "last_name"=>substr($array['last_name'], 0, 1), "status"=>"Time Out", "student_year" => $year, "student_course"=> $array['student_course'], "phone" => $array['parents_contact'], "imageFile"=>$array['imageFile'], "message_sent"=>"Success!", "created_at" => date('h:i a', strtotime($array['created_at']))));
                 $this->insertSMSEntry($array['id'], "Time Out", 1, $datetimetoday,$array['school_id']);
             } catch (Exception $e) {
                 echo $e->getMessage();
@@ -198,7 +276,7 @@ class StudentCntr extends Student{
                 // Send a message using the Device ID 1.
                 // $msg = sendSingleMessage("+11234567890", "This is a test of single message.", 1);
 
-                echo json_encode(array("first_name"=>$array['first_name'], "last_name"=>$array['last_name'], "status"=>"Time In", "student_year" => $year, "student_course"=> $array['student_course'], "phone" => $array['parents_contact'], "address" => $array['address'], "imageFile"=>$array['imageFile'], "message_sent"=>"Success!"));
+                echo json_encode(array("first_name"=>preg_replace("~\b". preg_quote($array['first_name'], '~') ."\b~i", $array['first_name'][0] . str_repeat('*', strlen($array['first_name']) - 1), $array['first_name']), "last_name"=>substr($array['last_name'], 0, 1), "status"=>"Time In", "student_year" => $year, "student_course"=> $array['student_course'], "phone" => $array['parents_contact'], "imageFile"=>$array['imageFile'], "message_sent"=>"Success!", "created_at" => date('h:i a', strtotime($array['created_at']))));
                 $this->insertSMSEntry($array['id'], "Time In", 1, $datetimetoday,$array['school_id']);
             } catch (Exception $e) {
                 echo $e->getMessage();

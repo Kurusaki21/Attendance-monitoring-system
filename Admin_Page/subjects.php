@@ -201,7 +201,7 @@ if(isset($user)){
                             <div class="admin-card">
 
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered table-secondary" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Subject Name</th>
@@ -293,11 +293,11 @@ if(isset($user)){
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="../includes/subject.inc.php">
+                <form onSubmit="if(!confirm('Is the form filled out correctly?')){return false;}"  method="post" action="../includes/subject.inc.php">
                         <div class="form-row justify-content-center">
                             <div class="form-group col-md-6">
                                 <label for="student_first_name">Subject Name</label>
-                                <input type="text" class="form-control" name="subject_name" placeholder="subject name">
+                                <input type="text" class="form-control" name="subject_name" placeholder="subject name" required>
                             </div>
                         </div>
                         <div class="form-row justify-content-center">

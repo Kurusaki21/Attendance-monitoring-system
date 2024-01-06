@@ -230,7 +230,7 @@ if(isset($user)){
                               <hr>
                               <div class="container"> 
                               <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered table-secondary" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Professor Name</th>
@@ -252,7 +252,7 @@ if(isset($user)){
                                                     <td> <?= $rm['email']; ?></td>
                                                     <td> <?= $rm['address']; ?></td>
                                                     <td>
-                                                        <button type="button" onclick="addSchedule(<?= $rm['id'];?>, <?= $rm['subject_id']; ?>)" class="btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="assign schedule"><i class="fa fa-plus"></i></button>
+                                                        <button type="button" onclick="addSchedule(<?= $rm['id'];?>, <?= $rm['subject_id']; ?>)" class="btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="assign schedule"><i class="fa fa-paperclip"></i></button>
                                                         <button type="button" onclick="deleteProf(<?= $rm['id'];?>, <?= $rm['subject_id']; ?>)" class="btn-sm btn-danger dlt_record" data-toggle="tooltip" data-placement="top" title="delete"><i class="fa fa-trash"></i></button>
                                                     </td>
                                                 </tr>
@@ -354,7 +354,7 @@ if(isset($user)){
                                <div class="form-row justify-content-center">
                                     <div class="form-group">
                                         <label for="student_first_name">Room Number</label>
-                                            <select class="selectpicker form-control" data-live-search="true" name="select_room">
+                                            <select class="selectpicker form-control" data-live-search="true" name="select_room" required>
                                                  <option>Select Room Number</option>
                                                 <?php
                                                     
@@ -375,13 +375,13 @@ if(isset($user)){
                                 <div class="form-row justify-content-center">
                                     <div class="form-group">
                                         <label for="student_first_name">Time In</label>
-                                        <input type="time" class="form-control" name="time_in">
+                                        <input type="time" class="form-control" name="time_in" required>
                                     </div>
                                 </div>
                                 <div class="form-row justify-content-center">
                                     <div class="form-group">
                                         <label for="student_first_name">Time Out</label>
-                                        <input type="time" class="form-control" name="time_out">
+                                        <input type="time" class="form-control" name="time_out" required>
                                     </div>
                                 </div>
                                 <div class="form-row justify-content-center">
@@ -489,8 +489,10 @@ if(isset($user)){
     }
 
     $('#btn_schedule_submit').click(function (){
-      
-        $.ajax({
+        var confirmation = confirm("Is the form filled out correctly?");
+
+        if(confirmation){
+            $.ajax({
             url: '../includes/subject_details.inc.php',
             type: 'post',
             dataType: 'json',
@@ -508,6 +510,8 @@ if(isset($user)){
                 }
             }
          });
+        }
+    
     })
 
     function schedules(id,subj_id){

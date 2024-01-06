@@ -87,16 +87,24 @@ class Student extends DB{
         }
     }
 
-    protected function editStudent($id, $fname, $lname, $email,  $address, $phone, $course, $year,$imgFile){
+    protected function editStudent($id, $fname, $lname, $email,  $address, $phone, $course, $year,$imgFile,$student_id_number){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("UPDATE students SET first_name = ?, last_name = ?, email = ?, address = ?, parents_contact =?, student_course = ?, student_year = ?, imageFile = ? WHERE id = ?");
-        $stmt->execute([$fname, $lname, $email,  $address, $phone, $course, $year,$imgFile, $id]);
-        header("location: ../admin_page/students.php");
+        if($imgFile == null){
+            $stmt = $connection->prepare("UPDATE students SET first_name = ?, last_name = ?, email = ?, address = ?, parents_contact =?, student_course = ?, student_year = ?, school_id = ? WHERE id = ?");
+            $stmt->execute([$fname, $lname, $email,  $address, $phone, $course, $year,$student_id_number, $id]);
+            header("location: ../admin_page/students.php");
+        }
+        else{
+            $stmt = $connection->prepare("UPDATE students SET first_name = ?, last_name = ?, email = ?, address = ?, parents_contact =?, student_course = ?, student_year = ?, imageFile = ?, school_id = ? WHERE id = ?");
+            $stmt->execute([$fname, $lname, $email,  $address, $phone, $course, $year,$imgFile,$student_id_number, $id]);
+            header("location: ../admin_page/students.php");
+        }
+      
     }
 
     protected function getSchoolId($id){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT id, school_id, first_name, last_name, student_course,student_year,school_year, imageFile,parents_contact, student_course,address  FROM students WHERE school_id = ? ORDER BY school_id DESC LIMIT 1");
+        $stmt = $connection->prepare("SELECT id, school_id, first_name, last_name, student_course,student_year,school_year, imageFile,parents_contact, student_course,created_at  FROM students WHERE school_id = ? ORDER BY school_id DESC LIMIT 1");
         $stmt->execute([$id]);
         $data = $stmt->fetch();
         $total = $stmt->rowCount();

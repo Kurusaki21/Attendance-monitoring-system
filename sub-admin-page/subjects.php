@@ -11,6 +11,9 @@
   $professors =  new ProfessorCntr();
   $list_of_professors = $professors->Professor();
 
+
+
+
 if(isset($user)){
       
   $name = $user['first_name']. ' ' .$user['last_name'];
@@ -24,12 +27,6 @@ if(isset($user)){
 <?php include 'includes/header.php'; ?>
 
 <style>
-    .dashboard-image1{
-      position: absolute;
-      margin-top: -70px;
-      z-index: 999999;
-      margin-left:1em;
-    }
     .card-student{
         width: 100%;
         justify-content: center;
@@ -37,6 +34,11 @@ if(isset($user)){
     }
     .table-bordered{
         color:white;
+    }
+    
+    .navbar-nav{
+        z-index: 9999;
+
     }
   
 </style>
@@ -57,111 +59,110 @@ if(isset($user)){
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="index.html">
-                    <div class="row">
-                        <div class="col d-flex justify-content-center"> 
-                            <div class="profile-picture">
-                                <img class="rounded-circle" src="../img/Profile.png" width="100" height="100">
-                            </div>
-                           
-                        </div>
-                        
-                    </div>
-                    <div class="row">
-                        <div class="col d-flex justify-content-center">
-                            <div class="admin-name">
-                                <?php echo $name; ?>
-                                <br>
-                                <small>Administrator</small>
-                            </div>
-                        </div>
-                    </div>
-                   
-                
-            </li>
+<li class="nav-item">
+    <a class="nav-link" href="index.html">
+        <div class="row">
+            <div class="col d-flex justify-content-center"> 
+                <div class="profile-picture">
+                    <img class="rounded-circle" src="../img/Profile.png" width="100" height="100">
+                </div>
+               
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col d-flex justify-content-center">
+                <div class="admin-name">
+                    <?php echo $name; ?>
+                    <br>
+                    <small><?= $role == 2 ? 'Sub Admin' : ""; ?></small>
+                </div>
+            </div>
+        </div>
+       
+    
+</li>
+
+<!-- Divider -->
+
+<li class="nav-item ">
+<a class="nav-link" href="index.php">
+<i class="fas fa-fw fa-chart-area"></i>
+<span>Dashboard</span></a>
+</li>
+<?php if($user['account_setting'] == 1){ ?>
+<li class="nav-item">
+<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+aria-expanded="true" aria-controls="collapseUtilities">
+<i class="fas fa-fw fa-users"></i>
+<span>List of Accounts</span>
+</a>
+<div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+data-parent="#accordionSidebar">
+<div class="bg-white py-2 collapse-inner rounded">
+<h6 class="collapse-header">Registered Users</h6>
+<a class="collapse-item" href="students.php">Students</a>
+<a class="collapse-item" href="professors.php">Professors</a>
+<a class="collapse-item" href="users.php">Users</a>
+</div>
+</div>
+</li>
+<?php }
+else{
+echo '';
+}
+?>
+
+<?php if($user['subject_setting'] == 1){ ?> 
+<li class="nav-item active">
+<a class="nav-link" href="subjects.php">
+<i class="fas fa-fw fa-clipboard"></i>
+<span>Subjects</span></a>
+</li>
+<?php }
+else{
+echo '';
+}
+?>
+
+<?php if($user['records_setting'] == 1){ ?> 
+<li class="nav-item">
+<a class="nav-link" href="records.php">
+<i class="fas fa-fw fa-chart-area"></i>
+<span>Records</span></a>
+</li>
+<?php }
+else{
+echo '';
+}
+?>
+
+<!-- Nav Item - Tables -->
+<?php if($user['sms_setting'] == 1){ ?> 
+<li class="nav-item">
+<a class="nav-link" href="sms.php">
+<i class="fas fa-fw fa-sms"></i>
+<span>SMS</span></a>
+</li>
+<?php }
+else{
+echo '';
+}
+?>
+
+<?php if($user['barcode_setting'] == 1){ ?>     
+<li class="nav-item">
+<a class="nav-link" href="barcode.php">
+<i class="fas fa-fw fa-sms"></i>
+<span>Barcode Scanner</span></a>
+</li>
+<?php }
+else{
+echo '';
+}
+?>
 
             <!-- Divider -->
-            <hr class="sidebar-divider">
-
-                <li class="nav-item ">
-                    <a class="nav-link" href="index.php">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Dashboard</span></a>
-                </li>
-                <?php if($user['account_setting'] == 1){ ?>
-                <li class="nav-item ">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                        aria-expanded="true" aria-controls="collapseUtilities">
-                        <i class="fas fa-fw fa-users"></i>
-                        <span>List of Accounts</span>
-                    </a>
-                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                        data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Registered Users</h6>
-                            <a class="collapse-item" href="students.php">Students</a>
-                            <a class="collapse-item" href="professors.php">Professors</a>
-                            <a class="collapse-item" href="users.php">Users</a>
-                        </div>
-                    </div>
-                </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
-
-                <?php if($user['subject_setting'] == 1){ ?> 
-                    <li class="nav-item active">
-                        <a class="nav-link" href="subjects.php">
-                            <i class="fas fa-fw fa-clipboard"></i>
-                            <span>Subjects</span></a>
-                    </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
-
-                <?php if($user['records_setting'] == 1){ ?> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="records.php">
-                            <i class="fas fa-fw fa-chart-area"></i>
-                            <span>Records</span></a>
-                    </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
-
-                <!-- Nav Item - Tables -->
-                <?php if($user['sms_setting'] == 1){ ?> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="sms.php">
-                            <i class="fas fa-fw fa-sms"></i>
-                            <span>SMS</span></a>
-                    </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
-
-                <?php if($user['barcode_setting'] == 1){ ?>     
-                <li class="nav-item">
-                    <a class="nav-link" href="barcode.php">
-                        <i class="fas fa-fw fa-sms"></i>
-                        <span>Barcode Scanner</span></a>
-                </li>
-                <?php }
-                else{
-                    echo '';
-                }
-                ?>
-
-                <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
             <!-- Sidebar Toggler (Sidebar) -->
@@ -218,7 +219,8 @@ if(isset($user)){
                          <h4><b>Subjects</b></h4>  
                          <div class="row card-student ">
                          <div class="row col-sm-12">
-                                 <button type="button" data-toggle="modal" data-target=".addRoom" class="btn btn-sm btn-default">Rooms</button> &nbsp;
+                                <button type="button" data-toggle="modal" data-target=".addRoom" class="btn btn-sm btn-success">Rooms</button> &nbsp;
+                                 <button type="button" data-toggle="modal" data-target=".school_year" class="btn btn-sm btn-warning">School Year</button> &nbsp;
                                  <button type="button" data-toggle="modal" data-target=".addSubject" class="btn btn-sm btn-primary">New Subject</button> 
                                
                             </div>
@@ -228,7 +230,7 @@ if(isset($user)){
                             <div class="admin-card">
 
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered table-secondary" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Subject Name</th>
@@ -303,7 +305,7 @@ if(isset($user)){
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../includes/logout.php">Logout</a>
+                    <a class="btn btn-primary" href="../logout.php">Logout</a>
                 </div>
             </div>
         </div>
@@ -314,7 +316,7 @@ if(isset($user)){
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Subject</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -333,9 +335,62 @@ if(isset($user)){
                                 <textarea class="form-control" name="subject_description" rows="3" placeholder="subject description"></textarea>
                             </div>
                         </div>
+
+                        <div class="form-row justify-content-center">
+                            <div class="form-group col-md-6">
+                                <label for="exampleFormControlTextarea1">School Year</label>
+                                <input type="text" name="school_year" class="form-control" readonly value="<?= $subject->getSchoolYear()['school_year']; ?>">
+                            </div>
+                        </div>
+
+                        <div class="form-row justify-content-center">
+                            <div class="form-group col-md-6">
+                                <label for="exampleFormControlTextarea1">Semester</label>
+                                <select class="form-control" name="school_sem">
+                                    <option value="1">1st</option>
+                                    <option value="2">2nd</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="form-row justify-content-center">
                             <div class="form-group col-md-6">
                                 <button type="submit" name="btn_submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                       
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+       <!-- Add Subject Modal -->
+       <div class="modal fade school_year" id="school_year" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                 <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">School Year</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="../includes/subject.inc.php">
+                        <div class="form-row justify-content-center">
+                            <div class="form-group col-md-6">
+                                <input type="text" class="form-control" name="school_year" placeholder="school year">
+                            </div>
+                        </div>
+                        <div class="form-row justify-content-center">
+                            <div class="form-group col-md-6">
+                                <label for="exampleFormControlTextarea1">Current School Year</label>
+                                <span class="badge bg-success"><?= $subject->getSchoolYear()['school_year']; ?></span>
+                            </div>
+                        </div>
+                        <div class="form-row justify-content-center">
+                            <div class="form-group col-md-6">
+                                <button type="submit" name="btn_submit_schoolyear" class="btn btn-primary">Submit</button>
                             </div>
                         </div>
                        
@@ -350,13 +405,13 @@ if(isset($user)){
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Room</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                <div class="alert alert-danger error_alert1" role="alert">
+                             <div class="alert alert-danger error_alert1" role="alert">
                                 <div class="error_div">
 
                                 </div>
@@ -416,7 +471,7 @@ if(isset($user)){
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Subject</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -497,6 +552,27 @@ if(isset($user)){
         </div>
     </div>
 
+      <!-- Assign Professor Modal -->
+      <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                 <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Assign Professor</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                             <div class="alert alert-danger" role="alert">
+                                <div class="error_modal">   
+                                        Subject Already Exist!
+                                </div>
+                            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -512,7 +588,19 @@ if(isset($user)){
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
     <!-- Page level custom scripts -->
     <script src="../js/demo/datatables-demo.js"></script>
+    <?php
+        if(isset($_GET['success'])){
+            if($_GET['success']==0 ){
+                // echo '<scrtipt> $("#errorModal").modal(); </script>';
+                echo "<script type='text/javascript'> $('#errorModal').modal('show'); </script>";
+            }
+           
+        }
+        
+        
+        ?>
     <script>
+       
         $('.error_alert1').hide();
         $('.success_alert1').hide();
         $('#btn_submit_room').on('click', function (e){
@@ -527,11 +615,17 @@ if(isset($user)){
                 },
                 url: "../includes/subject.inc.php",
                 success: function (response){
-                    if(response.success){
-                        $('.success_div1').html(response.success)
-                        $( ".success_alert1" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
-                        rooms(response.room_id, response.room_number)
-                    }
+                        if(response.error){
+                            $('.error_div').html(response.error)
+                            $( ".error_alert1" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
+                        }
+                        else{
+                            $('.success_div1').html(response.success)
+                            $( ".success_alert1" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
+                            rooms(response.room_id, response.room_number)
+                        }
+             
+                   
                 }
             })
         })

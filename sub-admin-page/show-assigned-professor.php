@@ -110,7 +110,7 @@ if(isset($user)){
                             <div class="admin-name">
                                 <?php echo $name; ?>
                                 <br>
-                                <small>Administrator</small>
+                                <small><?= $role == 2? 'Sub Admin' : ''; ?></small>
                             </div>
                         </div>
                     </div>
@@ -262,7 +262,7 @@ if(isset($user)){
                               <hr>
                               <div class="container"> 
                               <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered table-secondary" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Professor Name</th>

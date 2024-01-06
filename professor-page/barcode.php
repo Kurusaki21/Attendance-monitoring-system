@@ -161,8 +161,9 @@ if(isset($user)){
                                                        <h4 class="display-4 stud_course_professor"></h3>
                                                 </div>
                                                 <div class="row justify-content-center">
-                                                      <h4 class="display-4 stud_year_professor"></h3>
+                                                      <h4 class="display-4 time_in text-danger"></h3>
                                                 </div>
+                                           
                                           </div>
                                     </div>
                                     <div class="col-md-6">
@@ -266,6 +267,8 @@ if(isset($user)){
             </div>
     </div>
 
+    
+
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -291,7 +294,7 @@ if(isset($user)){
 
         var config = {
         fps: 10,
-        qrbox: {width: 400, height: 300},
+        qrbox: {width: 600, height: 300},
         rememberLastUsedCamera: true,
         // Only support camera scan type.
         supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
@@ -309,8 +312,8 @@ if(isset($user)){
                 dataType: "json",
                 url: "../includes/professor.inc.php?school_id=" + id+'&subj_id='+subject_id,
                 success: function (response){
-                    $.each(response, function(index, data) {
-                        if(data == 404){
+                    
+                    if(response.error == 404){
                             $('#is_present_professor').modal('show')
 
                             setTimeout(function(){
@@ -318,7 +321,7 @@ if(isset($user)){
                             }, 2000);
                             const myTimeout = setTimeout(timeInterval, 2000);
                         }
-                        else if(data == 400){
+                        else if(response.error == 400){
                             $('#undefined_student').modal('show')
 
                             setTimeout(function(){
@@ -327,12 +330,21 @@ if(isset($user)){
                             const myTimeout = setTimeout(timeInterval, 2000);
                         }
                         else{
-                            $('.stud_name_professor').html(data.first_name+' '+data.last_name);
-                            $('.stud_year_professor').html(data.student_year);
-                            $('.stud_course_professor').html(data.student_course);
-                            document.getElementById('student_preview_professor').innerHTML = '<img class="rounded-circle" width="200" height="200" src="'+data.imageFile+'">';
+                            $('.stud_name_professor').html(response.first_name+' '+response.last_name+'.');
+                            $('.stud_course_professor').html(response.student_course+ ' - ' +response.student_year);
+                            if(response.ontime == 1){
+                                $('.time_in').html('LATE ('+ response.created_at+')')
+                            }
+                            else{
+                                $('.time_in').html('ON TIME ('+ response.created_at+')')
+                            }
+                          
+                            document.getElementById('student_preview_professor').innerHTML = '<img class="rounded-circle" width="200" height="200" src="'+response.imageFile+'">';
                             const myTimeout = setTimeout(timeInterval, 2000);
                         }
+          
+                    $.each(response, function(index, data) {
+                       
                           
                     });
                 }

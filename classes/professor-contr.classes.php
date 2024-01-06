@@ -59,17 +59,20 @@ class ProfessorCntr extends Professor{
             echo json_encode(array("error" => "400"));   
         }
         else{
-            if($this->attendanceExist($this->getStudentData($school_id)['id'],$this->getSchedulData($subject_id)['prof_id'], $subject_id ) == false){
-                if ($time >= $newTime) {
-                    return $this->setStudentAttendance($this->getStudentData($school_id)['id'], $this->getSchedulData($subject_id)['prof_id'], $subject_id, 0);
-                
-                }
-                else{
-                    return $this->setStudentAttendance($this->getStudentData($school_id)['id'], $this->getSchedulData($subject_id)['prof_id'], $subject_id, 1);
-                }
+            if($this->attendanceExist($this->getStudentData($school_id)['id'],$this->getSchedulData($subject_id)['prof_id'], $subject_id ) == true){
+                echo json_encode(array("error" => "404"));
             }
             else{
-                echo json_encode(array("error" => "404"));
+              
+                if ($time <= $newTime) {
+                    return $this->setStudentAttendance($this->getStudentData($school_id)['id'], $this->getSchedulData($subject_id)['prof_id'], $subject_id, 0);
+               
+               
+               }
+               else{
+                    return $this->setStudentAttendance($this->getStudentData($school_id)['id'], $this->getSchedulData($subject_id)['prof_id'], $subject_id, 1);
+                
+               }
             }
         }
        
@@ -91,11 +94,11 @@ class ProfessorCntr extends Professor{
     public function attendanceExist($student_id, $prof_id, $subject_id){
         $result;
 
-        if($this->checkAttendance($student_id, $prof_id, $subject_id) == 0){
-            $result = false;
+        if($this->checkAttendance($student_id, $prof_id, $subject_id) == true){
+            $result = true;
         }
         else{
-            $result = true;
+            $result = false;
         }
         return $result;
 

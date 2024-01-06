@@ -210,10 +210,11 @@ if(isset($user)){
                         <div class="admin-container">
                             <div class="admin-card">
                             <div class="card-box table-responsive">
-                            <table id="example-table" class="table table-striped table-bordered " width="100%">
+                            <table id="example-table" class="table  table-bordered table-secondary" width="100%">
                                     <thead>
                                         <tr>
-                                            <th>Shoold ID</th>
+                                            <th>Student Barcode</th>
+                                            <th>ID Number</th>
                                             <th>Student Photo</th>
                                             <th>Name</th>
                                             <th>Email</th>
@@ -236,7 +237,9 @@ if(isset($user)){
                                                             <?php echo '<img src="data:image/png;base64,' . base64_encode($generator->getBarcode($students['school_id'], $generator::TYPE_CODE_128)) . '">'; ?>
                                                       
                                                     </td>
+                                                    <td> <?= $students['school_id']; ?></td>
                                                     <td align="center"><img src="<?=$students['imageFile'] ?>" width="50px" height="50px"> </td>
+                                               
                                                     <td> <?= $students['first_name'].' '.$students['last_name']; ?></td>
                                                     <td> <?= $students['email']; ?></td>
                                                     <td> <?= $students['address']; ?></td>
@@ -315,7 +318,7 @@ if(isset($user)){
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="../includes/student.inc.php" enctype="multipart/form-data">
+                    <form method="POST" onSubmit="if(!confirm('Is the form filled out correctly?')){return false;}" action="../includes/student.inc.php" enctype="multipart/form-data">
                         <div class="form-group">
                          
                             <label for="student_email">Student ID</label>
@@ -324,24 +327,24 @@ if(isset($user)){
                         <div class="form-row">
                             <div class="form-group col-md-6">
                             <label for="student_first_name">First Name</label>
-                            <input type="text" class="form-control" name="first_name" placeholder="first name">
+                            <input type="text" class="form-control" name="first_name" placeholder="first name" required>
                             </div>
                             <div class="form-group col-md-6">
                             <label for="student_last_name">Last Name</label>
-                            <input type="text" class="form-control" name="last_name" placeholder="last name">
+                            <input type="text" class="form-control" name="last_name" placeholder="last name" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="student_email">Email</label>
-                            <input type="email" class="form-control" name="email" placeholder="email">
+                            <input type="email" class="form-control" name="email" placeholder="email" required>
                         </div>
                         <div class="form-group">
                             <label for="student_address">Address</label>
-                            <input type="text" class="form-control" name="address" placeholder="address">
+                            <input type="text" class="form-control" name="address" placeholder="address" required>
                         </div>
                         <div class="form-group">
                             <label for="student_phone">Parents Phone Number</label>
-                            <input type="number" class="form-control" name="phone" placeholder="phone number">
+                            <input type="number" class="form-control" name="phone" placeholder="phone number" required>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
@@ -383,7 +386,7 @@ if(isset($user)){
                             </div>
 
                             <div class="form-row col-md-12">
-                                    <input type="file" name="item_photo" value=""  onchange="loadFile(event)">   <input type=button value="Take Snapshot" onClick="take_snapshot()">
+                                    <input type="file" name="item_photo" value="" onchange="loadFile2(event)">   <input type=button value="Take Snapshot" onClick="take_snapshot()">
                                     <div class="col-md-6">
                                     
                                         <br/>
@@ -398,17 +401,16 @@ if(isset($user)){
                             </div>
                             <div class="form-row col-md-6 justify-content-center"> 
                                 <div id="my_camera">
-                                    <video id="video" width="150" height="150" autoplay></video>    <div class="col-md-6+ captured_image">
+                                    <video id="video" width="150" height="150" autoplay></video>    <div class="col-md-6 captured_image">
                                     <!-- <canvas id="canvas"  width="640" height="420"></canvas> -->
                                     </div>
                                     <button id="capture" type="button">Capture</button>
                                     <button id="close_div" type="button" onclick="closeDiv()">Close</button>
-                                
-                                 
+                                            
                                 </div>
                             </div>
                             <div class="form-row col-md-3 ">
-                              
+                                        <input type="hidden" name="webcam_pic" value=""  id="put_address" >
                             </div>
                         </div>
                         <hr>
@@ -430,28 +432,32 @@ if(isset($user)){
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="../includes/student.inc.php" enctype="multipart/form-data">
+                    <form method="POST" onSubmit="if(!confirm('Is the form filled out correctly?')){return false;}" action="../includes/student.inc.php" enctype="multipart/form-data">
                         <div class="form-row">
+                        <div class="form-group col-md-9">
+                            <label for="student_first_name">ID Number</label>
+                            <input type="text" class="form-control" name="student_id_number" id="student_id_number" required>
+                            </div>
                             <div class="form-group col-md-6">
                             <label for="student_first_name">First Name</label>
-                            <input type="text" class="form-control" name="first_name" id="student_first_name" placeholder="first name">
+                            <input type="text" class="form-control" name="first_name" id="student_first_name" placeholder="first name" required>
                             </div>
                             <div class="form-group col-md-6">
                             <label for="student_last_name">Last Name</label>
-                            <input type="text" class="form-control" name="last_name" id="student_last_name" placeholder="last name">
+                            <input type="text" class="form-control" name="last_name" id="student_last_name" placeholder="last name" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="student_email">Email</label>
-                            <input type="email" class="form-control" name="email" id="student_email" placeholder="email">
+                            <input type="email" class="form-control" name="email" id="student_email" placeholder="email" required>
                         </div>
                         <div class="form-group">
                             <label for="student_address">Address</label>
-                            <input type="text" class="form-control" name="address" id="student_address" placeholder="address">
+                            <input type="text" class="form-control" name="address" id="student_address" placeholder="address" required>
                         </div>
                         <div class="form-group">
                             <label for="student_phone">Parents Phone Number</label>
-                            <input type="number" class="form-control" name="phone" id="student_phone" placeholder="phone number">
+                            <input type="number" class="form-control" name="phone" id="student_phone" placeholder="phone number" required>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
@@ -487,13 +493,39 @@ if(isset($user)){
                                 </select>
                             </div>
 
+                            <div class="form-group col-md-3">
+                                 <label for="block">School Year</label>
+                                 <input type="text" class="form-control" name="school_year" value="<?= $subject->getSchoolYear()['school_year']; ?>" readonly>
+                            </div>
+
                             <div class="form-row col-md-12">
-                                    <input type="file" name="item_photo" value=""  onchange="loadFile2(event)">
+                                    <input type="file" name="item_photo" value="" onchange="loadFile(event)">   <input type=button value="Take Snapshot" onClick="take_snapshot1()">
+                                    <div class="col-md-6">
+                                    
+                                        <br/>
+                                  
+                                        <input type="hidden" name="image" class="image-tag">
+                                    </div>
                                  
                             </div>
-                            <div class="form-row col-md-12 ">
-                                <img id="edit_preview" src="#" />
+                    
+                            <div class="form-row col-md-3 ">
+                                <canvas id="canvas1" src="#" width="640" height="420" /> 
                             </div>
+                            <div class="form-row col-md-6 justify-content-center"> 
+                                <div id="my_camera1">
+                                    <video id="video1" width="150" height="150" autoplay></video>    <div class="col-md-6 captured_image">
+                                    <!-- <canvas id="canvas"  width="640" height="420"></canvas> -->
+                                    </div>
+                                    <button id="capture1" type="button">Capture</button>
+                                    <button id="close_div1" type="button" onclick="closeDiv1()">Close</button>
+                                            
+                                </div>
+                            </div>
+                            <div class="form-row col-md-3 ">
+                                        <input type="hidden" name="webcam_pic" value=""  id="put_address1" >
+                            </div>
+
 
                                 <input type="hidden" id = "student_id" name="student_id">
                         </div>
@@ -534,16 +566,27 @@ if(isset($user)){
     <script tpye="application/javascript">
 
     $('#my_camera').hide();
+    $('#my_camera1').hide();
 
-    var loadFile = function(event) {
-    var output = document.getElementById('canvas');
-    output.canvas = URL.createObjectURL(event.target.files[0]);
-        output.onload = function() {
-        URL.revokeObjectURL(output.src) // free memory
-        }
-    };
+    const ctx = canvas.getContext('2d');
+    imgin.onchange = e => {
+    const file = imgin.files[0];
+    if(file) {
+      const reader = new FileReader();
+        reader.onload = () => {
+            const img = new Image();
+            img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+      }
+            img.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+    }
+}
     var loadFile2 = function(event) {
-    var output = document.getElementById('edit_preview');
+    var output = document.getElementById('canvas').getContext('2d');
     output.src = URL.createObjectURL(event.target.files[0]);
         output.onload = function() {
         URL.revokeObjectURL(output.src) // free memory
@@ -555,9 +598,9 @@ if(isset($user)){
 $(document).ready(function () {
     // Setup - add a text input to each footer cell
     $('#example-table thead tr')
-        .clone(true)
-        .addClass('filters')
-        .appendTo('#example-table thead');
+        // .clone(true)
+        // .addClass('filters')
+        // .appendTo('#example-table thead');
  
         var table = $('#example-table').DataTable({
           
@@ -569,7 +612,7 @@ $(document).ready(function () {
     
                 // For each column
                 api
-                    .columns(":not(:last-child)")
+                    .columns(":nth-child(8)")
                     .eq(0)
                     .each(function (colIdx) {
                         // Set the header cell to contain the input element
@@ -577,7 +620,11 @@ $(document).ready(function () {
                             $(api.column(colIdx).header()).index()
                         );
                         var title = $(cell).text();
-                        $(cell).html('<input type="text" placeholder="' + title + '" />');
+                        var html = '';
+                        html += '<select>'
+                        html += '<option>' + title + '</option>'
+                        html += '</select>'
+                        $(cell).html(html);
     
                         // On every keypress in this input
                         $(
@@ -626,7 +673,7 @@ $(document).ready(function () {
             'colvis'
         ],
         columnDefs: [ {
-            visible: false
+            visible: true
         } ]
         });
       });
@@ -659,6 +706,7 @@ $(document).ready(function () {
                 url: "../includes/student.inc.php?id=" + id,
                 success: function (response){
                 $.each(response, function(index, data) {
+                        $('#student_id_number').val(data.school_id);
                         $('#student_first_name').val(data.first_name)
                         $('#student_last_name').val(data.last_name)
                         $('#student_address').val(data.address)
@@ -695,8 +743,17 @@ $(document).ready(function () {
         $('#my_camera').show();
     }
 
+    
+    function take_snapshot1(e) {
+      
+      $('#my_camera1').show();
+  }
+
     function closeDiv(){
         $('#my_camera').hide(); 
+    }
+    function closeDiv1(){
+        $('#my_camera1').hide(); 
     }
 
     window.onload = function() {
@@ -705,10 +762,17 @@ $(document).ready(function () {
     var context = canvas.getContext('2d');
     var capture = document.getElementById('capture');
 
+
+    var edit_video = document.getElementById('video1');
+    var edit_canvas = document.getElementById('canvas1');
+    var edit_context = edit_canvas.getContext('2d');
+    var edit_capture = document.getElementById('capture1');
+
     // Check if the browser supports the getUserMedia API
     if (navigator.getUserMedia) {
         navigator.getUserMedia({video: true}, function(stream) {
             video.srcObject = stream;
+            edit_video.srcObject = stream;
         }, function(error) {
             console.log('Error: ', error);
         });
@@ -721,12 +785,32 @@ $(document).ready(function () {
 
         // Get the image as a data URL
         var dataURL = canvas.toDataURL('image/png');
+    
 
         // Get the image as a Blob
         var blob = dataURLtoBlob(dataURL);
 
+
         // Save the image using the Blob
         saveImage(blob);
+ 
+        
+    });
+
+    edit_capture.addEventListener('click', function() {
+        edit_context.drawImage(video, 0, 0, 640, 480);
+
+        // Get the image as a data URL
+    
+        var dataURL1 = canvas1.toDataURL('image/png');
+
+        // Get the image as a Blob
+ 
+        var blob1 = dataURLtoBlob(dataURL1);
+
+        // Save the image using the Blob
+  
+        saveImage(blob1);
         
     });
 
@@ -753,9 +837,11 @@ $(document).ready(function () {
 
         request.onload = function() {
             if (request.status === 200) {
-              
-                const myJSON = JSON.stringify(request.response);
-                console.log(myJSON);
+                var obj = JSON.parse(request.response);
+                var imageUrl = obj.image;
+                console.log(imageUrl);
+                $('#put_address').val(imageUrl);
+                $('#put_address1').val(imageUrl);
                 // $.each(request.response, function(index, data) {
                 //     console.log(data);
                 // })
@@ -765,6 +851,8 @@ $(document).ready(function () {
             }
         };
     }
+
+    
 };
 </script>
 

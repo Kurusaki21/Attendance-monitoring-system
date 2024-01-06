@@ -12,7 +12,6 @@ if(isset($user)){
   $role = $user['role'];
   if(isset($role) == '1'){
 
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -68,7 +67,7 @@ if(isset($user)){
                             <div class="admin-name">
                                 <?php echo $name; ?>
                                 <br>
-                                <small>Administrator</small>
+                                <small><?= $role == 2 ? 'Sub Admin' : ''; ?></small>
                             </div>
                         </div>
                     </div>
@@ -79,7 +78,7 @@ if(isset($user)){
              <!-- Divider -->
              <hr class="sidebar-divider">
 
-<li class="nav-item active">
+<li class="nav-item ">
     <a class="nav-link" href="index.php">
         <i class="fas fa-fw fa-chart-area"></i>
         <span>Dashboard</span></a>
@@ -107,7 +106,7 @@ else{
 }
 ?>
 
-<?php if($user['subject_setting'] == 1){ ?> 
+<?php if($user['subject_setting'] ==1){ ?> 
     <li class="nav-item">
         <a class="nav-link" href="subjects.php">
             <i class="fas fa-fw fa-clipboard"></i>
@@ -133,7 +132,7 @@ else{
 
 <!-- Nav Item - Tables -->
 <?php if($user['sms_setting'] == 1){ ?> 
-    <li class="nav-item">
+    <li class="nav-item active">
         <a class="nav-link" href="sms.php">
             <i class="fas fa-fw fa-sms"></i>
             <span>SMS</span></a>
@@ -216,7 +215,7 @@ else{
                             <div class="admin-card">
 
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered table-secondary" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Full name</th>
@@ -239,7 +238,7 @@ else{
                                                 <td> <?= $student['parents_contact']; ?></td>
                                                 
                                                 <td><?= $student['has_sent'] == '1' ? 'True' : 'False';?></td>
-                                                <td> <?= $student['created_at']; ?></td>
+                                                <td><?= date("M d Y h:i:s a", strtotime($student['created_at']))?></td>
                                             <?php  
                                             }
                                             }

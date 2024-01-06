@@ -52,3 +52,9 @@ body {
     backdrop-filter: blur(500px);
     margin:1%
 }
+#example-table{
+    color: black;
+}
+#dataTable{
+    color: black;
+}

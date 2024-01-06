@@ -9,7 +9,7 @@ if(isset($user)){
   $name = $user['first_name'].' ' .$user['last_name'];
 ;
   $role = $user['role'];
-  if(isset($role) == '1'){
+  if($role == '2'){
 
 
 ?>
@@ -19,7 +19,6 @@ if(isset($user)){
 <style>
     .dashboard-image1{
       position: absolute;
-      margin-top: -70px;
       z-index: 999999;
       margin-left:1em;
     }
@@ -62,7 +61,7 @@ if(isset($user)){
                             <div class="admin-name">
                                 <?php echo $name; ?>
                                 <br>
-                                <small>Administrator</small>
+                                <small><?= $role == 2 ? 'Sub Admin' : ""; ?></small>
                             </div>
                         </div>
                     </div>
@@ -71,54 +70,83 @@ if(isset($user)){
             </li>
 
             <!-- Divider -->
-            <hr class="sidebar-divider">
+           
+<li class="nav-item active">
+    <a class="nav-link" href="index.php">
+        <i class="fas fa-fw fa-chart-area"></i>
+        <span>Dashboard</span></a>
+</li>
+<?php if($user['account_setting'] == 1){ ?>
+<li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+        aria-expanded="true" aria-controls="collapseUtilities">
+        <i class="fas fa-fw fa-users"></i>
+        <span>List of Accounts</span>
+    </a>
+    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+        data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Registered Users</h6>
+            <a class="collapse-item" href="students.php">Students</a>
+            <a class="collapse-item" href="professors.php">Professors</a>
+            <a class="collapse-item" href="users.php">Users</a>
+        </div>
+    </div>
+</li>
+<?php }
+else{
+    echo '';
+}
+?>
 
-            <li class="nav-item active">
-                <a class="nav-link" href="index.php">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Dashboard</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>List of Accounts</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded showme">
-                        <h6 class="collapse-header">Registered Users</h6>
-                        <a class="collapse-item" href="students.php">Students</a>
-                        <a class="collapse-item" href="professors.php">Professors</a>
-                        <a class="collapse-item" href="users.php">Sub-Admin</a>
-                    </div>
-                </div>
-            </li>
+<?php if($user['subject_setting'] == 1){ ?> 
+    <li class="nav-item">
+        <a class="nav-link" href="subjects.php">
+            <i class="fas fa-fw fa-clipboard"></i>
+            <span>Subjects</span></a>
+    </li>
+<?php }
+else{
+    echo '';
+}
+?>
 
-            <li class="nav-item">
-                <a class="nav-link" href="subjects.php">
-                    <i class="fas fa-fw fa-clipboard"></i>
-                    <span>Subjects</span></a>
-            </li>
-            
-            <li class="nav-item">
-                <a class="nav-link" href="records.php">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Records</span></a>
-            </li>
+<?php if($user['records_setting'] == 1){ ?> 
+    <li class="nav-item">
+        <a class="nav-link" href="records.php">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Records</span></a>
+    </li>
+<?php }
+else{
+    echo '';
+}
+?>
 
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="sms.php">
-                    <i class="fas fa-fw fa-sms"></i>
-                    <span>SMS</span></a>
-            </li>
+<!-- Nav Item - Tables -->
+<?php if($user['sms_setting'] == 1){ ?> 
+    <li class="nav-item">
+        <a class="nav-link" href="sms.php">
+            <i class="fas fa-fw fa-sms"></i>
+            <span>SMS</span></a>
+    </li>
+<?php }
+else{
+    echo '';
+}
+?>
 
-            <li class="nav-item">
-                <a class="nav-link" href="barcode.php">
-                    <i class="fas fa-fw fa-sms"></i>
-                    <span>Barcode Scanner</span></a>
-            </li>
+<?php if($user['barcode_setting'] == 1){ ?>     
+<li class="nav-item">
+    <a class="nav-link" href="barcode.php">
+        <i class="fas fa-fw fa-sms"></i>
+        <span>Barcode Scanner</span></a>
+</li>
+<?php }
+else{
+    echo '';
+}
+?>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -182,64 +210,70 @@ if(isset($user)){
                   
                                 <div class="row d-flex justify-content-center">
                                   <div class="col-sm-6 p-5">
-                           
+                                  <a href="students.php" class="btn btn-link">
                                     <div class="card">
                                     <div class="dashboard-image1">
-                                      <img  src="../img/lg/Studs.jpg" width="150" height="150">
+                                      <img  src="../img/lg/Studs.jpg" width="100" height="100">
                                       </div>
                                         <div class="card-body">
                                           <p class="text-right mb-0 font-weight-bold text-gray-800">Students</p>
                                           <p class="text-right text-gray-800"><?=  $recoords->countAllStudents()['count']; ?></p>
                                           <hr>
-                                          <div class="d-flex justify-content-center"><a href="students.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
-                                        </div>
+                                        
+                                        </div>show all</a>
                                     </div>
                                   </div>
 
                                   <div class="col-sm-6 p-5">
-                                    <div class="dashboard-image1">
-                                     <img  src="../img/lg/professor.png" width="150" height="150">
-                                    </div>
+                                  <a href="professors.php" class="btn btn-link">
                                     <div class="card">
-                                      <div class="card-body">
+                                    <div class="dashboard-image1">
+                                    <img  src="../img/lg/professor.png" width="100" height="100">
+                                      </div>
+                                        <div class="card-body">
                                           <p class="text-right mb-0 font-weight-bold text-gray-800">Professor</p>
                                           <p class="text-right text-gray-800"><?=  $recoords->countAllProfessors(); ?></p>
                                           <hr>
-                                          <div class="d-flex justify-content-center"><a href="professors.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
-                                      </div>
+                                        
+                                        </div>show all</a>
                                     </div>
                                   </div>
                                 </div>
                     
-                                <div class="row d-flex justify-content-center">
-                                    <div class="col-sm-6 p-5">
-                                        <div class="dashboard-image1">
-                                        <img  src="../img/lg/Sub_admin.jpg" width="150" height="150">
-                                        </div>
-                                        <div class="card">
-                                          <div class="card-body">
-                                            <p class="text-right mb-0 font-weight-bold text-gray-800">Sub-Admin</p>
-                                            <p class="text-right text-gray-800"><?=  $recoords->countAllSubAdmin(); ?></p>
-                                            <hr>
-                                            <div class="d-flex justify-content-center"><a href="users.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
-                                          </div>
-                                        </div>
-                                      </div>
+                           
 
-                                    <div class="col-sm-6 p-5">
-                                        <div class="dashboard-image1">
-                                        <img  src="../img/lg/Records.png" width="150" height="150">
-                                        </div>
-                                        <div class="card">
-                                          <div class="card-body">
-                                            <p class="text-right mb-0 font-weight-bold text-gray-800">Records</p>
-                                            <p class="text-right text-gray-800"><?= $recoords->countAllRecords(); ?></p>
-                                            <hr>
-                                            <div class="d-flex justify-content-center"><a href="records.php" class="btn btn-link"><i class="fa fa-solid fa-eye"></i>Show all</a></div> 
-                                          </div>
-                                        </div>
+                                      <div class="row d-flex justify-content-center">
+                                  <div class="col-sm-6 p-5">
+                                  <a href="users.php" class="btn btn-link">
+                                    <div class="card">
+                                    <div class="dashboard-image1">
+                                    <img  src="../img/lg/Sub_admin.jpg" width="100" height="100">
+                                      </div>
+                                        <div class="card-body">
+                                        <p class="text-right mb-0 font-weight-bold text-gray-800">Sub-Admin</p>
+                                            <p class="text-right text-gray-800"><?=  $recoords->countAllSubAdmin(); ?></p>
+                                          <hr>
+                                        
+                                        </div>show all</a>
                                     </div>
                                   </div>
+
+
+                                  <div class="col-sm-6 p-5">
+                                  <a href="records.php" class="btn btn-link">
+                                    <div class="card">
+                                    <div class="dashboard-image1">
+                                    <img  src="../img/lg/Records.png" width="100" height="100">
+                                      </div>
+                                        <div class="card-body">
+                                        <p class="text-right mb-0 font-weight-bold text-gray-800">Records</p>
+                                            <p class="text-right text-gray-800"><?= $recoords->countAllRecords(); ?></p>
+                                          <hr>
+                                        
+                                        </div>show all</a>
+                                    </div>
+                                  </div>
+                                </div>
 
                                   <!-- <div class="row mt-5 d-flex justify-content-center">
                                     <div class="col-sm-6 mb-4">
