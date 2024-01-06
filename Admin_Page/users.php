@@ -543,6 +543,7 @@ if(isset($user)){
             $('#btn_edit_submit').attr('disabled', 'disabled');
             return false;
         } else {
+            $('#btn_edit_submit').show();
             $("#conpasscheck1").hide();
             $('#btn_edit_submit').removeAttr("disabled");
         }
@@ -562,6 +563,7 @@ if(isset($user)){
             $('#btn_edit_submit').attr('disabled', 'disabled');
             return false;
         } else {
+            $('#btn_edit_submit').show();
             $("#conpasscheck1").hide();
             $('#btn_edit_submit').removeAttr("disabled");
         }
