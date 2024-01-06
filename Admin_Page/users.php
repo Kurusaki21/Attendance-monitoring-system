@@ -477,15 +477,22 @@ if(isset($user)){
          $(document).ready(function () {
         $("#conpasscheck").hide();
         $("#conpasscheck1").hide();
+        $('#btn_edit_submit').hide();
         $("#btn_submit").hide();
-        // $("#btn_submit_edit").hide();
+
         let confirmPasswordError = true;
         $("#prof_confirm_password").keyup(function () {
             validateConfirmPassword();
         });
-        $("#edit_professor_confirm_password").keyup(function () {
-            validateConfirmPassword1();
+        $('#user_password').keyup(function(){
+            validatePassword();
+        })
+        $("#edit_prof_confirm_password").keyup(function () {
+            validateEditConfirmPassword();
         });
+        $('#edit_user_password').keyup(function(){
+            validateEditUserPassword();
+        })
 
         function validateConfirmPassword() {
         let confirmPasswordValue = $("#prof_confirm_password").val();
@@ -494,36 +501,76 @@ if(isset($user)){
             $("#conpasscheck").show();
             $("#conpasscheck").html("Password didn't Match");
             $("#conpasscheck").css("color", "red");
+            $('#btn_submit').attr("disabled", true);
             confirmPasswordError = false;
+          
             
             return false;
         } else {
             $("#conpasscheck").hide();
             $("#btn_submit").show();
+            $('#btn_submit').attr("disabled", false);
         }
     }
 
-    function validateConfirmPassword1() {
-        let confirmPasswordValue1 = $("#edit_professor_confirm_password").val();
-        let passwordValue = $("#edit_professor_password").val();
+    function validatePassword() {
+        let confirmPasswordValue = $("#prof_confirm_password").val();
+        let passwordValue = $("#user_password").val();
+        if (passwordValue != confirmPasswordValue) {
+            $("#conpasscheck").show();
+            $("#conpasscheck").html("Password didn't Match");
+            $("#conpasscheck").css("color", "red");
+            $('#btn_submit').attr("disabled", true);
+            confirmPasswordError = false;
+          
+            
+            return false;
+        } else {
+            $("#conpasscheck").hide();
+            $("#btn_submit").show();
+            $('#btn_submit').attr("disabled", false);
+        }
+    }
+
+    function validateEditConfirmPassword() {
+        let confirmPasswordValue1 = $("#edit_prof_confirm_password").val();
+        let passwordValue = $("#edit_user_password").val();
         if (passwordValue != confirmPasswordValue1) {
             $("#conpasscheck1").show();
             $("#conpasscheck1").html("Password didn't Match");
             $("#conpasscheck1").css("color", "red");
             confirmPasswordError = false;
-            $('#btn_submit_edit').attr('disabled', 'disabled');
+            $('#btn_edit_submit').attr('disabled', 'disabled');
             return false;
         } else {
             $("#conpasscheck1").hide();
-            $('#btn_submit_edit').removeAttr("disabled");
+            $('#btn_edit_submit').removeAttr("disabled");
         }
         // if(!passwordValue && !confirmPasswordValue1){
         //     $('#btn_submit_edit').removeAttr("disabled");
         // }
     }
 
-    
-        
+    function validateEditUserPassword() {
+        let confirmPasswordValue1 = $("#edit_prof_confirm_password").val();
+        let passwordValue = $("#edit_user_password").val();
+        if (passwordValue != confirmPasswordValue1) {
+            $("#conpasscheck1").show();
+            $("#conpasscheck1").html("Password didn't Match");
+            $("#conpasscheck1").css("color", "red");
+            confirmPasswordError = false;
+            $('#btn_edit_submit').attr('disabled', 'disabled');
+            return false;
+        } else {
+            $("#conpasscheck1").hide();
+            $('#btn_edit_submit').removeAttr("disabled");
+        }
+        // if(!passwordValue && !confirmPasswordValue1){
+        //     $('#btn_submit_edit').removeAttr("disabled");
+        // }
+    }
+
+
     });
          function deleteUser(id){
             var confirmation = confirm("are you sure you want to remove the item?");
