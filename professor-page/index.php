@@ -182,7 +182,7 @@ if(isset($user)){
                                                            
                                                             <select class="custom-select"  name="professor_schedule">
                                                             <?php foreach($prof->getProfessorSchedules($id) as $prof_sched){?>
-                                                                <option value="<?= $prof_sched['ids']; ?>">  <?=  'Room # ' .$prof_sched['room_number'].' | '. ucfirst($prof_sched['subject_name']).' '.$prof_sched['day'].' ('.$prof_sched['time_in'].'-'.$prof_sched['time_out'].')'?></option>
+                                                                <option value="<?= $prof_sched['ids']; ?>">  <?=  'Room # ' .$prof_sched['room_number'].' | '. ucfirst($prof_sched['subject_name']).' '.$prof_sched['day'].' ('.date("h:i A", strtotime($prof_sched['time_in'])).'-'.date("h:i A", strtotime($prof_sched['time_out'])).')'?></option>
                                                             
                                                                 <?php } ?>
                                                             </select>

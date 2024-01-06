@@ -31,7 +31,7 @@ if(isset($_POST['prof_id']) && isset($_POST['subject_id'])){
                     <?php } ?>
                
                 <button class="btn btn-link" data-toggle="collapse" onclick="showData(<?= $_POST['prof_id'].','.$_POST['subject_id'].','.$data['id']; ?>)" data-target="#collapse_<?= $data['id']; ?>" aria-expanded="true" aria-controls="collapseOne">
-                    <?= $data['day'].' | '.$data['time_in'].'-'.$data['time_out']; ?>
+                <?= $data['day'].' | '. date("h:i A", strtotime($data['time_in'])).'-'.date("h:i A", strtotime($data['time_out'])); ?>
                 </button>
                 </div>
             </div>
