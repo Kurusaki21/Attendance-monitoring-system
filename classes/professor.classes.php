@@ -97,7 +97,7 @@ class Professor extends DB{
 
     protected function profSchedDetails($prof_id){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT subject_schedule.id, subject.subject_name, GROUP_CONCAT(subject_schedule.id) as ids,GROUP_CONCAT(CASE WHEN subject_schedule.day = 'mon' THEN 'M' WHEN subject_schedule.day = 'tues' THEN 'T' WHEN subject_schedule.day = 'wed' THEN 'W' WHEN subject_schedule.day = 'thurs' THEN 'TH' ELSE 'F' END SEPARATOR '|') as day, rooms.room_number, subject_schedule.time_in, subject_schedule.time_out FROM subject_schedule LEFT JOIN subject ON subject_schedule.subject_id = subject.id LEFT JOIN rooms ON subject_schedule.room_id = rooms.id WHERE subject_schedule.prof_id = ? GROUP BY subject_schedule.time_in, subject_id , subject_schedule.room_id ORDER BY subject_name;");
+        $stmt = $connection->prepare("SELECT subject_schedule.id, subject.subject_name, GROUP_CONCAT(subject_schedule.id) as ids,GROUP_CONCAT(CASE WHEN subject_schedule.day = 'mon' THEN 'M' WHEN subject_schedule.day = 'tues' THEN 'T' WHEN subject_schedule.day = 'wed' THEN 'W' WHEN subject_schedule.day = 'thurs' THEN 'TH' WHEN subject_schedule.day = 'fri' THEN 'F' ELSE 'SAT' END SEPARATOR '|') as day, rooms.room_number, subject_schedule.time_in, subject_schedule.time_out FROM subject_schedule LEFT JOIN subject ON subject_schedule.subject_id = subject.id LEFT JOIN rooms ON subject_schedule.room_id = rooms.id WHERE subject_schedule.prof_id = ? GROUP BY subject_schedule.time_in, subject_id , subject_schedule.room_id ORDER BY subject_name;;");
         $stmt->execute([$prof_id]);
 
         $data = $stmt->fetchall();

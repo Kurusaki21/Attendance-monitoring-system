@@ -352,8 +352,8 @@ else{
 
 
         var config = {
-        fps: 10,
-        qrbox: {width: 500, height: 300},
+        fps: 30,
+        qrbox: {width: 600, height: 300},
         rememberLastUsedCamera: true,
         // Only support camera scan type.
         supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]

@@ -15,7 +15,7 @@ if(isset($user)){
 <!DOCTYPE html>
 <html lang="en">
 <?php include 'includes/header.php'; ?>
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="../includes/html5-qrcode.min.js" type="text/javascript"></script>
 
 <style>
     .dashboard-image1{
@@ -294,7 +294,7 @@ if(isset($user)){
 
         var config = {
         fps: 10,
-        qrbox: {width: 600, height: 300},
+        qrbox: {width: 600, height: 100},
         rememberLastUsedCamera: true,
         // Only support camera scan type.
         supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
