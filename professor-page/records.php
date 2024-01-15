@@ -156,7 +156,8 @@ if(isset($user)){
                         <div class="admin-container">
                             <div class="admin-card">
                             
-                              
+                                <input type="date" id="input_date" onchange="handler(event);">
+                                <br>
                                 <div class="table table-responsive">
                                 <table class="display" id="example" width="100%" cellspacing="0">
                                     <thead>
@@ -172,18 +173,35 @@ if(isset($user)){
                                
                                     <tbody>
                                         <?php 
-                                        
-                                            foreach($prof->getAllStudentRecords($id) as $rm){
+                                        if(isset($_GET['date'])){
+                                            foreach($prof->getAllStudentRecords($id, $_GET['date']) as $rm){
+                                                ?>
+                                                <tr>
+                                                    <td><?= ucfirst($rm['first_name']).' '.ucfirst($rm['last_name']); ?></td>
+                                                    <td><?= ucfirst($rm['subject_name']); ?></td>
+                                                    <td><?= $rm['day'].' '. $rm['time_in'].'-'.$rm['time_out'] ?></td>
+                                                    <td><?= $rm['is_present'] == 1 ? 'Present' : 'Absent'?></td>
+                                                    <td><?= $rm['on_time'] == 1 ? 'On TIme' : 'Late' ?></td>
+                                                    <td><?= $rm['created_at']; ?></td>
+                                                </tr>
+                                                <?php }
+                                        }
+                                        else{
+                                            foreach($prof->getAllStudentRecords($id, null) as $rm){
+                                                ?>
+                                                <tr>
+                                                    <td><?= ucfirst($rm['first_name']).' '.ucfirst($rm['last_name']); ?></td>
+                                                    <td><?= ucfirst($rm['subject_name']); ?></td>
+                                                    <td><?= $rm['day'].' '. $rm['time_in'].'-'.$rm['time_out'] ?></td>
+                                                    <td><?= $rm['is_present'] == 1 ? 'Present' : 'Absent'?></td>
+                                                    <td><?= $rm['on_time'] == 1 ? 'On TIme' : 'Late' ?></td>
+                                                    <td><?= $rm['created_at']; ?></td>
+                                                </tr>
+                                                <?php }
+                                        }
                                         ?>
-                                        <tr>
-                                            <td><?= ucfirst($rm['first_name']).' '.ucfirst($rm['last_name']); ?></td>
-                                            <td><?= ucfirst($rm['subject_name']); ?></td>
-                                            <td><?= $rm['day'].' '. $rm['time_in'].'-'.$rm['time_out'] ?></td>
-                                            <td><?= $rm['is_present'] == 1 ? 'Present' : 'Absent'?></td>
-                                            <td><?= $rm['on_time'] == 1 ? 'On TIme' : 'Late' ?></td>
-                                            <td><?= $rm['created_at']; ?></td>
-                                        </tr>
-                                        <?php } ?>
+                                        
+                                      
                                     </tbody>
                                 </table>
                                
@@ -292,6 +310,11 @@ if(isset($user)){
                 ]
             } );
         } );
+
+        function handler(e){
+        // alert(e.target.value);
+        window.location.href = 'records.php?date='+e.target.value;
+        }
 
     </script>
 </body>

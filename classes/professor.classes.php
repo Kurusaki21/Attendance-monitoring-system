@@ -276,12 +276,21 @@ class Professor extends DB{
         return $resultCheck;
     }
 
-    protected function records($id){
+    protected function records($id, $date){
         $connection = $this->dbOpen();
-        $stmt = $connection->prepare("SELECT students.first_name, students.last_name, subject.subject_name, CASE WHEN subject_schedule.day = 'mon' THEN 'Monday' WHEN subject_schedule.day = 'tues' THEN 'Tuesday' WHEN subject_schedule.day = 'wed' THEN 'Wednesday' WHEN subject_schedule.day = 'thurs' THEN 'Thursday' WHEN subject_schedule.day = 'fri' THEN 'Friday' ELSE 'Saturday' END as day, subject_schedule.time_in, subject_schedule.time_out, student_attendance.is_present, student_attendance.on_time, student_attendance.created_at FROM student_attendance LEFT JOIN students ON students.id = student_attendance.student_id LEFT JOIN subject_schedule ON subject_schedule.id = student_attendance.sched_id LEFT JOIN subject ON subject_schedule.subject_id = subject.id WHERE student_attendance.prof_id = ? ORDER BY created_at DESC;");
-        $stmt->execute([$id]);
-        $data = $stmt->fetchall();
-        return $data;
+        if($date != null){
+            $stmt = $connection->prepare("SELECT students.first_name, students.last_name, subject.subject_name, CASE WHEN subject_schedule.day = 'mon' THEN 'Monday' WHEN subject_schedule.day = 'tues' THEN 'Tuesday' WHEN subject_schedule.day = 'wed' THEN 'Wednesday' WHEN subject_schedule.day = 'thurs' THEN 'Thursday' WHEN subject_schedule.day = 'fri' THEN 'Friday' ELSE 'Saturday' END as day, subject_schedule.time_in, subject_schedule.time_out, student_attendance.is_present, student_attendance.on_time, student_attendance.created_at FROM student_attendance LEFT JOIN students ON students.id = student_attendance.student_id LEFT JOIN subject_schedule ON subject_schedule.id = student_attendance.sched_id LEFT JOIN subject ON subject_schedule.subject_id = subject.id WHERE student_attendance.prof_id = ? AND date(student_attendance.created_at) = ? ORDER BY created_at DESC;");
+            $stmt->execute([$id,$date]);
+            $data = $stmt->fetchall();
+            return $data;
+        }
+        else{
+            $stmt = $connection->prepare("SELECT students.first_name, students.last_name, subject.subject_name, CASE WHEN subject_schedule.day = 'mon' THEN 'Monday' WHEN subject_schedule.day = 'tues' THEN 'Tuesday' WHEN subject_schedule.day = 'wed' THEN 'Wednesday' WHEN subject_schedule.day = 'thurs' THEN 'Thursday' WHEN subject_schedule.day = 'fri' THEN 'Friday' ELSE 'Saturday' END as day, subject_schedule.time_in, subject_schedule.time_out, student_attendance.is_present, student_attendance.on_time, student_attendance.created_at FROM student_attendance LEFT JOIN students ON students.id = student_attendance.student_id LEFT JOIN subject_schedule ON subject_schedule.id = student_attendance.sched_id LEFT JOIN subject ON subject_schedule.subject_id = subject.id WHERE student_attendance.prof_id = ? ORDER BY created_at DESC;");
+            $stmt->execute([$id]);
+            $data = $stmt->fetchall();
+            return $data;
+        }
+    
     }
 
     protected function countRecords($id){

@@ -121,8 +121,8 @@ class ProfessorCntr extends Professor{
         return $result;
     }
 
-    public function getAllStudentRecords($id){
-        return $this->records($id);
+    public function getAllStudentRecords($id,$date){
+        return $this->records($id, $date);
     }
    public function countStudentsAttndance($id){
     return $this->countRecords($id);
